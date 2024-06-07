@@ -1,0 +1,46 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "jquery@3.6.3",
+      "destination": "wwwroot/lib/jquery"
+    },
+    {
+      "library": "jqueryui@1.13.2",
+      "destination": "wwwroot/lib/jqueryui"
+    },
+    {
+      "library": "bootstrap@4.6.2",
+      "destination": "wwwroot/lib/bootstrap"
+    },
+    {
+      "library": "jquery-toast-plugin@1.3.2",
+      "destination": "wwwroot/lib/jquery-toast-plugin"
+    },
+    {
+      "library": "fancybox@3.5.7",
+      "destination": "wwwroot/lib/fancybox"
+    },
+    {
+      "library": "slick-carousel@1.8.1",
+      "destination": "wwwroot/lib/slick"
+    },
+    {
+      "library": "sweetalert2@11.10.6",
+      "destination": "wwwroot/lib/sweetalert2"
+    },
+    {
+      "library": "select2@4.0.13",
+      "destination": "wwwroot/lib/select2"
+    },
+    {
+      "library": "file-uploader@5.16.2",
+      "destination": "wwwroot/lib/file-uploader"
+    },
+    {
+      "library": "aos@2.3.4",
+      "destination": "wwwroot/lib/aos"
+    }
+  ]
+}

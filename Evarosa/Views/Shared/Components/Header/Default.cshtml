@@ -1,0 +1,75 @@
+﻿<header>
+    <div class="container">
+        <div class="row py-3">
+            <div class="col-lg-2 d-flex align-items-center">
+                <a asp-controller="Home" asp-action="Index" class="logo">
+                    <img src="~/images/logo.jpg" alt="logo" />
+                </a>
+            </div>
+            <div class="col-lg-8 d-flex justify-content-center align-items-center">
+                <div class="input-group search">
+                    <div class="input-group-prepend">
+                        <select class="custom-select">
+                            <option selected>Tìm theo</option>
+                            <option value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                        </select>
+                    </div>
+                    <input type="text" class="form-control" placeholder="Tìm sản phẩm, danh mục hay thương hiệu">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="button">
+                            <i class="fa-regular fa-magnifying-glass"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 d-flex d-flex justify-content-end align-items-center">
+                <a href="" class="link-icon mr-4">
+                    <div class="icon">
+                        <span class="count">9</span>
+                        <i class="fa-solid fa-cart-minus"></i>
+                    </div>
+                    <span class="name">Giỏ hàng</span>
+                </a>
+                <a href="" class="link-icon">
+                    <div class="icon">
+                        <i class="fa-solid fa-user"></i>
+                        <span class="arrow">
+                            <i class="fa-solid fa-caret-down"></i>
+                        </span>
+                    </div>
+                    <span class="name">Tài khoản</span>
+                </a>
+            </div>
+        </div>
+        <nav class="header-nav pb-3">
+            <ul class="menu">
+                <li>
+                    <a class="active" asp-controller="Home" asp-action="Index">Trang chủ</a>
+                </li>
+                <li>
+                    <a asp-controller="Home" asp-action="About">Giới thiệu</a>
+                </li>
+                <li>
+                    <a href="">Mỹ phẩm</a>
+                </li>
+                <li>
+                    <a href="">thực phẩm chức năng</a>
+                </li>
+                <li>
+                    <a href="">hotdeal</a>
+                </li>
+                <li>
+                    <a href="">nội y</a>
+                </li>
+                <li>
+                    <a href="">tin tức - sự kiện</a>
+                </li>
+                <li>
+                    <a asp-controller="Home" asp-action="Contact">Liên hệ</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</header>
