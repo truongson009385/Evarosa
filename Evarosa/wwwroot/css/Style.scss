@@ -285,7 +285,6 @@ header {
 }
 
 .header-nav {
-    
 }
 
 .menu {
@@ -330,7 +329,11 @@ header {
 }
 
 .banner {
-   @include slick-dots; 
+    @include slick-dots;
+
+    .slick-dots {
+        bottom: 5px;
+    }
 }
 
 .banner-item {
@@ -351,6 +354,7 @@ header {
     img {
         width: 128px;
         aspect-ratio: 1;
+        object-fit: cover;
         padding: 5px;
         border-radius: 50%;
         border: 3px solid $primary;
@@ -373,6 +377,10 @@ header {
     font-size: 28px;
     font-weight: 600;
     text-transform: uppercase;
+
+    &.white {
+        color: $white;
+    }
 }
 
 .line-bottom {
@@ -388,6 +396,10 @@ header {
         width: 68px;
         height: 3px;
         background-color: $primary;
+    }
+
+    &.white::before {
+        background-color: $white;
     }
 }
 
@@ -453,6 +465,12 @@ header {
     .slick-dots {
         bottom: -50px;
     }
+
+    .product-item {
+        .avatar {
+            padding: 10px;
+        }
+    }
 }
 
 .product-item {
@@ -462,7 +480,7 @@ header {
 
     .avatar {
         display: block;
-        padding: 10px;
+        padding: 0;
         background-color: $primaryLight;
 
         img {
@@ -509,25 +527,45 @@ header {
     }
 }
 
+.btn {
+    box-shadow: none;
+}
+
 .btn.btn-primary {
     color: $white;
     background-color: $primary;
-    box-shadow: none;
     border: 0;
 }
 
+.btn.btn-light {
+    color: $primary;
+    background-color: $light;
+    border: 0;
+}
+
+.btn.btn-outline-primary {
+    color: $primary;
+    border-color: $primary;
+    border-radius: 0;
+
+    &:hover {
+        color: $white;
+        background-color: $primary;
+    }
+}
 
 .news {
     position: relative;
-    background-image: url(../images/news-bg.png);
-    background-size: cover;
+    background: rgba($primary, .8);
 
     &::before {
         content: "";
         position: absolute;
         inset: 0;
-        background: $primary;
-        mix-blend-mode: multiply;
+        z-index: -1;
+        background-image: url(../images/news-bg.png);
+        background-size: cover;
+        background-attachment: fixed;
     }
 }
 
@@ -624,9 +662,13 @@ header {
         margin-bottom: 15px;
 
         .name {
+            display: block;
             color: $white;
-            font-size: 20px;
+            text-align: justify;
+            font-size: 16px;
             font-weight: 600;
+            line-height: 36px;
+            @include truncate(1);
         }
 
         .content {
@@ -634,18 +676,14 @@ header {
             left: 0;
             bottom: 0;
             right: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: end;
-            height: 150px;
-            opacity: 0.8;
-            background: linear-gradient(0deg, rgba(49, 49, 49, 0.71) 0%, rgba(54, 54, 54, 0.00) 100%);
-            mix-blend-mode: normal;
+            display: block;
             color: $white;
-            padding: 15px;
+            padding: 0 15px;
+            height: 36px;
+            background-color: $primary;
         }
 
-        .text {
+        .text, .date {
             display: none;
         }
     }
@@ -716,6 +754,8 @@ header {
             font-size: 16px;
             font-weight: 600;
             @include truncate(2);
+            height: 48px;
+            line-height: 24px;
         }
 
         .date {
@@ -798,4 +838,132 @@ header {
             margin-bottom: 0;
         }
     }
+}
+
+.about-image {
+    aspect-ratio: 1.3;
+    object-fit: cover;
+}
+
+.about-text {
+    color: $black;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: normal;
+    text-transform: uppercase;
+}
+
+.about-title {
+    color: $black;
+    font-size: 32px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.partner-slider {
+    @include letterSpacing(10px, -10px);
+    @include slick-dots;
+
+    @include slick-arrows("\f054", "\f053") {
+        color: $gray;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .slick-prev {
+        left: -40px;
+    }
+
+    .slick-next {
+        right: -40px;
+    }
+
+    .slick-prev, .slick-next {
+        width: 30px;
+        height: 30px;
+        background-color: transparent;
+        border-radius: 50%;
+    }
+
+    .slick-dots {
+        bottom: -50px;
+    }
+
+    img {
+        display: block;
+        padding: 20px;
+        aspect-ratio: 1.8;
+        object-fit: contain;
+        background-color: $white;
+        box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    }
+}
+
+footer {
+    background-color: $white;
+}
+
+.footer-title {
+    color: $black;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 24px;
+    letter-spacing: 0.64px;
+    text-transform: uppercase;
+}
+
+.footer-links {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    a {
+        color: $black;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 24px;
+        transition: .2s;
+
+        &:hover {
+            color: $primary;
+        }
+    }
+}
+
+.footer-social {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    a {
+        @include flex-center;
+        width: 35px;
+        aspect-ratio: 1;
+        color: $white;
+        background-color: $primary;
+        border-radius: 5px;
+        transition: .3s linear;
+
+        &:hover {
+            transform: translateY(-3px);
+            box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 2px, rgba(0, 0, 0, 0.07) 0px 2px 4px, rgba(0, 0, 0, 0.07) 0px 4px 8px, rgba(0, 0, 0, 0.07) 0px 8px 16px, rgba(0, 0, 0, 0.07) 0px 16px 32px, rgba(0, 0, 0, 0.07) 0px 32px 64px;
+        }
+    }
+}
+
+.copyright {
+    padding: 10px 0;
+    color: #3A2313;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 24px;
+    background-color: #F1F2F3;
+    margin-bottom: 0;
 }

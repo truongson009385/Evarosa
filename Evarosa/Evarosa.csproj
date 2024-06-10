@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -12,6 +12,54 @@
 
   <ItemGroup>
     <None Include="compilerconfig.json" />
+    <None Include="Views\Article\Article.cshtml" />
+    <None Include="Views\Article\ArticleCategory.cshtml" />
+    <None Include="Views\Article\ListArticle.cshtml" />
+    <None Include="Views\Article\ListArticleCategory.cshtml" />
+    <None Include="Views\Article\UpdateArticle.cshtml" />
+    <None Include="Views\Article\UpdateArticleCategory.cshtml" />
+    <None Include="Views\Banner\Banner.cshtml" />
+    <None Include="Views\Banner\EditBanner.cshtml" />
+    <None Include="Views\Banner\ListBanner.cshtml" />
+    <None Include="Views\Contact\ListContact.cshtml" />
+    <None Include="Views\Vcms\ChangePassword.cshtml" />
+    <None Include="Views\Vcms\ConfigSite.cshtml" />
+    <None Include="Views\Vcms\CreateAdmin.cshtml" />
+    <None Include="Views\Vcms\EditAdmin.cshtml" />
+    <None Include="Views\Vcms\Index.cshtml" />
+    <None Include="Views\Vcms\ListAdmin.cshtml" />
+    <None Include="Views\Vcms\Login.cshtml" />
+    <None Include="wwwroot\css\admin\login\call-center-agent.svg" />
+    <None Include="wwwroot\css\admin\login\check.svg" />
+    <None Include="wwwroot\css\admin\login\checklist.svg" />
+    <None Include="wwwroot\css\admin\login\facebook.svg" />
+    <None Include="wwwroot\css\admin\login\icon-info.svg" />
+    <None Include="wwwroot\css\admin\login\mail.svg" />
+    <None Include="wwwroot\css\admin\login\phone.svg" />
+    <None Include="wwwroot\css\themes\base\accessdenied.scss" />
+    <None Include="wwwroot\css\themes\base\accordion.scss" />
+    <None Include="wwwroot\css\themes\base\all.scss" />
+    <None Include="wwwroot\css\themes\base\autocomplete.scss" />
+    <None Include="wwwroot\css\themes\base\base.scss" />
+    <None Include="wwwroot\css\themes\base\button.scss" />
+    <None Include="wwwroot\css\themes\base\core.scss" />
+    <None Include="wwwroot\css\themes\base\datepicker.scss" />
+    <None Include="wwwroot\css\themes\base\dialog.scss" />
+    <None Include="wwwroot\css\themes\base\draggable.scss" />
+    <None Include="wwwroot\css\themes\base\jquery-ui.scss" />
+    <None Include="wwwroot\css\themes\base\menu.scss" />
+    <None Include="wwwroot\css\themes\base\pagination.scss" />
+    <None Include="wwwroot\css\themes\base\progressbar.scss" />
+    <None Include="wwwroot\css\themes\base\resizable.scss" />
+    <None Include="wwwroot\css\themes\base\selectable.scss" />
+    <None Include="wwwroot\css\themes\base\selectmenu.scss" />
+    <None Include="wwwroot\css\themes\base\slider.scss" />
+    <None Include="wwwroot\css\themes\base\sortable.scss" />
+    <None Include="wwwroot\css\themes\base\spinner.scss" />
+    <None Include="wwwroot\css\themes\base\tabs.scss" />
+    <None Include="wwwroot\css\themes\base\theme.scss" />
+    <None Include="wwwroot\css\themes\base\tooltip.scss" />
+    <None Include="wwwroot\css\themes\login.less" />
     <None Include="wwwroot\webfonts\font-awesome\webfonts\fa-brands-400.woff2" />
     <None Include="wwwroot\webfonts\font-awesome\webfonts\fa-duotone-900.woff2" />
     <None Include="wwwroot\webfonts\font-awesome\webfonts\fa-light-300.woff2" />
@@ -22,6 +70,22 @@
     <None Include="wwwroot\webfonts\font-awesome\webfonts\fa-solid-900.woff2" />
     <None Include="wwwroot\webfonts\font-awesome\webfonts\fa-thin-100.woff2" />
     <None Include="wwwroot\webfonts\font-awesome\webfonts\fa-v4compatibility.woff2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Imageflow.Net" Version="0.13.2" />
+    <PackageReference Include="Imageflow.Server" Version="0.8.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.2" />
+    <PackageReference Include="X.PagedList.Mvc.Core" Version="9.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Uploads\" />
   </ItemGroup>
 
 </Project>

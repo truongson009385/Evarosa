@@ -17,5 +17,14 @@
         dots: true
     });
 
+    $('.partner-slider').slick({
+        infinite: true,
+        slidesToShow: 5,
+        slidesToScroll: 5,
+        speed: 800,
+        arrows: true,
+        dots: true
+    });
+
     $(".outstanding").tabs();
 })

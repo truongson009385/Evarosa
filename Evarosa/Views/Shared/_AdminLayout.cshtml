@@ -1,0 +1,151 @@
+﻿@inject IAppService _appService
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    @if (_appService.Config.Favicon != null)
+    {
+        <link rel="icon" type="image/x-icon" href="@PathSystem.Combine("/contents/system/", _appService.Config.Favicon)">
+    }
+
+    <!--Fonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+    <!--Styles-->
+    <link href="~/webfonts/font-awesome/css/all.css" rel="stylesheet" />
+
+    <link href="~/lib/jqueryui/themes/base/jquery-ui.min.css" rel="stylesheet" />
+    <link href="~/lib/jqueryui/themes/base/theme.min.css" rel="stylesheet" />
+    <link href="~/lib/file-uploader/jquery.fine-uploader/fine-uploader-new.min.css" rel="stylesheet" />
+    <link href="~/css/bundlesCss.min.css" rel="stylesheet" />
+    <link href="~/css/adminCss.min.css" rel="stylesheet" />
+    <link href="~/css/themes/base/all.min.css" rel="stylesheet" />
+    <link href="~/css/styleAdmin.min.css" rel="stylesheet" />
+
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body>
+    <div id="responsive">
+        <div class="app-header">
+            <div class="app-header__logo">
+                @if (_appService.Config.Image != null)
+                {
+                    <a asp-action="Index" asp-controller="Home" target="_blank"><img class="logo-admin" src="@PathSystem.Combine("/contents/system/", _appService.Config.Image)" alt="logo" /></a>
+                }
+                else
+                {
+                    <a asp-action="Index" asp-controller="Home" target="_blank"><img class="logo-admin" src="~/images/logo.png" /></a>
+                }
+                <a id="btn-show" onclick="myFunction()"><i class="fa-solid fa-bars"></i><i class="fa-solid fa-times"></i></a>
+            </div>
+            <div class="app-header__content">
+                <div class="media mr-lg-5 mr-3 drop">
+                    <img class="mr-3 avatar" src="~/css/admin/icon_profile.png" />
+                    <div class="media-body">
+                        <h5 class="mb-0">@(User.Identity?.Name ?? "admin")</h5>
+                        Quản trị viên
+                    </div>
+                    <div class="content-drop">
+                        <a asp-action="ConfigSite" asp-controller="Vcms"><i class="fa-solid fa-info-circle mr-1"></i> Thông tin chung</a>
+                        <a asp-action="ChangePassword" asp-controller="Vcms"><i class="fa-solid fa-low-vision mr-1"></i>Đổi mật khẩu</a>
+                        <a asp-action="LogOut" asp-controller="Vcms"><i class="fa-solid fa-sign-out-alt mr-1"></i> Đăng xuất</a>
+                    </div>
+                </div>
+                <a id="help" class="drop" onclick="fbFunction()">
+                    <i class="fas fa-user-headset"></i>
+                    <div class="content-drop">Gửi yêu cầu cho chúng tôi</div>
+                </a>
+            </div>
+        </div>
+        <div id="left_menu_profile">
+            <div class="left_menu_profile">
+                <ul class="drop-bar">
+                    <li data-id="0">
+                        <a class="root expand mb-3" asp-action="Index" asp-controller="Vcms">Tổng quan website</a>
+                    </li>
+                    <li data-id="1">
+                        <a class="root"><span>Quản trị viên</span><i class="fa-solid fa-caret-down"></i></a>
+                        <div class="sub hidden">
+                            <div>
+                                <a class="text_link" asp-action="ConfigSite" asp-controller="Vcms">Thông tin chung</a>
+                            </div>
+                            <div>
+                                <a class="text_link" asp-action="CreateAdmin" asp-controller="Vcms">Quản trị viên</a>
+                            </div>
+                            <div>
+                                <a class="text_link" asp-action="ChangePassword" asp-controller="Vcms">Đổi mật khẩu</a>
+                            </div>
+                            <div>
+                                <a class="text_link" asp-action="LogOut" asp-controller="Vcms">Đăng xuất</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li data-id="2">
+                        <a class="root"><span>Quản lý bài viết</span><i class="fa-solid fa-caret-down"></i></a>
+                        <div class="sub hidden">
+                            <div>
+                                <a class="text_link" asp-action="ArticleCategory" asp-controller="Article">Thêm danh mục</a>
+                            </div>
+                            <div>
+                                <a class="text_link" asp-action="ListArticleCategory" asp-controller="Article">Danh sách danh mục</a>
+                            </div>
+                            <div>
+                                <a class="text_link" asp-action="Article" asp-controller="Article">Thêm bài viết</a>
+                            </div>
+                            <div>
+                                <a class="text_link" asp-action="ListArticle" asp-controller="Article">Danh sách bài viết</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li data-id="3">
+                        <a class="root"><span>Quản lý quảng cáo</span><i class="fa-solid fa-caret-down"></i></a>
+                        <div class="sub hidden">
+                            <div>
+                                <a class="text_link" asp-action="Banner" asp-controller="Banner">Thêm quảng cáo</a>
+                            </div>
+                            <div>
+                                <a class="text_link" asp-action="ListBanner" asp-controller="Banner">Danh sách quảng cáo</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li data-id="4">
+                        <a class="root"><span>Quản lý liên hệ</span><i class="fa-solid fa-caret-down"></i></a>
+                        <div class="sub hidden">
+                            <div>
+                                <a class="text_link" asp-action="ListContact" asp-controller="Contact">Danh sách liên hệ</a>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id="content_center_right">
+            <div class="content_center_right">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+
+    <partial name="_templateqq" />
+
+    <script src="~/lib/jquery/jquery.min.js"></script>
+    <script src="~/lib/jqueryui/jquery-ui.min.js"></script>
+    <script src="~/lib/jquery.cookie.min.js"></script>
+    <script src="~/lib/file-uploader/jquery.fine-uploader/jquery.fine-uploader.min.js"></script>
+    <script src="~/lib/ckeditor/ckeditor.js"></script>
+    <script src="~/lib/ckeditor/adapters/jquery.js"></script>
+
+    <script src="~/lib/jquery.customUploader.js"></script>
+
+    <script src="~/js/bundlesJs.min.js"></script>
+    <script src="~/js/adminJs.js"></script>
+    <script src="~/js/scriptAdmin.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

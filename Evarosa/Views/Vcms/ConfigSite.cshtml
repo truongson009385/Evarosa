@@ -1,0 +1,179 @@
+﻿@model ConfigSite
+@{
+    ViewBag.Title = "Cấu hình Website";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<style>
+    .form_name {
+        width: 135px;
+    }
+</style>
+
+<div class="box_header">
+    <h2>@ViewBag.Title</h2>
+</div>
+<div class="box_content">
+    @if (ViewBag.Result == "success")
+    {
+        <div id="AlertBox" class="alert alert-success"><strong>Cập nhật thông tin thành công</strong></div>
+    }
+    @using (Html.BeginForm("ConfigSite", "Vcms", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.HiddenFor(a => a.Id)
+        <table class="form_table">
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.Title)</td>
+                <td class="form_text">@Html.EditorFor(model => model.Title)</td>
+            </tr>
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.Description)</td>
+                <td class="form_text">
+                    <textarea asp-for="Description" class="" rows="5">
+                    </textarea>
+                </td>
+            </tr>
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.EmailConfig)</td>
+                <td class="form_text">@Html.EditorFor(model => model.EmailConfig)</td>
+            </tr>
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.PassWordMail)</td>
+                <td class="form_text">@Html.EditorFor(model => model.PassWordMail)</td>
+            </tr>
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.Image)</td>
+                <td class="form_text">@Html.TextBoxFor(model => model.Image, new { type = "file" })</td>
+            </tr>
+            @if (Model.Image != null)
+            {
+                <tr>
+                    <td class="form_name"></td>
+                    <td class="form_text"><img class="img-border" src="@Url.Content($"/contents/system/{Model.Image}")" /></td>
+                </tr>
+            }
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.Favicon)</td>
+                <td class="form_text">@Html.TextBoxFor(model => model.Favicon, new { type = "file" })</td>
+            </tr>
+            @if (Model.Favicon != null)
+            {
+                <tr>
+                    <td class="form_name"></td>
+                    <td class="form_text"><img class="img-border" src="@Url.Content($"/contents/system/{Model.Favicon}")" /></td>
+                </tr>
+            }
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.Breadcrumb)</td>
+                <td class="form_text">@Html.TextBoxFor(model => model.Breadcrumb, new { type = "file" })</td>
+            </tr>
+            @if (Model.Breadcrumb != null)
+            {
+                <tr>
+                    <td class="form_name"></td>
+                    <td class="form_text"><img class="img-border" src="@Url.Content($"/contents/system/{Model.Breadcrumb}")" /></td>
+                </tr>
+            }
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.AboutImage)</td>
+                <td class="form_text">@Html.TextBoxFor(model => model.AboutImage, new { type = "file" })</td>
+            </tr>
+            @if (Model.AboutImage != null)
+            {
+                <tr>
+                    <td class="form_name"></td>
+                    <td class="form_text"><img class="img-border" src="@Url.Content($"/contents/system/{Model.AboutImage}")" /></td>
+                </tr>
+            }
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.AboutTitle)</td>
+                <td class="form_text">@Html.EditorFor(model => model.AboutTitle)</td>
+            </tr>
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.AboutText)</td>
+                <td class="form_text">@Html.EditorFor(model => model.AboutText)</td>
+            </tr>
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.AboutUrl)</td>
+                <td class="form_text">@Html.EditorFor(model => model.AboutUrl)</td>
+            </tr>
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.AboutVideo)</td>
+                <td class="form_text">@Html.EditorFor(model => model.AboutVideo)</td>
+            </tr>
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.ContactInfo)</td>
+                <td class="form_text">@Html.EditorFor(model => model.ContactInfo)</td>
+            </tr>
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.Place)</td>
+                <td class="form_text">@Html.EditorFor(model => model.Place)</td>
+            </tr>
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.GoogleMap)</td>
+                <td class="form_text">@Html.EditorFor(model => model.GoogleMap)</td>
+            </tr>
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.Hotline)</td>
+                <td class="form_text">@Html.EditorFor(model => model.Hotline)</td>
+            </tr>
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.Zalo)</td>
+                <td class="form_text">@Html.EditorFor(model => model.Zalo)</td>
+            </tr>
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.Email)</td>
+                <td class="form_text">@Html.EditorFor(model => model.Email)</td>
+            </tr>
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.Facebook)</td>
+                <td class="form_text">@Html.EditorFor(model => model.Facebook)</td>
+            </tr>
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.Twitter)</td>
+                <td class="form_text">@Html.EditorFor(model => model.Twitter)</td>
+            </tr>
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.Pinterest)</td>
+                <td class="form_text">@Html.EditorFor(model => model.Pinterest)</td>
+            </tr>
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.Linkedin)</td>
+                <td class="form_text">@Html.EditorFor(model => model.Linkedin)</td>
+            </tr>
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.GoogleMapLink)</td>
+                <td class="form_text">@Html.EditorFor(model => model.GoogleMapLink)</td>
+            </tr>
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.WhatsApp)</td>
+                <td class="form_text">@Html.EditorFor(model => model.WhatsApp)</td>
+            </tr>
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.Viber)</td>
+                <td class="form_text">@Html.EditorFor(model => model.Viber)</td>
+            </tr>
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.Youtube)</td>
+                <td class="form_text">@Html.EditorFor(model => model.Youtube)</td>
+            </tr>
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.GoogleAnalytics)</td>
+                <td class="form_text">@Html.EditorFor(model => model.GoogleAnalytics)</td>
+            </tr>
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.LiveChat)</td>
+                <td class="form_text">@Html.EditorFor(model => model.LiveChat)</td>
+            </tr>
+            <tr>
+                <td class="form_name"></td>
+                <td class="form_text"><input type="submit" class="btn quick-link" value="Cập nhật" /></td>
+            </tr>
+        </table>
+    }
+</div>
+
+@section scripts{
+    <script>
+        
+    </script>
+}

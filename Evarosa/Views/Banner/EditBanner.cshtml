@@ -1,0 +1,85 @@
+﻿@model BannerViewModel
+@{
+    ViewBag.Title = "Cập nhật banner";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<style>
+    .form_name {
+        width: 150px;
+    }
+
+    .note {
+        font-weight: normal;
+    }
+</style>
+<div class="box_header">
+    <h2>@ViewBag.Title</h2>
+    <div class="list-group list-group-horizontal">
+        <a class="btn quick-link mr-2" asp-action="ListBanner"><i class="fa-solid fa-list mr-2"></i>Danh sách banner</a>
+    </div>
+</div>
+<div class="box_content px-300">
+    @using (Html.BeginForm("EditBanner", "Banner", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.Banner.Id)
+        <table class="form_table">
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.Banner.GroupId)</td>
+                <td class="form_text">
+                    @Html.DropDownListFor(model => model.Banner.GroupId, Model.SelectGroup, "Chọn vị trí banner", new { @class = "form_control w300" })
+                    @Html.ValidationMessageFor(model => model.Banner.GroupId)
+                </td>
+            </tr>
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.Banner.Name)</td>
+                <td class="form_text">@Html.EditorFor(model => model.Banner.Name)</td>
+            </tr>
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.Banner.Slogan)</td>
+                <td class="form_text">@Html.EditorFor(model => model.Banner.Slogan)</td>
+            </tr>
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.Banner.Image)</td>
+                <td class="form_text">
+                    <input asp-for="Image" />
+                </td>
+            </tr>
+            @if (Model.Banner.Image != null)
+            {
+                <tr>
+                    <td class="form_name"></td>
+                    <td class="form_text"><img class="img-border" src="@PathSystem.Combine("/contents/banners", Model.Banner.Image)" /></td>
+                </tr>
+            }
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.Banner.Content)</td>
+                <td class="form_text">@Html.EditorFor(model => model.Banner.Content)</td>
+            </tr>
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.Banner.Url)</td>
+                <td class="form_text">@Html.EditorFor(model => model.Banner.Url)</td>
+            </tr>
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.Banner.Sort)</td>
+                <td class="form_text">@Html.EditorFor(model => model.Banner.Sort)</td>
+            </tr>
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.Banner.Active)</td>
+                <td class="form_text">@Html.CheckBoxFor(model => model.Banner.Active)</td>
+            </tr>
+            <tr>
+                <td class="form_name"></td>
+                <td class="form_text">
+                    <input type="submit" class="btn quick-link" value="Cập nhật" />
+                </td>
+            </tr>
+        </table>
+    }
+</div>
+
+@section scripts{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

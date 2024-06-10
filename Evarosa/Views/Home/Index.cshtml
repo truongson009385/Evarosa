@@ -72,7 +72,7 @@
 
 <div class="news">
     <div class="container py-5">
-        <h2 class="section-title line-bottom mb-4">Tin tức và sự kiện</h2>
+        <h2 class="section-title line-bottom white mb-4">Tin tức và sự kiện</h2>
         <div class="news-grid overflow-hidden">
             @for (int j = 0; j < 7; j++)
             {
@@ -84,7 +84,7 @@
                         <a href="" class="name">
                             Tên bài viết
                         </a>
-                        <p class="date">20/05/2022</p>
+                        <p class="date"><i class="fa-regular fa-calendar mr-2"></i>20/05/2022</p>
                         <p class="text">
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat
                         </p>
@@ -92,5 +92,40 @@
                 </div>
             }
         </div>
+        <div class="d-flex justify-content-center mt-4">
+            <a href="" class="btn btn-light">
+                Xem tất cả<i class="fa-solid fa-circle-chevron-right ml-2"></i>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-6">
+            <p class="about-text mb-2">về chúng tôi</p>
+            <h2 class="about-title mb-3">evarosa</h2>
+            <div class="about-content mb-3">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+
+                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </div>
+            <button type="button" class="btn btn-outline-primary">Tìm hiểu thêm<i class="fa-sharp fa-solid fa-arrow-right ml-2"></i></button>
+        </div>
+        <div class="col-lg-6">
+            <img class="about-image" src="~/images/c0bf482b1c98656440de74fc4cce3137.jpg" alt="" />
+        </div>
+    </div>
+</div>
+
+<div class="container py-5">
+    <h2 class="section-title line-bottom mb-4">Đối tác - Khách hàng</h2>
+    <div class="partner-slider">
+        @for (int j = 0; j < 15; j++)
+        {
+            <div class="my-3">
+                <img src="~/images/dt.png" alt="" />
+            </div>
+        }
     </div>
 </div>

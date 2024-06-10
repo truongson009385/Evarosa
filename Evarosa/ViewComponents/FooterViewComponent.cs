@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace GoVietTrip.ViewComponents
+namespace Evarosa.ViewComponents
 {
     public class FooterViewComponent : ViewComponent
     {

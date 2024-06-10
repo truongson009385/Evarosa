@@ -1,0 +1,11 @@
+﻿@model string
+
+@{
+    string[] splitStrings = Model.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+}
+
+<div class="alert alert-@splitStrings[0] alert-dismissable" id="AlertBox">
+    <a class="panel-close close" data-dismiss="alert">&times;</a>
+    @splitStrings[1]
+</div>
+

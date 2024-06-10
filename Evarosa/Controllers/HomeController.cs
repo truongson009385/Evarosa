@@ -18,7 +18,7 @@ namespace Evarosa.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult AllProduct()
         {
             return View();
         }

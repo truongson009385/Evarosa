@@ -1,0 +1,147 @@
+﻿@model ArticleCategoryViewModel
+
+@{
+    ViewBag.Title = "Thêm danh mục bài viết";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+<form asp-action="ArticleCategory" asp-controller="Article" enctype="multipart/form-data">
+    @Html.ValidationSummary(true)
+    <div class="box_header">
+        <h2>@ViewBag.Title</h2>
+        <div class="list-group list-group-horizontal">
+            <a class="btn quick-link mr-2" asp-action="ListArticleCategory"><i class="fa-solid fa-list mr-2"></i>Danh sách danh mục</a>
+        </div>
+    </div>
+
+    <div class="box_content">
+        <div class="row">
+            <div class="col-lg-8">
+                <table class="form_table">
+                    <tr>
+                        <td class="form_name">
+                            <label asp-for="ArticleCategory.Title"></label>
+                        </td>
+                        <td class="form_text">
+                            <input asp-for="ArticleCategory.Title" />
+                            <span asp-validation-for="ArticleCategory.Title" class="text-danger"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">
+                            <label asp-for="Url"></label>
+                        </td>
+                        <td class="form_text">
+                            <input asp-for="Url" />
+                            <span asp-validation-for="Url" class="text-danger"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">
+                            <label asp-for="ArticleCategory.Image"></label>
+                        </td>
+                        <td class="form_text">
+                            <div class="file-image mb-3"></div>
+                            <input type="hidden" asp-for="ArticleCategory.Image" id="Image" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">
+                            <label asp-for="ArticleCategory.Description"></label>
+                        </td>
+                        <td class="form_text">
+                            <textarea asp-for="ArticleCategory.Description" class="form_control"></textarea>
+                            <span asp-validation-for="ArticleCategory.Description" class="text-danger"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="form_name"></td>
+                        <td class="form_text">
+                            <button type="submit" class="btn quick-link">
+                                <i class="fa-solid fa-paper-plane mr-2"></i>Thêm mới
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-lg-4">
+                <table class="form_table">
+                    <tr>
+                        <td class="form_name">
+                            <label asp-for="ArticleCategory.ParentCategoryId"></label>
+                        </td>
+                        <td class="form_text">
+                            <select class="v-select" asp-for="ArticleCategory.ParentCategoryId" asp-items="Model.SelectListCategory"></select>
+                            <span asp-validation-for="ArticleCategory.ParentCategoryId" class="text-danger"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">
+                            <label asp-for="ArticleCategory.Type"></label>
+                        </td>
+                        <td class="form_text">
+                            <select class="v-select" asp-for="ArticleCategory.Type" asp-items="Html.GetEnumSelectList<TypeArticle>()"></select>
+                            <span asp-validation-for="ArticleCategory.Type" class="text-danger"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">
+                            <label asp-for="ArticleCategory.Sort"></label>
+                        </td>
+                        <td class="form_text">
+                            <input asp-for="ArticleCategory.Sort" value="1" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">
+                            <label asp-for="ArticleCategory.Active"></label>
+                        </td>
+                        <td class="form_text">
+                            <input asp-for="ArticleCategory.Active" checked />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">
+                            <label asp-for="ArticleCategory.ShowHeader"></label>
+                        </td>
+                        <td class="form_text">
+                            <input asp-for="ArticleCategory.ShowHeader" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">
+                            <label asp-for="ArticleCategory.ShowHome"></label>
+                        </td>
+                        <td class="form_text">
+                            <input asp-for="ArticleCategory.ShowHome" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">
+                            <label asp-for="ArticleCategory.ShowArticle"></label>
+                        </td>
+                        <td class="form_text">
+                            <input asp-for="ArticleCategory.ShowArticle" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+            
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(".file-image").customUploader({
+            folder: "blog-categories",
+            extens: "jpg, jpeg, png",
+            limit: 1,
+            input: "#Image"
+        });
+    </script>
+}

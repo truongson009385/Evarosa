@@ -1,0 +1,145 @@
+﻿@model ArticleViewModel
+
+@{
+    ViewBag.Title = "Thêm bài viết";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<form asp-action="Article" asp-controller="Article" method="post" enctype="multipart/form-data">
+    @Html.ValidationSummary(true)
+    <div class="box_header">
+        <h2>@ViewBag.Title</h2>
+        <div class="list-group list-group-horizontal">
+            <a class="btn quick-link mr-2" asp-action="ListArticle"><i class="fa-solid fa-list mr-2"></i>Danh sách bài viết</a>
+        </div>
+    </div>
+
+    <div class="box_content">
+        <div class="row">
+            <div class="col-lg-8">
+                <table class="form_table">
+                    <tr>
+                        <td class="form_name">
+                            <label asp-for="Article.Name"></label>
+                        </td>
+                        <td class="form_text">
+                            <input asp-for="Article.Name" />
+                            <span asp-validation-for="Article.Name" class="text-danger"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">
+                            <label asp-for="Article.ShortDescription"></label>
+                        </td>
+                        <td class="form_text">
+                            <textarea asp-for="Article.ShortDescription" class="form_control"></textarea>
+                            <span asp-validation-for="Article.ShortDescription" class="text-danger"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">
+                            <label asp-for="Article.Image"></label>
+                        </td>
+                        <td class="form_text">
+                            <div class="file-image mb-3"></div>
+                            <input type="hidden" asp-for="Article.Image" id="Image" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">
+                            <label asp-for="Article.Body"></label>
+                        </td>
+                        <td class="form_text">
+                            <textarea asp-for="Article.Body" class="ckeditor"></textarea>
+                            <span asp-validation-for="Article.Body" class="text-danger"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">
+                            <label asp-for="Article.Sort"></label>
+                        </td>
+                        <td class="form_text">
+                            <input asp-for="Article.Sort" />
+                            <span asp-validation-for="Article.Sort" class="text-danger"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">
+                            <label asp-for="Url"></label>
+                        </td>
+                        <td class="form_text">
+                            <input asp-for="Url" />
+                            <span asp-validation-for="Url" class="text-danger"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">
+                            <label asp-for="Article.TitleMeta"></label>
+                        </td>
+                        <td class="form_text">
+                            <input asp-for="Article.TitleMeta" />
+                            <span asp-validation-for="Article.TitleMeta" class="text-danger"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">
+                            <label asp-for="Article.DescriptionMeta"></label>
+                        </td>
+                        <td class="form_text">
+                            <textarea asp-for="Article.DescriptionMeta" rows="5"></textarea>
+                            <span asp-validation-for="Article.DescriptionMeta" class="text-danger"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="form_name"></td>
+                        <td class="form_text">
+                            <button type="submit" class="btn quick-link">
+                                <i class="fa-solid fa-paper-plane mr-2"></i>Thêm mới
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-lg-4">
+                <table class="form_table">
+                    <tr>
+                        <td class="form_name">
+                            <label asp-for="Article.ArticleCategoryId"></label>
+                        </td>
+                        <td class="form_text">
+                            <select class="v-select" asp-for="Article.ArticleCategoryId" asp-items="Model.SelectListCategory"></select>
+                            <span asp-validation-for="Article.ArticleCategoryId" class="text-danger"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(m => m.Article.Active)</td>
+                        <td class="form_text">
+                            @Html.EditorFor(m => m.Article.Active)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(m => m.Article.ShowHome)</td>
+                        <td class="form_text">
+                            @Html.EditorFor(m => m.Article.ShowHome)
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(".file-image").customUploader({
+            folder: "blog",
+            extens: "jpg, jpeg, png",
+            limit: 1,
+            input: "#Image"
+        });
+    </script>
+}

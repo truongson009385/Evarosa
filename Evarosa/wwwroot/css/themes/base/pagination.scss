@@ -1,0 +1,62 @@
+﻿.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+.pagination a,
+.pagination span
+{
+    color: black;
+    float: left;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    justify-content: center;
+    align-items:center;
+    border-radius: 50%;
+    font-size: 16px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all .3s;
+}
+
+.pagination a:hover,
+.pagination span:hover {
+    background-color: #079aa5;
+    color: white;
+}
+
+.pagination li.active span {
+    background-color: #079aa5;
+    color: white;
+}
+
+.PagedList-skipToNext a,
+.PagedList-skipToPrevious a {
+    position: relative;
+    text-indent: -999999px;
+}
+
+.PagedList-skipToNext a::after {
+    font-family: "Font Awesome 6 Pro";
+    font-weight: 900;
+    content: "\f061";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    text-indent: 1px;
+    transform: translate(-50%, -50%);
+}
+
+.PagedList-skipToPrevious a::before {
+    font-family: "Font Awesome 6 Pro";
+    font-weight: 900;
+    content: "\f060";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    text-indent: 1px;
+    transform: translate(-50%, -50%);
+}

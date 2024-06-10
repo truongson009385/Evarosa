@@ -1,0 +1,134 @@
+﻿@model ArticleCategoryViewModel
+
+@{
+    ViewBag.Title = "Danh sách danh mục bài viết";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="box_header">
+    <h2>@ViewBag.Title</h2>
+
+    <div class="list-group list-group-horizontal">
+        <a class="btn quick-link mr-2" asp-action="ArticleCategory"><i class="fa-solid fa-pen mr-2"></i>Thêm mới</a>
+    </div>
+</div>
+
+<div class="box_content">
+    <form class="mb-4" action="" method="get">
+        <div class="row">
+            <div class="col-3">
+                <label>Từ khóa</label>
+                @Html.TextBoxFor(m => m.ArticleCategory.Title, new { @class = "form_control" })
+                <button type="submit" class="btn-search ml-auto">Tìm kiếm</button>
+            </div>
+        </div>
+    </form>
+    <table class="list_table tablecenter table-striped">
+        <tbody>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col" style="width: 120px;">@Html.DisplayNameFor(m => m.ArticleCategory.Image)</th>
+                <th scope="col">@Html.DisplayNameFor(m => m.ArticleCategory.Title)</th>
+                <th scope="col">@Html.DisplayNameFor(m => m.ArticleCategory.Type)</th>
+                <th scope="col">@Html.DisplayNameFor(m => m.ArticleCategory.Active)</th>
+                <th scope="col" style="width: 200px;"></th>
+            </tr>
+            @{
+                var index = (Model.ListArticleCategory.PageNumber - 1) * Model.ListArticleCategory.PageSize + 1;
+            }
+            @if (Model.ListArticleCategory.Any())
+            {
+                int i = 1;
+
+                @foreach (var item in Model.ListArticleCategory)
+                {
+                    int level = 0;
+
+                    await RenderCategory(item, level, i);
+
+                    i++;
+                }
+            }
+            @if (Model.ListArticleCategory.PageCount > 1)
+            {
+                <tr>
+                    <td colspan="5">
+                        @Html.PagedListPager(Model.ListArticleCategory, page => Url.Action("ListArticleCategory", new { page }))
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@{
+    async Task RenderCategory(ArticleCategory item, int level, int stt)
+    {
+        var prefix = String.Concat(Enumerable.Repeat("&rArr;", level));
+
+        <tr data-id="@item.Id">
+            <td scope="row">
+                <input type="hidden" name="ProductId" value="@item.Id" />
+                @(stt != 0 ? stt : "")
+            </td>
+            <td class="left">
+                @if (item.Image != null)
+                {
+                    <img src="@PathSystem.Combine("/contents/blog-categories/", item.Image)" alt="" style="width: 86px; object-fit: contain;" />
+                }
+                else
+                {
+                    @:NO PHOTO
+                }
+            </td>
+            <td class="left">
+                @Html.Raw(prefix)
+                @item.Title
+            </td>
+            <td class="left">
+                @item.Type.GetDisplayName()
+            </td>
+            <td>@Html.DisplayFor(a=>item.Active)</td>
+            <td>
+                <a class="btn btn-warning" asp-action="UpdateArticleCategory" asp-route-id="@item.Id">
+                    Sửa
+                </a>
+                <a class="btn btn-danger" href="javascript:;" onclick="deleteFunc(@item.Id)">
+                    Xóa
+                </a>
+            </td>
+        </tr>
+        if (item.CategoryChildren?.Count > 0)
+        {
+            foreach (var cCategory in item.CategoryChildren)
+            {
+                await RenderCategory(cCategory, level + 1, 0);
+            }
+        }
+    }
+}
+
+@section Scripts {
+    <script>
+        function deleteFunc(id) {
+            if (confirm("Bạn có chắc chắn xóa danh mục này không?")) {
+                $.post("/Article/DeleteArticleCategory", { id: id }, function (data) {
+                    if (data.success) {
+                        $.toast({
+                            text: 'Xóa danh mục thành công',
+                            position: 'bottom-right',
+                            icon: 'success'
+                        });
+                        $("tr[data-id='" + id + "']").fadeOut();
+                    }
+                    else {
+                        $.toast({
+                            text: 'Quá trình thực hiện không thành công. Hãy thử lại',
+                            icon: 'error'
+                        });
+                    }
+                });
+            }
+        }
+    </script>
+}

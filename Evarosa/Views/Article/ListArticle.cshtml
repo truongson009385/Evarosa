@@ -1,0 +1,130 @@
+﻿@model ArticleViewModel
+
+@{
+    ViewBag.Title = "Danh sách bài viết";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="box_header">
+    <h2>@ViewBag.Title</h2>
+    <div class="list-group list-group-horizontal">
+        <a class="btn quick-link mr-2" asp-action="Article"><i class="fa-solid fa-pen mr-2"></i>Thêm mới</a>
+    </div>
+</div>
+
+<div class="box_content">
+    <form class="mb-4" action="" method="get">
+        <div class="row">
+            <div class="col-3">
+                <label>Từ khóa</label>
+                <input name="term" asp-for="Term" />
+            </div>
+            <div class="col-3">
+                <label>Danh mục</label>
+                <select name="cateId" asp-for="CategoryId" asp-items="Model.SelectListCategory">
+                    <option value="">Chọn danh mục</option>
+                </select>
+            </div>
+            <div class="col-3">
+                <label>Loại bài viết</label>
+                <select name="type" asp-for="TypeArticle" asp-items="Html.GetEnumSelectList<TypeArticle>()">
+                    <option value="">Chọn loại bài viết</option>
+                </select>
+            </div>
+            <div class="col-3">
+                <label>Từ ngày</label>
+                <input name="timer" asp-for="Timer" />
+            </div>
+            <div class="col-3 d-flex align-items-end">
+                <a asp-action="ListArticle" class="btn-search mb-2">Quay lại</a>
+                <button type="submit" class="btn-search mb-2">Tìm kiếm</button>
+            </div>
+        </div>
+    </form>
+    <table class="list_table tablecenter table-striped">
+        <tbody>
+            <tr>
+                <th scope="col" style="width: 50px;">#</th>
+                <th scope="col" style="width: 50px;">STT</th>
+                <th scope="col">@Html.DisplayNameFor(m => m.Article.Image)</th>
+                <th scope="col">@Html.DisplayNameFor(m => m.Article.Name)</th>
+                <th scope="col" style="width: 150px;">@Html.DisplayNameFor(m => m.Article.ArticleCategoryId)</th>
+                <th scope="col" style="width: 130px;"></th>
+            </tr>
+            @{
+                var i = (Model.ListArticle.PageNumber - 1) * Model.ListArticle.PageSize + 1;
+            }
+            @foreach (var item in Model.ListArticle)
+            {
+                <tr data-id="@item.Id">
+                    <td scope="row">
+                        <input type="hidden" name="ProductId" value="@item.Id" />
+                        @(i++)
+                    </td>
+                    <td>
+                        @item.Sort
+                    </td>
+                    <td class="left">
+                        <a asp-action="ArticleDetails" asp-controller="Home" asp-route-url="@item.Url" target="_blank">
+                            @if (item.Image != null)
+                            {
+                                <img src="@PathSystem.Combine("/contents/blog", item.Image)" style="width: 100px; aspect-ratio: 1; object-fit: contain;" alt="" />
+                            }
+                            else
+                            {
+                                @:NO IMAGE
+                            }
+                        </a>
+                    </td>
+                    <td class="left">@item.Name</td>
+                    <td class="left">
+                        <a asp-action="ListArticle" asp-controller="Home" asp-route-url="@item.ArticleCategory.Url" target="_blank">
+                            @item.ArticleCategory.Title
+                        </a>
+                    </td>
+                    <td>
+                        <a class="btn btn-warning mb-2" asp-action="UpdateArticle" asp-route-id="@item.Id" style="width: 110px;">
+                            Sửa
+                        </a>
+                        <a class="btn btn-danger" href="javascript:;" onclick="deleteFunc(@item.Id)" style="width: 110px;">
+                            Xóa
+                        </a>
+                    </td>
+                </tr>
+            }
+            @if (Model.ListArticle.PageCount > 1)
+            {
+                <tr>
+                    <td colspan="7">
+                        @Html.PagedListPager(Model.ListArticle, page => Url.Action("ListArticle", new { page, term = Model.Term, cateId = Model.CategoryId, type = Model.TypeArticle, timer = Model.Timer, }))
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script>
+        function deleteFunc(id) {
+            if (confirm("Bạn có chắc chắn xóa bài viết này không?")) {
+                $.post("/Article/DeleteArticle", { id: id }, function (data) {
+                    if (data.success) {
+                        $.toast({
+                            text: 'Xóa bài viết thành công',
+                            position: 'bottom-right',
+                            icon: 'success'
+                        });
+                        $("tr[data-id='" + id + "']").fadeOut();
+                    }
+                    else {
+                        $.toast({
+                            text: 'Quá trình thực hiện không thành công. Hãy thử lại',
+                            icon: 'error'
+                        });
+                    }
+                });
+            }
+        }
+    </script>
+}

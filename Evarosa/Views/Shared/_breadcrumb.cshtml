@@ -1,0 +1,38 @@
+﻿@model BreadcrumbViewModel
+@inject IAppService AppService
+
+<div class="breadcrumb-wrapper">
+    @if (!string.IsNullOrEmpty(Model.Image))
+    {
+        <div class="breadcrumb-image">
+            <img src="@Model.Image" alt="@Model.Image" />
+        </div>
+    } else
+    {
+        @if (!string.IsNullOrEmpty(AppService.Config.Breadcrumb))
+        {
+            <div class="breadcrumb-image">
+                <img src="@PathSystem.Combine("/contents/system", AppService.Config.Breadcrumb)?w=1920" alt="@AppService.Config.Breadcrumb" />
+            </div>
+        }
+    }
+    <nav class="breadcrumb-nav" aria-label="breadcrumb">
+        <div class="container">
+            <ol class="breadcrumb">
+                @foreach (var item in Model.Path)
+                {
+                    <li class="breadcrumb-item @(string.IsNullOrEmpty(item.Value) ? "active" : "")">
+                        @if (string.IsNullOrEmpty(item.Value))
+                        {
+                            <span aria-current="page">@item.Key</span>
+                        }
+                        else
+                        {
+                            <a href="@item.Value">@Html.Raw(item.Key)</a>
+                        }
+                    </li>
+                }
+            </ol>
+        </div>
+    </nav>
+</div>
