@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="~/webfonts/font-awesome/css/all.css" />
     <link rel="stylesheet" href="~/css/BundlesCss.min.css" />
     <link rel="stylesheet" href="~/css/Style.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/StyleMember.min.css" asp-append-version="true" />
 </head>
 <body>
     @await Component.InvokeAsync("Header")
@@ -25,6 +26,8 @@
     <script src="~/lib/jqueryui/jquery-ui.min.js"></script>
     <script src="~/js/BundlesJs.min.js"></script>
     <script src="~/js/Script.js" asp-append-version="true"></script>
+    <script src="~/js/ScriptMember.js" asp-append-version="true"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

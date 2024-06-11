@@ -16,16 +16,23 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // Add services to the container.
 builder.Services.AddAuthentication(options =>
 {
-    options.DefaultAuthenticateScheme = "vcms";
-    options.DefaultChallengeScheme = "vcms";
+    options.DefaultAuthenticateScheme = "member";
+    options.DefaultChallengeScheme = "member";
 })
-.AddCookie("vcms", o =>
-{
-    o.LoginPath = "/Vcms/Login";
-    o.LogoutPath = "/Vcms/Logout";
-    o.ExpireTimeSpan = TimeSpan.FromMinutes(60);
-    o.AccessDeniedPath = "/Vcms/AccessDenied";
-});
+    .AddCookie("member", o =>
+    {
+        o.LoginPath = "/dang-nhap";
+        o.LogoutPath = "/dang-xuat";
+        o.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+        o.AccessDeniedPath = "/access-denied";
+    })
+    .AddCookie("vcms", o =>
+    {
+        o.LoginPath = "/Vcms/Login";
+        o.LogoutPath = "/Vcms/Logout";
+        o.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+        o.AccessDeniedPath = "/Vcms/AccessDenied";
+    });
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpContextAccessor();

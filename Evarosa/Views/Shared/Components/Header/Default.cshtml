@@ -24,23 +24,48 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-2 d-flex d-flex justify-content-end align-items-center">
-                <a href="" class="link-icon mr-4">
-                    <div class="icon">
-                        <span class="count">9</span>
-                        <i class="fa-solid fa-cart-minus"></i>
-                    </div>
-                    <span class="name">Giỏ hàng</span>
-                </a>
-                <a href="" class="link-icon">
-                    <div class="icon">
-                        <i class="fa-solid fa-user"></i>
-                        <span class="arrow">
-                            <i class="fa-solid fa-caret-down"></i>
-                        </span>
-                    </div>
-                    <span class="name">Tài khoản</span>
-                </a>
+            <div class="col-lg-2">
+                <ul class="header-links">
+                    <li>
+                        <a href="" class="link-icon mr-4">
+                            <div class="icon">
+                                <span class="count">9</span>
+                                <i class="fa-solid fa-cart-minus"></i>
+                            </div>
+                            <span class="name">Giỏ hàng</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-controller="Member" asp-action="Index" class="link-icon">
+                            <div class="icon">
+                                <i class="fa-solid fa-user"></i>
+                                <span class="arrow">
+                                    <i class="fa-solid fa-caret-down"></i>
+                                </span>
+                            </div>
+                            <span class="name">@(User.Identity.IsAuthenticated ? User.Identity.Name : "Tài khoản")</span>
+                        </a>
+
+                        <ul class="drop-menu">
+                            @if (!User.Identity.IsAuthenticated)
+                            {
+                                <li>
+                                    <a asp-controller="Member" asp-action="Login">Đăng nhập</a>
+                                </li>
+                                <li>
+                                    <a asp-controller="Member" asp-action="Register">Đăng ký</a>
+                                </li>
+                            } else
+                            {
+                                <li>
+                                    <form asp-controller="Member" asp-action="Logout" method="post">
+                                        <button type="submit">Đăng xuất</button>
+                                    </form>
+                                </li>
+                            }
+                        </ul>
+                    </li>
+                </ul>
             </div>
         </div>
         <nav class="header-nav pb-3">

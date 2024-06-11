@@ -22,6 +22,14 @@
     <None Include="Views\Banner\EditBanner.cshtml" />
     <None Include="Views\Banner\ListBanner.cshtml" />
     <None Include="Views\Contact\ListContact.cshtml" />
+    <None Include="Views\Shared\DisplayTemplates\ImageFeedback.cshtml" />
+    <None Include="Views\Shared\EditorTemplates\CheckBox.cshtml" />
+    <None Include="Views\Shared\EditorTemplates\DateTimePicker.cshtml" />
+    <None Include="Views\Shared\EditorTemplates\EditorBox.cshtml" />
+    <None Include="Views\Shared\EditorTemplates\NumberBox.cshtml" />
+    <None Include="Views\Shared\EditorTemplates\Password.cshtml" />
+    <None Include="Views\Shared\EditorTemplates\TextArea.cshtml" />
+    <None Include="Views\Shared\EditorTemplates\TextBox.cshtml" />
     <None Include="Views\Vcms\ChangePassword.cshtml" />
     <None Include="Views\Vcms\ConfigSite.cshtml" />
     <None Include="Views\Vcms\CreateAdmin.cshtml" />

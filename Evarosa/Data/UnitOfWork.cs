@@ -13,6 +13,7 @@ namespace Evarosa.Data
         public Repository<Article> Article { get; set; }
         public Repository<Banner> Banner { get; set; }
         public Repository<Contact> Contact { get; set; }
+        public Repository<Member> Member { get; set; }
 
         public UnitOfWork(ApplicationDbContext db)
         {
@@ -24,6 +25,7 @@ namespace Evarosa.Data
             Article = new Repository<Article>(_db);
             Banner = new Repository<Banner>(_db);
             Contact = new Repository<Contact>(_db);
+            Member = new Repository<Member>(_db);
 
         }
 

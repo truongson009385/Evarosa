@@ -18,4 +18,6 @@ public class ApplicationDbContext : DbContext
     public DbSet<ConfigSite> ConfigSite { get; set; }
     public DbSet<Contact> Contacts { get; set; }
     public DbSet<Banner> Banners { get; set; }
+    public DbSet<Member> Members { get; set; }
+
 }

@@ -1,0 +1,54 @@
+﻿@model MemberForm
+
+@{
+    ViewData["Title"] = "Đăng ký";
+}
+
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-6 mx-auto">
+            <div class="member-wrapper">
+                <form class="member-form" asp-action="Register" method="post">
+                    <h1 class="form-title text-center mb-2">@ViewData["Title"]</h1>
+                    <p class="form-text text-center mb-4">Vui lòng nhập thông tin của bạn để đăng ký</p>
+                    @Html.ValidationSummary(true)
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            @Html.EditorFor(m => m.FullName)
+                        </div>
+                        <div class="form-group col-md-6">
+                            @Html.EditorFor(m => m.BirthDate)
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            @Html.EditorFor(m => m.Email)
+                        </div>
+                        <div class="form-group col-md-6">
+                            @Html.EditorFor(m => m.PhoneNumber)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.EditorFor(m => m.Address)
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            @Html.EditorFor(m => m.Password)
+                        </div>
+                        <div class="form-group col-md-6">
+                            @Html.EditorFor(m => m.ConfirmPassword)
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-block btn-primary">Đăng ký</button>
+                    <p class="form-text text-center mb-0 mt-3">Bạn đã có tài khoản? <a asp-controller="Member" asp-action="Login">Đăng nhập ngay.</a></p>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

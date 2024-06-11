@@ -40,38 +40,45 @@ namespace Evarosa.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> Login(AdminForm model, string returnUrl)
+        public async Task<IActionResult> Login(AdminForm model, string returnUrl = null)
         {
-            var admin = await _unitOfWork.Admin.GetAll(predicate: a => a.Username == model.Username && a.Active).FirstOrDefaultAsync();
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var admin = await _unitOfWork.Admin.GetAll(predicate: a => a.Username == model.Username).FirstOrDefaultAsync();
 
             if (admin == null)
             {
-                ViewBag.ErrorMessage = "Tài khoản không tồn tại";
+                ModelState.AddModelError("", "Tài khoản không tồn tại");
                 return View(model);
             }
 
             var passwordHash = HtmlHelpers.ComputeHash(model.Password, _pepper, _iteration);
-
             if (admin.Password != passwordHash)
             {
-                ViewBag.ErrorMessage = "Mật khẩu không đúng";
+                ModelState.AddModelError("", "Mật khẩu không đúng");
                 return View(model);
             }
 
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, Convert.ToString(admin.Id)),
+                new Claim(ClaimTypes.NameIdentifier, admin.Id.ToString()),
                 new Claim(ClaimTypes.Name, admin.Username),
             };
 
             var claimsIdentity = new ClaimsIdentity(claims, "vcms");
-
             await HttpContext.SignInAsync("vcms", new ClaimsPrincipal(claimsIdentity));
 
-            if (Url.IsLocalUrl(returnUrl))
+            if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+            {
                 return Redirect(returnUrl);
+            }
             else
-                return RedirectToAction("Index");
+            {
+                return RedirectToAction("Index", "Vcms");
+            }
         }
 
         public async Task<IActionResult> Logout()

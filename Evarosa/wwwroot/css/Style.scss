@@ -197,6 +197,7 @@ header {
 }
 
 .link-icon {
+    max-width: 80px;
     @include flex-center;
     flex-direction: column;
 
@@ -238,6 +239,7 @@ header {
         font-size: 12px;
         font-weight: 500;
         margin-top: 2px;
+        @include truncate(1);
     }
 
     &:hover {
@@ -324,6 +326,59 @@ header {
 
         &::before {
             display: block;
+        }
+    }
+}
+
+.header-links {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+
+    li {
+        position: relative;
+
+        &:hover .drop-menu {
+            top: 100%;
+            opacity: 1;
+            visibility: visible;
+        }
+    }
+
+    .drop-menu {
+        position: absolute;
+        top: calc(100% + 30px);
+        right: 0;
+        z-index: 2;
+        padding: 0 15px;
+        margin: 0;
+        list-style-type: none;
+        background-color: $white;
+        box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+        opacity: 0;
+        visibility: hidden;
+        transition: .4s ease;
+
+        a, button {
+            display: inline-block;
+            white-space: nowrap;
+            padding: 8px 0;
+            color: $black;
+            outline: 0;
+            border: 0;
+            background-color: transparent;
+            transition: .2s;
+
+            &:hover {
+                color: $primary;
+            }
+        }
+
+        li:not(:last-child) a {
+            border-bottom: 1px solid #cdcdcd;
         }
     }
 }
@@ -966,4 +1021,30 @@ footer {
     line-height: 24px;
     background-color: #F1F2F3;
     margin-bottom: 0;
+}
+
+.form-control {
+    box-shadow: none !important;
+    border-radius: 5px;
+
+    &:focus {
+        border-color: $primary;
+    }
+}
+
+.validation-summary-errors {
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid $red;
+    background-color: rgba($red, .3);
+    border-radius: 5px;
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        color: $black;
+        font-size: 14px;
+        font-weight: 600;
+    }
 }
