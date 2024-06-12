@@ -1,76 +1,47 @@
 ﻿using System.Net.Mail;
 using System.Net;
-using System.Text;
+using Microsoft.Extensions.Options;
 
 namespace Evarosa.Services.Impl
 {
     public class MailService : IMailService
     {
-        public async Task<string> SendEmailAsync(string smtpmail, string subject, string body, string emailTo, string emailFrom, string username, string password, string emailName = null, string bcc = null, string replyTo = null)
+        private readonly MailSettings _mailSettings;
+        private readonly ILogger<MailService> _logger;
+
+        public MailService(IOptions<MailSettings> mailSettingsOptions, ILogger<MailService> logger)
+        {
+            _mailSettings = mailSettingsOptions.Value;
+            _logger = logger;
+        }
+
+        public async Task<bool> SendEmailAsync(MailData mailData)
         {
             try
             {
-                if (emailName == null)
+                using (var mailMessage = new MailMessage())
                 {
-                    emailName = "Vico Register";
-                }
+                    mailMessage.From = new MailAddress(_mailSettings.SenderEmail, _mailSettings.SenderName);
+                    mailMessage.To.Add(new MailAddress(mailData.EmailToId, mailData.EmailToName));
+                    mailMessage.Subject = mailData.EmailSubject;
+                    mailMessage.Body = mailData.EmailBody;
+                    mailMessage.IsBodyHtml = true;
 
-                string host = "smtp.gmail.com";
-                int port = 587;
-                switch (smtpmail)
-                {
-                    case "gmail":
-                        host = "smtp.gmail.com";
-                        break;
-                    case "yahoo":
-                        host = "smtp.mail.yahoo.com";
-                        break;
-                    case "live":
-                        host = "smtp.live.com";
-                        break;
-                    case "amazon":
-                        host = "email-smtp.us-east-1.amazonaws.com";
-                        break;
-                    case "zoho":
-                        host = "smtp.zoho.com";
-                        break;
-                    case "yandex":
-                        host = "smtp.yandex.com";
-                        break;
-                }
-
-                using (MailMessage message = new MailMessage())
-                {
-                    message.From = new MailAddress(emailFrom, emailName);
-                    message.To.Add(emailTo);
-                    if (replyTo != null)
+                    using (var smtpClient = new SmtpClient(_mailSettings.Server, _mailSettings.Port))
                     {
-                        message.ReplyToList.Add(replyTo);
-                    }
-
-                    if (bcc != null)
-                    {
-                        message.Bcc.Add(bcc);
-                    }
-
-                    message.Subject = subject;
-                    message.SubjectEncoding = Encoding.UTF8;
-                    message.Body = body;
-                    message.BodyEncoding = Encoding.UTF8;
-                    message.IsBodyHtml = true;
-                    using (SmtpClient smtpClient = new SmtpClient(host, port))
-                    {
-                        smtpClient.Credentials = new NetworkCredential(username, password);
+                        smtpClient.Credentials = new NetworkCredential(_mailSettings.SenderEmail, _mailSettings.Password);
                         smtpClient.EnableSsl = true;
-                        await smtpClient.SendMailAsync(message);
+
+                        await smtpClient.SendMailAsync(mailMessage);
                     }
                 }
 
-                return "Send Successfull";
+                return true;
             }
             catch (Exception ex)
             {
-                return ex.Message;
+                _logger.LogError(ex, "An error occurred while sending email to {EmailToId}", mailData.EmailToId);
+                return false;
             }
         }
     }

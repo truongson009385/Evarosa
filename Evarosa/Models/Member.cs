@@ -17,6 +17,10 @@ namespace Evarosa.Models
         [EmailAddress(ErrorMessage = "Email không hợp lệ.")]
         public string Email { get; set; }
 
+        public string? EmailConfirmation { get; set; }
+
+        public string? Token { get; set; }
+
         [Display(Name = "Số điện thoại"), UIHint("MemberTextBox")]
         [Required(ErrorMessage = "Số điện thoại là bắt buộc.")]
         [RegularExpression(@"^\(?(09|03|07|08|05)\)?[-. ]?([0-9]{8})$", ErrorMessage = "Số điện thoại không đúng định dạng.")]

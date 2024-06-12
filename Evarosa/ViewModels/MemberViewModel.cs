@@ -20,6 +20,10 @@ namespace Evarosa.ViewModels
         [StringLength(50, MinimumLength = 6, ErrorMessage = "Mật khẩu phải có ít nhất 6 ký tự.")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
+
+        [Display(Name = "Remember Me?")]
+        public bool RememberMe { get; set; }
+        public string? ReturnUrl { get; set; }
     }
 
     public class MemberForm
@@ -57,5 +61,57 @@ namespace Evarosa.ViewModels
         [Display(Name = "Ngày sinh"), UIHint("MemberDateBox")]
         [DataType(DataType.Date)]
         public DateTime? BirthDate { get; set; }
+    }
+
+    public class ForgotPasswordViewModel
+    {
+        [Display(Name = "Email"), UIHint("MemberTextBox")]
+        [Required(ErrorMessage = "Email là bắt buộc.")]
+        [EmailAddress(ErrorMessage = "Email không hợp lệ.")]
+        public string Email { get; set; }
+    }
+
+    public class ChangePasswordViewModel
+    {
+        [Required(ErrorMessage = "Mật khẩu là bắt buộc.")]
+        [StringLength(50, MinimumLength = 6, ErrorMessage = "Mật khẩu phải có ít nhất 6 ký tự.")]
+        [DataType(DataType.Password)]
+        [Display(Name = "Mật khẩu hiện tại"), UIHint("MemberPassword")]
+        public string OldPassword { get; set; }
+
+        [Required(ErrorMessage = "Mật khẩu là bắt buộc.")]
+        [StringLength(50, MinimumLength = 6, ErrorMessage = "Mật khẩu phải có ít nhất 6 ký tự.")]
+        [DataType(DataType.Password)]
+        [Display(Name = "Mật khẩu"), UIHint("MemberPassword")]
+        public string Password { get; set; }
+
+        [Required(ErrorMessage = "Xác nhận mật khẩu là bắt buộc.")]
+        [DataType(DataType.Password), UIHint("MemberPassword")]
+        [Display(Name = "Xác nhận mật khẩu")]
+        [Compare("Password", ErrorMessage = "Mật khẩu không khớp!")]
+        public string ConfirmPassword { get; set; }
+    }
+
+    public class ResetPasswordViewModel
+    {
+        [Display(Name = "Email"), UIHint("MemberTextBox")]
+        [Required(ErrorMessage = "Email là bắt buộc.")]
+        [EmailAddress(ErrorMessage = "Email không hợp lệ.")]
+        public string Email { get; set; }
+
+        [Required(ErrorMessage = "Mật khẩu là bắt buộc.")]
+        [StringLength(50, MinimumLength = 6, ErrorMessage = "Mật khẩu phải có ít nhất 6 ký tự.")]
+        [DataType(DataType.Password)]
+        [Display(Name = "Mật khẩu"), UIHint("MemberPassword")]
+        public string Password { get; set; }
+
+        [Required(ErrorMessage = "Xác nhận mật khẩu là bắt buộc.")]
+        [StringLength(50, MinimumLength = 6, ErrorMessage = "Mật khẩu phải có ít nhất 6 ký tự.")]
+        [DataType(DataType.Password)]
+        [Display(Name = "Xác nhận mật khẩu"), UIHint("MemberPassword")]
+        [Compare("Password", ErrorMessage = "Mật khẩu không khớp!")]
+        public string ConfirmPassword { get; set; }
+
+        public string? Code { get; set; } = string.Empty;
     }
 }

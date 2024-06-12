@@ -48,6 +48,7 @@ builder.Services.AddTransient<IMailService, MailService>();
 builder.Services.AddTransient<IFileService, FileService>();
 builder.Services.AddSingleton<IAppService, AppService>();
 builder.Services.AddScoped<UnitOfWork, UnitOfWork>();
+builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 
 var app = builder.Build();
 

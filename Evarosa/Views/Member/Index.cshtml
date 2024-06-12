@@ -7,8 +7,12 @@
 <div class="container my-5">
     <div class="member-wrapper">
         @await Component.InvokeAsync("Member")
+        @if (!string.IsNullOrEmpty(ViewBag.Message))
+        {
+            <partial name="_resultmessage" model="ViewBag.Message" />
+        }
         <h3 class="member-title">Thông tin cá nhân</h3>
-        <form class="member-form">
+        <form asp-action="Index" method="post" class="member-form">
             @Html.ValidationSummary(true)
             @Html.HiddenFor(m => m.Member.Id)
             <div class="form-row">
@@ -16,7 +20,9 @@
                     @Html.EditorFor(m => m.Member.FullName)
                 </div>
                 <div class="form-group col-md-6">
-                    @Html.EditorFor(m => m.Member.BirthDate)
+                    <label asp-for="Member.BirthDate"></label>
+                    <input class="form-control" type="date" asp-for="Member.BirthDate" />
+                    <span asp-validation-for="Member.BirthDate"></span>
                 </div>
             </div>
             <div class="form-row">

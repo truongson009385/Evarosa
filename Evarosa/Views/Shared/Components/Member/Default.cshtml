@@ -1,4 +1,10 @@
-﻿
+﻿@functions {
+    public string Active(string? url)
+    {
+        string currentPath = Context.Request.Path;
+        return currentPath.Equals(url, StringComparison.OrdinalIgnoreCase) ? "active" : "";
+    }
+}
 
 <div class="avatar-upload mb-4">
     <div class="avatar-edit">
@@ -27,28 +33,23 @@
 </ul>
 <ul class="member-menu mt-4 mb-5">
     <li>
-        <a href="" class="active">
-            <i class="fa-regular fa-address-card"></i>Thông tin tài khoản
+        <a asp-controller="Member" asp-action="Index" class="@Active(Url.Action("Index", "Member"))">
+            <i class="fa-regular fa-address-card"></i>Tài khoản
         </a>
     </li>
     <li>
-        <a href="">
+        <a asp-controller="Member" asp-action="ChangePassword" class="@Active(Url.Action("ChangePassword", "Member"))">
             <i class="fa-regular fa-key"></i>Đổi mật khẩu
         </a>
     </li>
     <li>
-        <a href="">
-            <i class="fa-regular fa-address-card"></i>Đường dẫn thành viên
+        <a asp-controller="Member" asp-action="ListOrder" class="@Active(Url.Action("ListOrder", "Member"))">
+            <i class="fa-regular fa-box"></i>Đơn hàng
         </a>
     </li>
     <li>
-        <a href="">
-            <i class="fa-regular fa-address-card"></i>Đường dẫn thành viên
-        </a>
-    </li>
-    <li>
-        <a href="">
-            <i class="fa-regular fa-address-card"></i>Đường dẫn thành viên
+        <a asp-controller="Member" asp-action="ListAddress" class="@Active(Url.Action("ListAddress", "Member"))">
+            <i class="fa-regular fa-map-location"></i>Địa chỉ
         </a>
     </li>
 </ul>
