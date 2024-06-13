@@ -1,0 +1,239 @@
+﻿@model ListOrderViewModel
+@{
+    ViewBag.Title = "Danh sách đơn đặt hàng";
+    Layout = "_AdminLayout";
+}
+
+<div class="box_header">
+    <h2>@ViewBag.Title</h2>
+</div>
+<div class="box_content mt-0">
+    <form action="@Url.Action("ListOrder")" method="get">
+        <table class="form_table">
+            <tr>
+                <td>Mã đơn hàng</td>
+                <td>
+                    <input name="madonhang" asp-for="MaDonhang" type="text" class="form_control" />
+                </td>
+                <td>Tên khách hàng</td>
+                <td>
+                    <input name="customerName" asp-for="CustomerName" type="text" class="form_control" />
+                </td>
+            </tr>
+            <tr>
+                <td>Điện thoại khách hàng</td>
+                <td>
+                    <input name="customerMobile" asp-for="CustomerMobile" type="text" class="form_control" />
+                </td>
+                <td>Email khách hàng</td>
+                <td>
+                    <input name="customerEmail" asp-for="CustomerEmail" type="text" class="form_control" />
+                </td>
+            </tr>
+            <tr>
+                <td>Ngày đặt hàng từ</td>
+                <td>
+                    <input name="fromdate" asp-for="FromDate" type="text" class="form_control datepicker" />
+                </td>
+                <td>Đến ngày</td>
+                <td>
+                    <input name="todate" asp-for="ToDate" type="text" class="form_control datepicker" />
+                </td>
+            </tr>
+            <tr>
+                <td>Hình thức thanh toán</td>
+                <td>
+                    <select name="payment" class="form_control" asp-for="Payment" asp-items="Html.GetEnumSelectList<PaymentType>()">
+                        <option value="" selected>Tất cả</option>
+                    </select>
+                </td>
+                <td>Trạng thái thanh toán</td>
+                <td>
+                    <select name="status" class="form_control" asp-for="Status" asp-items="Html.GetEnumSelectList<OrderStatus>()">
+                        <option value="">Tất cả đơn hàng</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Số đơn trên trang</td>
+                <td>
+                    <input name="pageSize" type="number" class="form_control w100" value="@(Model.PageSize)" max="200" />
+                </td>
+                <td>Thành phố</td>
+                <td>
+                    <select name="cityId" class="form_control w300" asp-for="CityId" asp-items="Model.CitySelectList">
+                        <option value="" selected>Tất cả</option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+        <div>
+            <button type="submit" class="btn-search">TÌM KIẾM</button>
+        </div>
+    </form>
+    <hr />
+    <p>Có tổng số <strong>@Model.Orders.TotalItemCount</strong> đơn hàng</p>
+    <table class="list_table tablecenter">
+        <tr>
+            <th style="width: 40px">Mã ĐH</th>
+            <th>Thông tin đơn hàng</th>
+            <th>Trạng thái thanh toán</th>
+            <th>Trạng thái xử lý</th>
+            <th>Ghi chú</th>
+            <th style="width: 100px;"></th>
+        </tr>
+        @foreach (var order in Model.Orders)
+        {
+            var colorStats = "";
+            if (order.Status == OrderStatus.Processing)
+            {
+                colorStats = "process-order";
+            }
+            var congno = order.Total - order.Prepayment;
+
+            <tr data-id="@order.Id">
+                <td><a href="javascript:;" onclick="loadOrder(@order.Id)" class="@colorStats">@order.OrderCode</a></td>
+                <td class="left">
+                    <p><strong>Người mua</strong> @order.Customer?.FullName</p>
+                    <p><strong>Địa chỉ</strong> @order.Address, @order.Ward?.Name, @order.District?.Name, @order.City?.Name</p>
+                    <p><strong>Điện thoại</strong> @order.Customer?.PhoneNumber</p>
+                    <p><strong>Email</strong> @order.Customer?.Email</p>
+                    <p><strong>Ngày đặt:</strong> @order.CreateDate.ToString("dd/MM/yyyy HH:mm")</p>
+                </td>
+                <td>
+                    <select name="payment" class="form_control">
+                        @foreach (var item in Html.GetEnumSelectList<PaymentType>())
+                        {
+                            <option value="@item.Value" selected="@(int.Parse(item.Value) == (int)order.PaymentType ? "selected" : null)">@item.Text</option>
+                        }
+                    </select>
+                </td>
+                <td>
+                    <select name="status" class="form_control">
+                        @foreach (var item in Html.GetEnumSelectList<OrderStatus>())
+                        {
+                            <option value="@item.Value" selected="@(int.Parse(item.Value) == (int)order.Status ? "selected" : null)">@item.Text</option>
+                        }
+                    </select>
+                </td>
+                <td>
+                    <p class="left">
+                        Tiền hàng: <strong>@order.Total?.ToString("N0")</strong><br /><br />
+                        Phí Ship: <input type="text" class="form_control w100 input-number" name="ShipFee" value="@order.ShipFee" min="0" /><br />
+                        Đã thanh toán: <input type="text" class="form_control w100 input-number" name="ThanhToanTruoc" value="@order.Prepayment" min="0" /><br />
+                        Công nợ: <strong>@Convert.ToInt32(congno).ToString("N0")</strong>
+                    </p>
+                    <p>
+                        <textarea name="Notice" rows="4" class="form_control" placeholder="Ghi chú">@order.Customer.Note</textarea>
+                    </p>
+                    <button type="button" class="btn btn-primary" onclick="updateNoticeOrder(@order.Id)">Cập nhật</button>
+                </td>
+                <td>
+                    <a href="javascript:;" onclick="loadOrder(@order.Id)">[Xem đơn]</a><br /><br />
+                    @if (order.Status == OrderStatus.Canceled)
+                    {
+                        <a href="javascript:;" onclick="parmanentDeleteOrder(@order.Id)">[Xóa đơn]</a>
+                    }
+                    else
+                    {
+                        
+                            <a href="javascript:;" onclick="deleteOrder(@order.Id)">[Hủy đơn]</a>
+                    }
+                </td>
+            </tr>
+        }
+        @if (Model.Orders.PageCount > 1)
+        {
+            <tr>
+                <td colspan="7">@Html.PagedListPager(Model.Orders, page => Url.Action("ListOrder", new { page, status = Model.Status, name = Model.CustomerName, email = Model.CustomerEmail, mobile = Model.CustomerMobile, formdate = Model.FromDate, todate = Model.ToDate, cityId = Model.CityId, pagesize = Model.PageSize }))</td>
+            </tr>
+        }
+    </table>
+</div>
+<div id="contactDetails"></div>
+@section scripts
+{
+    <script src="~/Scripts/jquery.maskMoney.min.js"></script>
+    <script>
+        $(".datepicker").datepicker({
+            dateFormat: 'dd/mm/yy'
+        });
+        $(function () {
+            $(".input-number").maskMoney({
+                precision: 0,
+                thousands: ','
+            });
+        });
+        function updateNoticeOrder(id) {
+            var divId = $("tr[data-id='" + id + "']");
+            var notice = divId.find("textarea").val();
+            var thanhtoan = divId.find("input[name=ThanhToanTruoc]").val();
+            var shipFee = divId.find("input[name=ShipFee]").val();
+            var payment = divId.find("select[name=payment]").val();
+            var status = divId.find("select[name=status]").val();
+
+            var thanhtoantruoc = thanhtoan.replace(/\,/g, "");
+            var ship = shipFee.replace(/\,/g, "");
+            if (thanhtoantruoc < 0) {
+                alert("Số tiền thanh toán trước phải lơn hơn bằng 0");
+            }
+            if (ship < 0) {
+                alert("Số tiền ship phải lơn hơn bằng 0");
+            }
+
+            $.post("/Order/UpdateOrderNotice", { orderId: id, notice: notice, thanhtoantruoc: thanhtoantruoc, ship: ship, payment, status }, function (data) {
+                if (data) {
+                    alert("Cập nhật đơn hàng thành công");
+                    location.reload();
+                } else {
+                    alert("Quá trình thực hiện không thành công. Hãy thử lại");
+                }
+            });
+        }
+        function deleteOrder(id) {
+            if (confirm("Bạn có chắc chắn hủy đơn hàng này không?")) {
+                $.post("/Order/DeleteOrder", { orderId: id }, function (data) {
+                    if (data) {
+                        alert("Hủy đơn hàng thành công");
+                        $("tr[data-id='" + id + "']").fadeOut();
+                    } else {
+                        alert("Quá trình thực hiện không thành công. Hãy thử lại");
+                    }
+                });
+            }
+        }
+        function parmanentDeleteOrder(id) {
+            if (confirm("Bạn có chắc chắn Xóa đơn hàng này không?")) {
+                $.post("/Order/ParmanentDeleteOrder", { orderId: id }, function (data) {
+                    if (data) {
+                        alert("Xóa đơn hàng thành công");
+                        $("tr[data-id='" + id + "']").fadeOut();
+                    } else {
+                        alert("Quá trình thực hiện không thành công. Hãy thử lại");
+                    }
+                });
+            }
+        }
+        function loadOrder(id) {
+            $.get("/Order/LoadOrder", { orderId: id }, function (data) {
+                $("#contactDetails").html(data);
+                $("#contactDetails").dialog("open");
+            });
+        }
+        $(function () {
+            $("#contactDetails").dialog({
+                autoOpen: false,
+                modal: true,
+                width: 800,
+                show: {
+                    effect: "blind",
+                    duration: 1000
+                },
+                hide: {
+                    effect: "explode",
+                    duration: 1000
+                }
+            });
+        });
+    </script>
+}

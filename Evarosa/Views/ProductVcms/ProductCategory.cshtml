@@ -1,0 +1,144 @@
+﻿@model ProductCategoryViewModel
+
+@{
+    ViewBag.Title = "Thêm danh mục sản phẩm";
+    Layout = "_AdminLayout";
+}
+
+<div class="box_header">
+    <h2>@ViewBag.Title</h2>
+    <div class="list-group list-group-horizontal">
+        <a class="btn quick-link mr-2" asp-action="ListProductCategory"><i class="fa-solid fa-pen mr-2"></i>Danh sách danh mục sản phẩm</a>
+    </div>
+</div>
+<div class="box_content">
+    @using (Html.BeginForm("ProductCategory", "ProductVcms", FormMethod.Post, new { enctype = "multipart/form-data", @id = "product-form" }))
+    {
+        <div class="row">
+            <div class="col-lg-8 pr-lg-5">
+                @Html.ValidationSummary(true)
+                <table class="form_table">
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(model => model.ProductCategory.Title)</td>
+                        <td class="form_text">@Html.EditorFor(model => model.ProductCategory.Title)</td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(model => model.ProductCategory.Url)</td>
+                        <td class="form_text">@Html.EditorFor(model => model.Url)</td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(model => model.ProductCategory.Des)</td>
+                        <td class="form_text">
+                            <textarea asp-for="ProductCategory.Des"> </textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(model => model.ProductCategory.Content)</td>
+                        <td class="form_text">
+                            <textarea asp-for="ProductCategory.Content" class="ckeditor"> </textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(model => model.ProductCategory.Image)</td>
+                        <td class="form_text">
+                            <div class="file-image mb-3"></div>
+                            <input type="hidden" asp-for="ProductCategory.Image" id="Image" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(model => model.ProductCategory.Icon)</td>
+                        <td class="form_text">
+                            <div class="file-icon mb-3"></div>
+                            <input type="hidden" asp-for="ProductCategory.Icon" id="Icon" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(model => model.ProductCategory.Banner)</td>
+                        <td class="form_text">
+                            <div class="file-banner mb-3"></div>
+                            <input type="hidden" asp-for="ProductCategory.Banner" id="Banner" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="form_name"></td>
+                        <td class="form_text">
+                            <input type="submit" class="btn quick-link" value="Thêm mới" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-lg-4">
+                <table class="form_table">
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(model => model.ProductCategory.ParentCategoryId)</td>
+                        <td class="form_text">
+                            <select asp-for="ProductCategory.ParentCategoryId" class="form_control w300" asp-items="ViewBag.categories">
+                                <option value="">Không có danh mục cha</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(model => model.ProductCategory.BannerPromotion)</td>
+                        <td class="form_text">
+                            <select asp-for="ProductCategory.BannerPromotionId" class="form_control w300" asp-items="ViewBag.banners">
+                                <option value="">Không có banner khuyến mãi</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(model => model.ProductCategory.ShowHome)</td>
+                        <td class="form_text">@Html.EditorFor(model => model.ProductCategory.ShowHome)</td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(model => model.ProductCategory.ShowMenu)</td>
+                        <td class="form_text">@Html.EditorFor(model => model.ProductCategory.ShowMenu)</td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(model => model.ProductCategory.ShowHeader)</td>
+                        <td class="form_text">@Html.EditorFor(model => model.ProductCategory.ShowHeader)</td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(model => model.ProductCategory.ShowFooter)</td>
+                        <td class="form_text">@Html.EditorFor(model => model.ProductCategory.ShowFooter)</td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(model => model.ProductCategory.ShowOutstanding)</td>
+                        <td class="form_text">@Html.EditorFor(model => model.ProductCategory.ShowOutstanding)</td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(model => model.ProductCategory.Active)</td>
+                        <td class="form_text">@Html.CheckBoxFor(model => model.ProductCategory.Active, new { @checked = "checked" })</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(".file-image").customUploader({
+            folder: "product-categories",
+            extens: "jpg, jpeg, png",
+            limit: 1,
+            input: "#Image",
+        });
+
+        $(".file-icon").customUploader({
+            folder: "product-categories",
+            extens: "jpg, jpeg, png, svg",
+            limit: 1,
+            input: "#Icon",
+        });
+
+        $(".file-banner").customUploader({
+            folder: "product-categories",
+            extens: "jpg, jpeg, png",
+            limit: 1,
+            input: "#Banner",
+        });
+    </script>
+}

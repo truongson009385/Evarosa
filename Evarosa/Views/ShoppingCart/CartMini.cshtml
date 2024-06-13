@@ -1,0 +1,33 @@
+﻿@model CartMiniViewModel
+
+@if (Model.CartItems.Any())
+{
+    <div class="list-item">
+        @foreach (var item in Model.CartItems)
+        {
+            <div class="media">
+                <img class="mr-2" src="@PathSystem.Combine("/contents/products", item.Product.GetAvatar() ?? "")" alt="" />
+                <div class="media-body">
+                    <a asp-controller="Home" asp-action="ProductDetails" asp-route-url="@item.Product.Url" class="name">
+                        @item.Product.Name
+                    </a>
+                    <p class="text">@item.Quantity x <strong>@Html.DisplayFor(m => item.Total)</strong></p>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="bar">
+        <div class="group-button">
+            <a asp-controller="ShoppingCart" asp-action="Index" class="button-4 text-center">
+                Xem giỏ hàng
+            </a>
+            <a asp-controller="ShoppingCart" asp-action="Checkout" class="button-5 text-center">
+                Thanh toán
+            </a>
+        </div>
+    </div>
+} else
+{
+    @:Chưa có sản phẩm trong giỏ hàng.
+}

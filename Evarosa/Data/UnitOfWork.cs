@@ -14,6 +14,14 @@ namespace Evarosa.Data
         public Repository<Banner> Banner { get; set; }
         public Repository<Contact> Contact { get; set; }
         public Repository<Member> Member { get; set; }
+        public Repository<ProductCategory> ProductCategory { get; set; }
+        public Repository<Product> Product { get; set; }
+        public Repository<CartItem> CartItem { get; set; }
+        public Repository<Order> Order { get; set; }
+        public Repository<OrderDetail> OrderDetail { get; set; }
+        public Repository<City> City { get; set; }
+        public Repository<District> District { get; set; }
+        public Repository<Ward> Ward { get; set; }
 
         public UnitOfWork(ApplicationDbContext db)
         {
@@ -26,6 +34,14 @@ namespace Evarosa.Data
             Banner = new Repository<Banner>(_db);
             Contact = new Repository<Contact>(_db);
             Member = new Repository<Member>(_db);
+            ProductCategory = new Repository<ProductCategory>(_db);
+            Product = new Repository<Product>(_db);
+            CartItem = new Repository<CartItem>(_db);
+            Order = new Repository<Order>(_db);
+            OrderDetail = new Repository<OrderDetail>(_db);
+            City = new Repository<City>(_db);
+            District = new Repository<District>(_db);
+            Ward = new Repository<Ward>(_db);
 
         }
 

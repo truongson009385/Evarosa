@@ -1,0 +1,189 @@
+﻿@model ProductCategoryViewModel
+
+@{
+    ViewBag.Title = "Danh sách danh mục sản phẩm";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@if (!string.IsNullOrEmpty(ViewBag.Message))
+{
+    <partial name="_resultmessage" model="ViewBag.Message" />
+}
+
+<div class="box_header">
+    <h2>@ViewBag.Title</h2>
+
+    @if (User.IsInRole("Admin"))
+    {
+        <div class="list-group list-group-horizontal">
+            <a class="btn quick-link mr-2" asp-action="ProductCategory"><i class="fa-solid fa-pen mr-2"></i>Thêm mới</a>
+        </div>
+    }
+</div>
+
+<div class="box_content">
+    <form class="mb-4" action="" method="get">
+        <div class="row">
+            <div class="col-3">
+                <label>Từ khóa</label>
+                <input name="term" asp-for="Term" class="form_control" />
+                <button type="submit" class="btn-search ml-auto">Tìm kiếm</button>
+            </div>
+        </div>
+    </form>
+    <table class="list_table tablecenter table-striped">
+        <tbody>
+            <tr>
+                <th style="width: 50px" class="text-center">#</th>
+                <th style="width: 80px" class="text-center">STT</th>
+                <th style="width: 80px">Ảnh</th>
+                <th style="width: 200px">Tên</th>
+                <th style="width: 150px" class="text-center">Trang chủ</th>
+                <th style="width: 150px" class="text-center">Bộ lọc</th>
+                <th style="width: 150px" class="text-center">Header</th>
+                <th style="width: 150px" class="text-center">Chân trang</th>
+                <th style="width: 150px" class="text-center">Nổi bật</th>
+                <th style="width: 150px" class="text-center">Hoạt động</th>
+                <th scope="col" style="width: 100px;"></th>
+            </tr>
+            @{
+                var index = (Model.ListProductCategory.PageNumber - 1) * Model.ListProductCategory.PageSize + 1;
+            }
+            @if (Model.ListProductCategory.Any())
+            {
+                int i = 1;
+
+                @foreach (var item in Model.ListProductCategory)
+                {
+                    int level = 0;
+
+                    await RenderCategory(item, level, i);
+
+                    i++;
+                }
+            }
+            @if (Model.ListProductCategory.PageCount > 1)
+            {
+                <tr>
+                    <td colspan="11">
+                        @Html.PagedListPager(Model.ListProductCategory, page => Url.Action("ListProductCategory", new { page }))
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@{
+    async Task RenderCategory(ProductCategory item, int level, int stt)
+    {
+        string prefix = String.Concat(Enumerable.Repeat("&rArr;", level));
+
+        <tr data-id="@item.Id">
+            <td>
+                @(stt != 0 ? stt : "")
+            </td>
+            <td>
+                <input type="number" name="sort" value="@item.Sort" />
+            </td>
+            <td>
+                @if (!string.IsNullOrEmpty(item.Image))
+                {
+                    <img src="@Url.Content($"/contents/product-categories/{item.Image}")" style="width: 80px; aspect-ratio: 1; object-fit: contain;">
+                }
+                else
+                {
+                    @:NO PHOTO
+                }
+            </td>
+            <td class="left">
+                @Html.Raw(prefix)
+                @item.Title
+            </td>
+            <td>
+                <input type="checkbox" name="showHome" checked="@item.ShowHome" />
+            </td>
+            <td>
+                <input type="checkbox" name="showMenu" checked="@item.ShowMenu" />
+            </td>
+            <td>
+                <input type="checkbox" name="showHeader" checked="@item.ShowHeader" />
+            </td>
+            <td>
+                <input type="checkbox" name="showFooter" checked="@item.ShowFooter" />
+            </td>
+            <td>
+                <input type="checkbox" name="showOutstanding" checked="@item.ShowOutstanding" />
+            </td>
+            <td>
+                <input type="checkbox" name="isActive" checked="@item.Active" />
+            </td>
+            <td>
+                <a href="javascript:;" onclick="quickUpdate('@item.Id')">Cập nhật</a>
+                - <a asp-action="UpdateProductCategory" asp-route-id="@item.Id">Sửa</a>
+                - <a href="javascript:;" onclick="deleteFunc('@item.Id')" class="red-warring">Xóa</a>
+            </td>
+        </tr>
+        if (item.CategoryChildren?.Count > 0)
+        {
+            foreach (var cCategory in item.CategoryChildren)
+            {
+                await RenderCategory(cCategory, level + 1, 0);
+            }
+        }
+    }
+}
+
+@section Scripts {
+    <script>
+        function deleteFunc(id) {
+            if (confirm("Bạn có chắc chắn xóa danh mục này không?")) {
+                $.post("/ProductVcms/DeleteProductCategory", { id: id }, function (data) {
+                    if (data.success) {
+                        $.toast({
+                            text: 'Xóa danh mục thành công',
+                            position: 'bottom-right',
+                            icon: 'success'
+                        });
+                        $("tr[data-id='" + id + "']").fadeOut();
+                    }
+                    else {
+                        $.toast({
+                            text: 'Quá trình thực hiện không thành công. Hãy thử lại',
+                            icon: 'error'
+                        });
+                    }
+                });
+            }
+        }
+
+        function quickUpdate(id) {
+            var item = $("tr[data-id='" + id + "']");
+
+            $.post("/ProductVcms/QuickUpdateCategory", {
+                categoryId: id,
+                sort: item.find("input[name='sort']").val(),
+                showHome: item.find("input[name='showHome']").prop("checked"),
+                showMenu: item.find("input[name='showMenu']").prop("checked"),
+                showHeader: item.find("input[name='showHeader']").prop("checked"),
+                showFooter: item.find("input[name='showFooter']").prop("checked"),
+                showOutstanding: item.find("input[name='showOutstanding']").prop("checked"),
+                isActive: item.find("input[name='isActive']").prop("checked"),
+            }, function (data) {
+                if (data.success) {
+                    $.toast({
+                        text: 'Cập nhật thành công',
+                        position: 'bottom-right',
+                        icon: 'success'
+                    });
+                }
+                else {
+                    $.toast({
+                        text: 'Quá trình thực hiện không thành công. Hãy thử lại',
+                        icon: 'error'
+                    });
+                }
+            });
+        }
+    </script>
+}

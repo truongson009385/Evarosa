@@ -1,0 +1,181 @@
+﻿@model CheckoutViewModel
+
+@{
+    ViewBag.Title = "Thanh toán";
+
+    var breadcrumb = new BreadcrumbViewModel
+    {
+        Path = new List<BreadcrumbItem>
+        {
+            new BreadcrumbItem
+            {
+                Key = "<i class='fa-solid fa-house mr-2'></i>Trang chủ",
+                Value = Url.Action("Index", "Home")
+            },
+            new BreadcrumbItem
+            {
+                Key = ViewBag.Title,
+                Value = null
+            }
+        }
+    };
+}
+
+@await Html.PartialAsync("_breadcrumb", breadcrumb)
+
+<form asp-controller="ShoppingCart" asp-action="Checkout" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="container pb-5">
+        <h1 class="page-title text-center mb-5">
+            @ViewBag.Title
+        </h1>
+        <div class="row">
+            <div class="col-lg-7">
+                <h2 class="cart-title mb-4">
+                    THÔNG TIN THANH TOÁN
+                </h2>
+                <div class="row mb-5">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label>Họ và tên *</label>
+                            <input class="form-control" type="text" asp-for="Order.Customer.FullName" placeholder="Họ và tên của bạn" />
+                        </div>
+                        <span asp-validation-for="Order.Customer.FullName" class="text-danger" style="font-size: 14px; font-weight: 600;"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Số điện thoại *</label>
+                            <input class="form-control" type="text" asp-for="Order.Customer.PhoneNumber" placeholder="Số điện thoại của bạn" />
+                        </div>
+                        <span asp-validation-for="Order.Customer.PhoneNumber" class="text-danger" style="font-size: 14px; font-weight: 600;"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Địa chỉ email *</label>
+                            <input class="form-control" type="text" asp-for="Order.Customer.Email" placeholder="Email của bạn" />
+                        </div>
+                        <span asp-validation-for="Order.Customer.Email" class="text-danger" style="font-size: 14px; font-weight: 600;"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Tỉnh/Thành phố *</label>
+                            <select id="cityDropdown" asp-for="Order.CityId" class="form-control select2">
+                                <option value="">Chọn Tỉnh/Thành phố</option>
+                                @foreach (var item in Model.Cities)
+                                {
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            </select>
+                        </div>
+                        <span asp-validation-for="Order.City" class="text-danger" style="font-size: 14px; font-weight: 600;"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Quận/Huyện *</label>
+                            <select id="districtDropdown" asp-for="Order.DistrictId" class="form-control select2">
+                                <option value="">Chọn Quận/Huyện</option>
+                            </select>
+                        </div>
+                        <span asp-validation-for="Order.District" class="text-danger" style="font-size: 14px; font-weight: 600;"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Xã/Phường *</label>
+                            <select id="wardDropdown" asp-for="Order.WardId" class="form-control select2">
+                                <option value="">Chọn Xã/Phường</option>
+                            </select>
+                        </div>
+                        <span asp-validation-for="Order.WardId" class="text-danger" style="font-size: 14px; font-weight: 600;"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Địa chỉ *</label>
+                            <input class="form-control" type="text" asp-for="Order.Address" placeholder="Ví dụ: Số 20, ngõ 90" />
+                        </div>
+                        <span asp-validation-for="Order.Address" class="text-danger" style="font-size: 14px; font-weight: 600;"></span>
+                    </div>
+                </div>
+                <h2 class="cart-title mb-4">
+                    THÔNG TIN BỔ SUNG
+                </h2>
+                <div class="mb-5">
+                    <div class="form-group">
+                        <label>Ghi chú đơn hàng (tuỳ chọn)</label>
+                        <textarea class="form-control" asp-for="Order.Customer.Note" rows="5" placeholder="Ghi chú về đơn hàng, ví dụ: thời gian hay chỉ dẫn địa điểm giao hàng chi tiết hơn."></textarea>
+                    </div>
+                    <span asp-validation-for="Order.Customer.Note" class="text-danger" style="font-size: 14px; font-weight: 600;"></span>
+                </div>
+                <h2 class="cart-title mb-4">
+                    Phương thức thanh toán: (*)
+                </h2>
+                <div class="mb-4 mb-lg-0">
+                    <div class="payment-type">
+                        @foreach (var item in Html.GetEnumSelectList<PaymentType>())
+                        {
+                            <input type="radio" asp-for="Order.PaymentType" id="credit@(item.Value)" value="@item.Value" checked="@(item.Value == Html.GetEnumSelectList<PaymentType>().First().Value)">
+                            <label class="credit-label four col" for="credit@(item.Value)">
+                                @Html.DisplayFor(m => item.Text)
+                            </label>
+                        }
+                    </div>
+                    <span asp-validation-for="Order.PaymentType" class="text-danger" style="font-size: 14px; font-weight: 600;"></span>
+                </div>
+            </div>
+            <div class="col-lg-5">
+                <div class="order-border">
+                    <h2 class="cart-title mb-4">
+                        ĐƠN HÀNG CỦA BẠN
+                    </h2>
+                    <table class="order table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="">Sản phẩm</th>
+                                <th scope="col" class="text-right" style="width: 200px;">Tạm tính</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.CartItems)
+                            {
+                                <tr data-id="@item.RecordId">
+                                    <td class="name">
+                                        @item.Product.Name<strong class="ml-2">x @item.Quantity</strong>
+                                    </td>
+                                    <td class="text">
+                                        @Html.DisplayFor(m => item.Total)
+                                    </td>
+                                </tr>
+                            }
+                            <tr>
+                                <td scope="row" class="sum">Tạm tính</td>
+                                <td class="sum-value">@Html.DisplayFor(m => m.Total)</td>
+                            </tr>
+                            <tr>
+                                <td scope="row" class="sum">Phí vận chuyển</td>
+                                <td class="sum-value shipfee">0 VNĐ</td>
+                            </tr>
+                            <tr>
+                                <td scope="row" class="sum">Tổng</td>
+                                <td class="sum-value total">@Html.DisplayFor(m => m.Total)</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td scope="row" colspan="2">
+                                    <button type="submit" class="button-1">
+                                        Đặt hàng
+                                    </button>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

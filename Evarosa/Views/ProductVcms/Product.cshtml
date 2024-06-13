@@ -1,0 +1,158 @@
+﻿@model ProductViewModel
+
+@{
+    ViewBag.Title = "Thêm sản phẩm";
+    Layout = "_AdminLayout";
+}
+
+<div class="box_header">
+    <h2>@ViewBag.Title</h2>
+    <div class="list-group list-group-horizontal">
+        <a class="btn quick-link mr-2" asp-action="ListProduct"><i class="fa-solid fa-pen mr-2"></i>Danh sách sản phẩm</a>
+    </div>
+</div>
+<div class="box_content">
+    @using (Html.BeginForm("Product", "ProductVcms", FormMethod.Post, new { enctype = "multipart/form-data", @id = "product-form" }))
+    {
+        <div class="row">
+            <div class="col-12">
+                @Html.ValidationSummary(true)
+                <table class="form_table">
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(model => model.Product.ProductCategoryId)</td>
+                        <td class="form_text pb-3">
+                            <select asp-for="Product.ProductCategoryId" class="select2 form_control" asp-items="ViewBag.categories" style="width: 300px;">
+                                <option value="">Chọn danh mục sản phẩm</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(model => model.Product.Name)</td>
+                        <td class="form_text">@Html.EditorFor(model => model.Product.Name)</td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(model => model.Product.ShortDes)</td>
+                        <td class="form_text">
+                            <textarea asp-for="Product.ShortDes" rows="5"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(model => model.Product.MaSP)</td>
+                        <td class="form_text">@Html.EditorFor(model => model.Product.MaSP)</td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(model => model.Product.Url)</td>
+                        <td class="form_text">@Html.EditorFor(model => model.Url)</td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(model => model.Price) (VND)</td>
+                        <td class="form_text">@Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "input-number" } })</td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(model => model.PriceSale) (VND)</td>
+                        <td class="form_text">@Html.EditorFor(model => model.PriceSale, new { htmlAttributes = new { @class = "input-number" } })</td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(model => model.Product.Images)</td>
+                        <td class="form_text">
+                            <div class="file-images mb-3"></div>
+                            <input type="hidden" asp-for="Product.Images" id="Images" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(model => model.Product.Content)</td>
+                        <td class="form_text">
+                            <textarea asp-for="Product.Content" class="ckeditor"> </textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(model => model.Product.TextOrder)</td>
+                        <td class="form_text">
+                            <textarea asp-for="Product.TextOrder" class="ckeditor"> </textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(model => model.Product.TextSize)</td>
+                        <td class="form_text">
+                            <textarea asp-for="Product.TextSize" class="ckeditor"> </textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(model => model.Product.Title)</td>
+                        <td class="form_text">@Html.EditorFor(model => model.Product.Title)</td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(model => model.Product.Description)</td>
+                        <td class="form_text">
+                            <textarea asp-for="Product.Description" rows="5"> </textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(model => model.Product.InStock)</td>
+                        <td class="form_text">
+                            <input asp-for="Product.InStock" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(model => model.Product.Sort)</td>
+                        <td class="form_text">
+                            <input asp-for="Product.Sort" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(model => model.Product.Active)</td>
+                        <td class="form_text">
+                            <input asp-for="Product.Active" checked />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(model => model.Product.ShowOutstanding)</td>
+                        <td class="form_text">
+                            <input asp-for="Product.ShowOutstanding" checked />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="form_name"></td>
+                        <td class="form_text">
+                            <input type="submit" class="btn quick-link" value="Thêm mới" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-5">
+                <table class="form_table" id="tableItemInfo">
+                    
+                </table>
+            </div>
+        </div>
+    }
+</div>
+
+@section scripts{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(document).ready(function () {
+            $(".input-number").maskMoney({
+                precision: 0,
+                thousands: ','
+            });
+        });
+
+        $(".file-images").customUploader({
+            folder: "products",
+            extens: "jpg, jpeg, png",
+            limit: 12,
+            input: "#Images",
+        });
+
+        $(".file-video").customUploader({
+            folder: "product-videos",
+            extens: "mp4",
+            limit: 1,
+            input: "#Video",
+        });
+    </script>
+}
+

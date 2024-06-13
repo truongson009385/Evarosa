@@ -1,0 +1,81 @@
+﻿@model CheckoutViewModel
+@inject IAppService _appService
+
+@{
+    ViewData["Title"] = "Thanh toán thành công";
+
+    var breadcrumb = new BreadcrumbViewModel
+    {
+        Path = new List<BreadcrumbItem>
+        {
+            new BreadcrumbItem
+            {
+                Key = "<i class='fa-solid fa-house mr-2'></i>Trang chủ",
+                Value = Url.Action("Index", "Home")
+            },
+            new BreadcrumbItem
+            {
+                Key = ViewBag.Title,
+                Value = null
+            }
+        }
+    };
+}
+
+@await Html.PartialAsync("_breadcrumb", breadcrumb)
+
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-6 mx-auto mt-2">
+            <div class="checkout_complete">
+                <div class="checkout_complete__body">
+                    <div class="checkout_complete__icon">
+                        <img src="~/images/checked.png" />
+                    </div>
+                    <h1 class="checkout_complete__title">Thông tin đặt hàng thành công</h1>
+                    <p class="checkout_complete__text">
+                        Xin chào Anh/Chị: <a href="javascipt:;">@(Model.Order.Customer.FullName)</a>
+                    </p>
+                    <p class="checkout_complete__text">
+                        Mã đơn hàng <a href="javascipt:;" class="text-danger">@Model.Order.OrderCode</a>
+                    </p>
+                    <p class="checkout_complete__text">
+                        Xin cảm ơn quý khách đã đặt hàng trên hệ thống của chúng tôi
+                        @Html.DisplayFor(m => m.Order.PaymentType)
+                        @Html.DisplayFor(m => m.Order.Status)
+                    </p>
+                </div>
+                <div class="checkout_complete__footer">
+                    <p class="checkout_complete__text">
+                        Điện thoại hỗ trợ: <a href="tel:@_appService.Config.Hotline">@_appService.Config.Hotline</a>
+                    </p>
+                    <p class="checkout_complete__text">
+                        Email hỗ trợ: <a href="mailto:@(_appService.Config.Email)">@_appService.Config.Email</a>
+                    </p>
+                    <a asp-controller="Home" asp-action="Index" class="checkout_complete__back">Quay về trang chủ (<span id="countdown">30</span>)</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var countdownTime = 30;
+
+            function updateCountdown() {
+                $('#countdown').text(countdownTime);
+
+                if (countdownTime === 0) {
+                    window.location.href = "/";
+                } else {
+                    countdownTime--;
+                    setTimeout(updateCountdown, 1000);
+                }
+            }
+
+            updateCountdown();
+        });
+    </script>
+}

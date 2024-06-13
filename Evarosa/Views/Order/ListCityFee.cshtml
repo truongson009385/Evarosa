@@ -1,0 +1,89 @@
+﻿@model CityViewModel
+
+@{
+    ViewBag.Title = "Danh sách phí ship Tỉnh/Thành";
+    Layout = "_AdminLayout";
+}
+
+<div class="box_header">
+    <h2>@ViewBag.Title</h2>
+</div>
+
+<div class="box_content">
+    <form class="mb-4" action="" method="get">
+        <div class="row">
+            <div class="col-3">
+                <label>Từ khóa</label>
+                <input name="term" asp-for="Term" />
+            </div>
+        </div>
+    </form>
+    <table class="list_table tablecenter table-striped">
+        <tbody>
+            <tr>
+                <th scope="col" style="width: 100px;">STT</th>
+                <th scope="col" style="width: 100px;">ID</th>
+                <th scope="col">Tên</th>
+                <th scope="col" style="width: 200px;">Phí ship</th>
+                <th scope="col" style="width: 120px;"></th>
+            </tr>
+            @{
+                var i = (Model.ListCity.PageNumber - 1) * Model.ListCity.PageSize + 1;
+            }
+            @foreach (var item in Model.ListCity)
+            {
+                <tr data-id="@item.Id">
+                    <td class="left" scope="row">
+                        <input type="hidden" name="ProductId" value="@item.Id" />
+                        @(i++)
+                    </td>
+                    <td class="left">@item.Id</td>
+                    <td class="left">@item.Name</td>
+                    <td class="left">
+                        <input name="fee" value="@item.ShipFee" min="0" />
+                    </td>
+                    <td>
+                        <a href="javascript:;" class="btn btn-warning" onclick="UpdateCityFee('@item.Id')">
+                            Cập nhật
+                        </a>
+                    </td>
+                </tr>
+            }
+            @if (Model.ListCity.PageCount > 1)
+            {
+                <tr>
+                    <td colspan="5">
+                        @Html.PagedListPager(Model.ListCity, page => Url.Action("ListCity", new { page, term = Model.Term }))
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script>
+        function UpdateCityFee(id) {
+            var row = $("tr[data-id='" + id + "']");
+
+            $.post("/Order/UpdateCityFee", { 
+                id,
+                fee: row.find("input[name='fee']").val(),
+            }, function (data) {
+                if (data.success) {
+                    $.toast({
+                        text: "Cập nhật thành công phí ship " + data.name,
+                        position: 'bottom-right',
+                        icon: 'success'
+                    });
+                }
+                else {
+                    $.toast({
+                        text: 'Quá trình thực hiện không thành công. Hãy thử lại',
+                        icon: 'error'
+                    });
+                }
+            });
+        }
+    </script>
+}

@@ -22,6 +22,15 @@
     <None Include="Views\Banner\EditBanner.cshtml" />
     <None Include="Views\Banner\ListBanner.cshtml" />
     <None Include="Views\Contact\ListContact.cshtml" />
+    <None Include="Views\Order\ListCityFee.cshtml" />
+    <None Include="Views\Order\ListOrder.cshtml" />
+    <None Include="Views\Order\LoadOrder.cshtml" />
+    <None Include="Views\ProductVcms\ListProduct.cshtml" />
+    <None Include="Views\ProductVcms\ListProductCategory.cshtml" />
+    <None Include="Views\ProductVcms\Product.cshtml" />
+    <None Include="Views\ProductVcms\ProductCategory.cshtml" />
+    <None Include="Views\ProductVcms\UpdateProduct.cshtml" />
+    <None Include="Views\ProductVcms\UpdateProductCategory.cshtml" />
     <None Include="Views\Shared\DisplayTemplates\ImageFeedback.cshtml" />
     <None Include="Views\Shared\EditorTemplates\CheckBox.cshtml" />
     <None Include="Views\Shared\EditorTemplates\DateTimePicker.cshtml" />
@@ -30,6 +39,10 @@
     <None Include="Views\Shared\EditorTemplates\Password.cshtml" />
     <None Include="Views\Shared\EditorTemplates\TextArea.cshtml" />
     <None Include="Views\Shared\EditorTemplates\TextBox.cshtml" />
+    <None Include="Views\ShoppingCart\CartMini.cshtml" />
+    <None Include="Views\ShoppingCart\Checkout.cshtml" />
+    <None Include="Views\ShoppingCart\CheckoutComplete.cshtml" />
+    <None Include="Views\ShoppingCart\Index.cshtml" />
     <None Include="Views\Vcms\ChangePassword.cshtml" />
     <None Include="Views\Vcms\ConfigSite.cshtml" />
     <None Include="Views\Vcms\CreateAdmin.cshtml" />
