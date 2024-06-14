@@ -85,6 +85,40 @@
                             </div>
                         </div>
                     </li>
+                    @if (User.IsInRole("Admin") || User.IsInRole("Editor"))
+                    {
+                        <li data-id="6">
+                            <a class="root"><span>Quản lý đơn hàng</span><i class="fa-solid fa-caret-down"></i></a>
+                            <div class="sub hidden">
+                                <div>
+                                    <a class="text_link" asp-action="ListOrder" asp-controller="Order">Danh sách đơn hàng</a>
+                                </div>
+                                <div>
+                                    <a class="text_link" asp-action="ListCityFee" asp-controller="Order">Danh sách phí ship Tỉnh/Thành</a>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                    @if (User.IsInRole("Admin") || User.IsInRole("Editor"))
+                    {
+                        <li data-id="5">
+                            <a class="root"><span>Quản lý sản phẩm</span><i class="fa-solid fa-caret-down"></i></a>
+                            <div class="sub hidden">
+                                <div>
+                                    <a class="text_link" asp-action="Product" asp-controller="ProductVcms">Thêm sản phẩm</a>
+                                </div>
+                                <div>
+                                    <a class="text_link" asp-action="ListProduct" asp-controller="ProductVcms">Danh sách sản phẩm</a>
+                                </div>
+                                <div>
+                                    <a class="text_link" asp-action="ProductCategory" asp-controller="ProductVcms">Thêm danh mục</a>
+                                </div>
+                                <div>
+                                    <a class="text_link" asp-action="ListProductCategory" asp-controller="ProductVcms">Danh sách danh mục</a>
+                                </div>
+                            </div>
+                        </li>
+                    }
                     <li data-id="2">
                         <a class="root"><span>Quản lý bài viết</span><i class="fa-solid fa-caret-down"></i></a>
                         <div class="sub hidden">

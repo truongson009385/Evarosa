@@ -29,9 +29,9 @@
                         <td class="form_text">@Html.EditorFor(model => model.ProductCategory.Url)</td>
                     </tr>
                     <tr>
-                        <td class="form_name">@Html.LabelFor(model => model.ProductCategory.Des)</td>
+                        <td class="form_name">@Html.LabelFor(model => model.ProductCategory.Description)</td>
                         <td class="form_text">
-                            <textarea asp-for="ProductCategory.Des"> </textarea>
+                            <textarea asp-for="ProductCategory.Description"> </textarea>
                         </td>
                     </tr>
                     <tr>
@@ -45,20 +45,6 @@
                         <td class="form_text">
                             <div class="file-image mb-3"></div>
                             <input type="hidden" asp-for="ProductCategory.Image" id="Image" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="form_name">@Html.LabelFor(model => model.ProductCategory.Icon)</td>
-                        <td class="form_text">
-                            <div class="file-icon mb-3"></div>
-                            <input type="hidden" asp-for="ProductCategory.Icon" id="Icon" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="form_name">@Html.LabelFor(model => model.ProductCategory.Banner)</td>
-                        <td class="form_text">
-                            <div class="file-banner mb-3"></div>
-                            <input type="hidden" asp-for="ProductCategory.Banner" id="Banner" />
                         </td>
                     </tr>
                     <tr>
@@ -80,14 +66,6 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="form_name">@Html.LabelFor(model => model.ProductCategory.BannerPromotion)</td>
-                        <td class="form_text">
-                            <select asp-for="ProductCategory.BannerPromotionId" class="form_control w300" asp-items="ViewBag.banners">
-                                <option value="">Không có banner khuyến mãi</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
                         <td class="form_name">@Html.LabelFor(model => model.ProductCategory.ShowHome)</td>
                         <td class="form_text">@Html.EditorFor(model => model.ProductCategory.ShowHome)</td>
                     </tr>
@@ -100,12 +78,12 @@
                         <td class="form_text">@Html.EditorFor(model => model.ProductCategory.ShowHeader)</td>
                     </tr>
                     <tr>
-                        <td class="form_name">@Html.LabelFor(model => model.ProductCategory.ShowFooter)</td>
-                        <td class="form_text">@Html.EditorFor(model => model.ProductCategory.ShowFooter)</td>
-                    </tr>
-                    <tr>
                         <td class="form_name">@Html.LabelFor(model => model.ProductCategory.ShowOutstanding)</td>
                         <td class="form_text">@Html.EditorFor(model => model.ProductCategory.ShowOutstanding)</td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(model => model.ProductCategory.Display)</td>
+                        <td class="form_text">@Html.EditorFor(model => model.ProductCategory.Display)</td>
                     </tr>
                     <tr>
                         <td class="form_name">@Html.LabelFor(model => model.ProductCategory.Active)</td>
@@ -128,22 +106,6 @@
             limit: 1,
             input: "#Image",
             init: '@Html.Raw(Model.ProductCategory.Image?.JsonUploader(Context.Request, "product-categories"))'
-        });
-
-        $(".file-icon").customUploader({
-            folder: "product-categories",
-            extens: "jpg, jpeg, png, svg",
-            limit: 1,
-            input: "#Icon",
-            init: '@Html.Raw(Model.ProductCategory.Icon?.JsonUploader(Context.Request, "product-categories"))'
-        });
-
-        $(".file-banner").customUploader({
-            folder: "product-categories",
-            extens: "jpg, jpeg, png",
-            limit: 1,
-            input: "#Banner",
-            init: '@Html.Raw(Model.ProductCategory.Banner?.JsonUploader(Context.Request, "product-categories"))'
         });
     </script>
 }

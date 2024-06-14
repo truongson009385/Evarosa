@@ -31,9 +31,9 @@
                         <td class="form_text">@Html.EditorFor(model => model.Product.Name)</td>
                     </tr>
                     <tr>
-                        <td class="form_name">@Html.LabelFor(model => model.Product.ShortDes)</td>
+                        <td class="form_name">@Html.LabelFor(model => model.Product.ShortDescription)</td>
                         <td class="form_text">
-                            <textarea asp-for="Product.ShortDes" rows="5"></textarea>
+                            <textarea asp-for="Product.ShortDescription" rows="5"></textarea>
                         </td>
                     </tr>
                     <tr>
@@ -66,18 +66,6 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="form_name">@Html.LabelFor(model => model.Product.TextOrder)</td>
-                        <td class="form_text">
-                            <textarea asp-for="Product.TextOrder" class="ckeditor"> </textarea>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="form_name">@Html.LabelFor(model => model.Product.TextSize)</td>
-                        <td class="form_text">
-                            <textarea asp-for="Product.TextSize" class="ckeditor"> </textarea>
-                        </td>
-                    </tr>
-                    <tr>
                         <td class="form_name">@Html.LabelFor(model => model.Product.Title)</td>
                         <td class="form_text">@Html.EditorFor(model => model.Product.Title)</td>
                     </tr>
@@ -85,12 +73,6 @@
                         <td class="form_name">@Html.LabelFor(model => model.Product.Description)</td>
                         <td class="form_text">
                             <textarea asp-for="Product.Description" rows="5"> </textarea>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="form_name">@Html.LabelFor(model => model.Product.InStock)</td>
-                        <td class="form_text">
-                            <input asp-for="Product.InStock" />
                         </td>
                     </tr>
                     <tr>
@@ -108,7 +90,13 @@
                     <tr>
                         <td class="form_name">@Html.LabelFor(model => model.Product.ShowOutstanding)</td>
                         <td class="form_text">
-                            <input asp-for="Product.ShowOutstanding" checked />
+                            <input asp-for="Product.ShowOutstanding" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(model => model.Product.ShowHome)</td>
+                        <td class="form_text">
+                            <input asp-for="Product.ShowHome" />
                         </td>
                     </tr>
                     <tr>
@@ -133,11 +121,9 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
     <script>
-        $(document).ready(function () {
-            $(".input-number").maskMoney({
-                precision: 0,
-                thousands: ','
-            });
+        $(".input-number").maskMoney({
+            precision: 0,
+            thousands: ','
         });
 
         $(".file-images").customUploader({
@@ -145,13 +131,6 @@
             extens: "jpg, jpeg, png",
             limit: 12,
             input: "#Images",
-        });
-
-        $(".file-video").customUploader({
-            folder: "product-videos",
-            extens: "mp4",
-            limit: 1,
-            input: "#Video",
         });
     </script>
 }

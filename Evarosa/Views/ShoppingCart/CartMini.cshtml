@@ -6,7 +6,7 @@
         @foreach (var item in Model.CartItems)
         {
             <div class="media">
-                <img class="mr-2" src="@PathSystem.Combine("/contents/products", item.Product.GetAvatar() ?? "")" alt="" />
+                <img class="mr-2" src="@PathSystem.Combine("/contents/products", item.Product.Avatar ?? "")" alt="" />
                 <div class="media-body">
                     <a asp-controller="Home" asp-action="ProductDetails" asp-route-url="@item.Product.Url" class="name">
                         @item.Product.Name

@@ -113,7 +113,7 @@ namespace Evarosa.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> QuickUpdateCategory(int categoryId, int sort, bool showHome, bool showMenu, bool showHeader, bool showFooter, bool showOutstanding, bool isActive)
+        public async Task<IActionResult> QuickUpdateCategory(int categoryId, int sort, bool showHome, bool showMenu, bool showHeader, bool showOutstanding, bool display, bool isActive)
         {
             var item = await unitOfWork.ProductCategory.FindAsync(categoryId);
 
@@ -123,8 +123,8 @@ namespace Evarosa.Controllers
             item.ShowHome = showHome;
             item.ShowMenu = showMenu;
             item.ShowHeader = showHeader;
-            item.ShowFooter = showFooter;
             item.ShowOutstanding = showOutstanding;
+            item.Display = display;
             item.Active = isActive;
 
             await unitOfWork.CommitAsync();
@@ -309,13 +309,11 @@ namespace Evarosa.Controllers
             product.Description = model.Product.Description;
             product.Name = model.Product.Name;
             product.MaSP = model.Product.MaSP;
-            product.ShortDes = model.Product.ShortDes;
+            product.ShortDescription = model.Product.ShortDescription;
             product.Images = model.Product.Images;
             product.Active = model.Product.Active;
             product.ShowOutstanding = model.Product.ShowOutstanding;
             product.Content = model.Product.Content;
-            product.TextOrder = model.Product.TextOrder;
-            product.TextSize = model.Product.TextSize;
             product.InStock = model.Product.InStock;
             product.Sort = model.Product.Sort;
             product.ProductCategoryId = model.Product.ProductCategoryId;

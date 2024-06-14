@@ -14,10 +14,8 @@ namespace Evarosa.ViewModels
         {
             var listgroup = new Dictionary<int, string>
             {
-                { 1, "Banner" },
-                { 2, "Tại sao?" },
-                { 3, "Nhân viên" },
-                { 4, "Thanh bên" },
+                { 1, "Quảng cáo" },
+                { 2, "Đối tác - Khách hàng" },
             };
             SelectGroup = new SelectList(listgroup, "Key", "Value");
         }
@@ -32,10 +30,8 @@ namespace Evarosa.ViewModels
         {
             var listgroup = new Dictionary<int, string>
             {
-                { 1, "Banner" },
-                { 2, "Tại sao?" },
-                { 3, "Nhân viên" },
-                { 4, "Thanh bên" },
+                { 1, "Quảng cáo" },
+                { 2, "Đối tác - Khách hàng" },
             };
             SelectGroup = new SelectList(listgroup, "Key", "Value");
         }

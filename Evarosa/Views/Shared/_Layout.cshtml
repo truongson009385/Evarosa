@@ -1,9 +1,29 @@
-﻿<!DOCTYPE html>
+﻿@inject IAppService AppService
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
+    <meta name="description" content="@(ViewData["Description"] == null ? AppService.Config.Description : ViewData["Description"])" />
+    <meta name="robots" content="@(ViewData["Robots"] == null ? "index,follow" : ViewData["Robots"])" />
+    <link rel="canonical" href="@ViewData["Canonical"]" />
+    <meta property="og:locale" content="vi_VN">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="@Html.Raw(ViewData["Title"])">
+    <meta property="og:description" content="@Html.Raw(ViewData["Description"])">
+    <meta property="og:url" content="@ViewData["Canonical"]">
+    <meta property="og:site_name" content="@Html.Raw(ViewData["Title"])">
+    <meta property="og:image" content="@ViewData["ImageShare"]" />
+
+    @if (AppService.Config.GoogleAnalytics != null)
+    {
+        @Html.Raw(AppService.Config.GoogleAnalytics)
+        ;
+    }
+
+    <link rel="icon" type="image/x-icon" href="@Url.Content($"/contents/system/{AppService.Config.Favicon}")">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,7 +47,15 @@
     <script src="~/js/BundlesJs.min.js"></script>
     <script src="~/js/Script.js" asp-append-version="true"></script>
     <script src="~/js/ScriptMember.js" asp-append-version="true"></script>
-
     @await RenderSectionAsync("Scripts", required: false)
+
+    <div id="fb-root"></div>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v14.0" nonce="di1pgAbX"></script>
+
+    @if (AppService.Config.LiveChat != null)
+    {
+        @Html.Raw(AppService.Config.LiveChat)
+        ;
+    }
 </body>
 </html>

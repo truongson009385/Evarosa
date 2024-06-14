@@ -15,11 +15,21 @@ namespace Evarosa.Models
         public string Password { get; set; }
 
         [Display(Name = "Hoạt động", Description = "Hoạt động")]
-        public bool Active { get; set; }
+        public bool Active { get; set; } = true;
 
-        public Admin()
-        {
-            Active = true;
-        }
+        [Display(Name = "Vai trò")]
+        public AdminRole Role { get; set; }
+    }
+
+    public enum AdminRole
+    {
+        [Display(Name = "Quản trị viên")]
+        Admin,
+
+        [Display(Name = "Editor")]
+        Editor,
+
+        [Display(Name = "Người viết bài")]
+        Copywriter,
     }
 }

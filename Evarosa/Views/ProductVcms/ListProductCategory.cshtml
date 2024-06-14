@@ -41,8 +41,8 @@
                 <th style="width: 150px" class="text-center">Trang chủ</th>
                 <th style="width: 150px" class="text-center">Bộ lọc</th>
                 <th style="width: 150px" class="text-center">Header</th>
-                <th style="width: 150px" class="text-center">Chân trang</th>
                 <th style="width: 150px" class="text-center">Nổi bật</th>
+                <th style="width: 150px" class="text-center">Trưng bày</th>
                 <th style="width: 150px" class="text-center">Hoạt động</th>
                 <th scope="col" style="width: 100px;"></th>
             </tr>
@@ -110,10 +110,10 @@
                 <input type="checkbox" name="showHeader" checked="@item.ShowHeader" />
             </td>
             <td>
-                <input type="checkbox" name="showFooter" checked="@item.ShowFooter" />
+                <input type="checkbox" name="showOutstanding" checked="@item.ShowOutstanding" />
             </td>
             <td>
-                <input type="checkbox" name="showOutstanding" checked="@item.ShowOutstanding" />
+                <input type="checkbox" name="display" checked="@item.Display" />
             </td>
             <td>
                 <input type="checkbox" name="isActive" checked="@item.Active" />
@@ -166,8 +166,8 @@
                 showHome: item.find("input[name='showHome']").prop("checked"),
                 showMenu: item.find("input[name='showMenu']").prop("checked"),
                 showHeader: item.find("input[name='showHeader']").prop("checked"),
-                showFooter: item.find("input[name='showFooter']").prop("checked"),
                 showOutstanding: item.find("input[name='showOutstanding']").prop("checked"),
+                display: item.find("input[name='display']").prop("checked"),
                 isActive: item.find("input[name='isActive']").prop("checked"),
             }, function (data) {
                 if (data.success) {

@@ -48,9 +48,9 @@ namespace Evarosa.Models
         Url(ErrorMessage = "Đường dẫn không chính xác"), UIHint("TextBox")]
         public string? Twitter { get; set; }
 
-        [StringLength(500, ErrorMessage = "Tối đa 500 ký tự"), Display(Name = "Đường dẫn Pinterest"),
+        [StringLength(500, ErrorMessage = "Tối đa 500 ký tự"), Display(Name = "Đường dẫn Instagram"),
         Url(ErrorMessage = "Đường dẫn không chính xác"), UIHint("TextBox")]
-        public string? Pinterest { get; set; }
+        public string? Instagram { get; set; }
 
         [StringLength(500, ErrorMessage = "Tối đa 500 ký tự"), Display(Name = "Đường dẫn Linkedin"),
         Url(ErrorMessage = "Đường dẫn không chính xác"), UIHint("TextBox")]
@@ -81,8 +81,8 @@ namespace Evarosa.Models
         [Display(Name = "Favicon"), StringLength(500)]
         public string? Favicon { get; set; }
 
-        [Display(Name = "Thanh địa chỉ"), StringLength(500)]
-        public string? Breadcrumb { get; set; }
+        [StringLength(2000, ErrorMessage = "Tối đa 2000 ký tự"), Display(Name = "Thông tin chân trang"), UIHint("EditorBox")]
+        public string? FooterInfo { get; set; }
 
         //Giới thiệu
         [Display(Name = "Tiêu đề giới thiệu"), StringLength(200, ErrorMessage = "Tối đa 200 ký tự"), UIHint("TextBox")]
@@ -94,9 +94,6 @@ namespace Evarosa.Models
         [StringLength(500, ErrorMessage = "Tối đa 500 ký tự"), Display(Name = "Đường dẫn giới thiệu"),
        Url(ErrorMessage = "Đường dẫn không chính xác"), UIHint("TextBox")]
         public string? AboutUrl { get; set; }
-        [StringLength(500, ErrorMessage = "Tối đa 500 ký tự"), Display(Name = "Đường dẫn video giới thiệu"),
-       Url(ErrorMessage = "Đường dẫn không chính xác"), UIHint("TextBox")]
-        public string? AboutVideo { get; set; }
 
         //Địa chỉ
         [Display(Name = "Địa chỉ"), UIHint("TextBox")]

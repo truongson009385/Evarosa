@@ -1,23 +1,35 @@
-﻿<footer>
+﻿@inject IAppService AppService
+
+<footer>
     <div class="container pt-5 pb-3">
         <div class="row mb-n4">
             <div class="col-md-6 col-lg-3 mb-4">
                 <a asp-controller="Home" asp-action="Index" class="logo">
-                    <img src="~/images/logo.jpg" alt="logo" />
+                    @if (!string.IsNullOrEmpty(AppService.Config.Image))
+                    {
+                        <img src="@PathSystem.Combine("/contents/system/", AppService.Config.Image)" alt="logo" />
+                    }
+                    else
+                    {
+                        <img src="~/images/logo.png" alt="logo" />
+                    }
                 </a>
                 <div class="footer-info mt-4">
-
+                    @Html.Raw(AppService.Config.FooterInfo)
                 </div>
             </div>
             <div class="col-md-6 col-lg-3 mb-4">
                 <h2 class="footer-title mb-4">Thông tin</h2>
                 <ul class="footer-links">
-                    @for (int j = 0; j < 6; j++)
-                    {
-                        <li>
-                            <a href="">Đường dẫn</a>
-                        </li>
-                    }
+                    <li>
+                        <a asp-controller="Home" asp-action="Index">Trang chủ</a>
+                    </li>
+                    <li>
+                        <a asp-controller="Home" asp-action="About">Giới thiệu</a>
+                    </li>
+                    <li>
+                        <a asp-controller="Home" asp-action="About">Liên hệ</a>
+                    </li>
                 </ul>
             </div>
             <div class="col-md-6 col-lg-3 mb-4">
@@ -33,16 +45,28 @@
             </div>
             <div class="col-md-6 col-lg-3 mb-4">
                 <h2 class="footer-title mb-4">Fanpage</h2>
+                <div class="footer-iframe mb-5">
+                    @if (AppService.Config.Facebook != null)
+                    {
+                        <div class="fanpage_footer mt-3">
+                            <div class="fb-page" data-href="@AppService.Config.Facebook" data-tabs="" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true">
+                                <blockquote cite="@AppService.Config.Facebook" class="fb-xfbml-parse-ignore">
+                                    <a href="@AppService.Config.Facebook">@AppService.Config.Title</a>
+                                </blockquote>
+                            </div>
+                        </div>
+                    }
+                </div>
                 <h2 class="footer-title mb-4">Liên kết mạng xã hội</h2>
                 <ul class="footer-social">
                     <li>
-                        <a href=""><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="@(AppService.Config.Facebook)"><i class="fa-brands fa-facebook-f"></i></a>
                     </li>
                     <li>
-                        <a href=""><i class="fa-brands fa-instagram"></i></a>
+                        <a href="@(AppService.Config.Instagram)"><i class="fa-brands fa-instagram"></i></a>
                     </li>
                     <li>
-                        <a href=""><i class="fa-brands fa-youtube"></i></a>
+                        <a href="@(AppService.Config.Youtube)"><i class="fa-brands fa-youtube"></i></a>
                     </li>
                 </ul>
             </div>

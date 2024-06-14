@@ -66,6 +66,7 @@ namespace Evarosa.Controllers
             {
                 new Claim(ClaimTypes.NameIdentifier, admin.Id.ToString()),
                 new Claim(ClaimTypes.Name, admin.Username),
+                new Claim(ClaimTypes.Role, admin.Role.ToString()),
             };
 
             var claimsIdentity = new ClaimsIdentity(claims, "vcms");
@@ -172,6 +173,7 @@ namespace Evarosa.Controllers
             }
 
             admin.Active = model.Admin.Active;
+            admin.Role = model.Admin.Role;
 
             if (model.Admin.Password != null)
             {
@@ -241,7 +243,6 @@ namespace Evarosa.Controllers
             var Favicon = Request.Form.Files["Favicon"];
             var Image = Request.Form.Files["Image"];
             var AboutImage = Request.Form.Files["AboutImage"];
-            var Breadcrumb = Request.Form.Files["Breadcrumb"];
 
             if (config == null)
             {
@@ -268,12 +269,6 @@ namespace Evarosa.Controllers
 
                     config.AboutImage = img.FileName;
                 }
-                if (Breadcrumb is { Length: > 0 })
-                {
-                    var img = await _fileService.UploadFileAsync("system", Breadcrumb);
-
-                    config.Breadcrumb = img.FileName;
-                }
 
                 //Cấu hình
                 config.Title = model.Title;
@@ -288,7 +283,7 @@ namespace Evarosa.Controllers
                 config.WhatsApp = model.WhatsApp;
                 config.Viber = model.Viber;
                 config.Twitter = model.Twitter;
-                config.Pinterest = model.Pinterest;
+                config.Instagram = model.Instagram;
                 config.Linkedin = model.Linkedin;
                 config.Zalo = model.Zalo;
                 config.Youtube = model.Youtube;
@@ -307,7 +302,7 @@ namespace Evarosa.Controllers
                 config.AboutTitle = model.AboutTitle;
                 config.AboutText = model.AboutText;
                 config.AboutUrl = model.AboutUrl;
-                config.AboutVideo = model.AboutVideo;
+                config.FooterInfo = model.FooterInfo;
 
                 await _unitOfWork.CommitAsync();
 

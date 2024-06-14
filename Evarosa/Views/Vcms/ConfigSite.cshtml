@@ -63,17 +63,6 @@
                 </tr>
             }
             <tr>
-                <td class="form_name">@Html.LabelFor(model => model.Breadcrumb)</td>
-                <td class="form_text">@Html.TextBoxFor(model => model.Breadcrumb, new { type = "file" })</td>
-            </tr>
-            @if (Model.Breadcrumb != null)
-            {
-                <tr>
-                    <td class="form_name"></td>
-                    <td class="form_text"><img class="img-border" src="@Url.Content($"/contents/system/{Model.Breadcrumb}")" /></td>
-                </tr>
-            }
-            <tr>
                 <td class="form_name">@Html.LabelFor(model => model.AboutImage)</td>
                 <td class="form_text">@Html.TextBoxFor(model => model.AboutImage, new { type = "file" })</td>
             </tr>
@@ -97,8 +86,8 @@
                 <td class="form_text">@Html.EditorFor(model => model.AboutUrl)</td>
             </tr>
             <tr>
-                <td class="form_name">@Html.LabelFor(model => model.AboutVideo)</td>
-                <td class="form_text">@Html.EditorFor(model => model.AboutVideo)</td>
+                <td class="form_name">@Html.LabelFor(model => model.FooterInfo)</td>
+                    <td class="form_text">@Html.EditorFor(model => model.FooterInfo)</td>
             </tr>
             <tr>
                 <td class="form_name">@Html.LabelFor(model => model.ContactInfo)</td>
@@ -133,8 +122,8 @@
                 <td class="form_text">@Html.EditorFor(model => model.Twitter)</td>
             </tr>
             <tr>
-                <td class="form_name">@Html.LabelFor(model => model.Pinterest)</td>
-                <td class="form_text">@Html.EditorFor(model => model.Pinterest)</td>
+                <td class="form_name">@Html.LabelFor(model => model.Instagram)</td>
+                    <td class="form_text">@Html.EditorFor(model => model.Instagram)</td>
             </tr>
             <tr>
                 <td class="form_name">@Html.LabelFor(model => model.Linkedin)</td>

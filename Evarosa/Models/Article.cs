@@ -34,7 +34,7 @@ namespace Evarosa.Models
         public string? Body { set; get; }
 
         [Display(Name = "Hoạt động")]
-        public bool Active { set; get; }
+        public bool Active { set; get; } = true;
 
         [Display(Name = "Hiển thị ở trang chủ")]
         public bool ShowHome { set; get; }
@@ -42,7 +42,8 @@ namespace Evarosa.Models
         [Display(Name = "Số thứ tự"), Required(ErrorMessage = "Bạn chưa nhập số thứ tự"), UIHint("NumberBox"), RegularExpression(@"\d+", ErrorMessage = "Chỉ nhập số nguyên dương")]
         public int Sort { get; set; } = 1;
 
-        [Display(Name = "Ngày tạo"), DataType(DataType.Date)]
+        [Display(Name = "Ngày tạo")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime CreatedAt { set; get; } = DateTime.UtcNow;
 
         public ArticleCategory ArticleCategory { get; set; }

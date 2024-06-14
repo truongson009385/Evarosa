@@ -18,7 +18,7 @@ namespace Evarosa.Models
         public string Name { get; set; }
 
         [Display(Name = "Mô tả ngắn")]
-        public string? ShortDes { set; get; }
+        public string? ShortDescription { set; get; }
 
         [Display(Name = "Thẻ title"), StringLength(200, ErrorMessage = "Tối đa 200 ký tự"), UIHint("TextBox")]
         public string? Title { get; set; }
@@ -29,12 +29,6 @@ namespace Evarosa.Models
         [Display(Name = "Thông tin chi tiết")]
         public string? Content { get; set; }
 
-        [Display(Name = "Đặt theo yêu cầu")]
-        public string? TextOrder { get; set; }
-
-        [Display(Name = "Hướng dẫn chọn size")]
-        public string? TextSize { get; set; }
-
         [Display(Name = "URL"), StringLength(255, ErrorMessage = "URL không được vượt quá 255 ký tự.")]
         public string Url { get; set; }
 
@@ -44,13 +38,13 @@ namespace Evarosa.Models
         [Display(Name = "Tồn kho")]
         public int InStock { get; set; } = 0;
 
-        [Display(Name = "Giá bán"), DisplayFormat(DataFormatString = "{0:N0} VNĐ")]
+        [Display(Name = "Giá bán"), DisplayFormat(DataFormatString = "{0:N0} đ")]
         public decimal Price { get; set; } = decimal.Zero;
 
-        [Display(Name = "Giá khuyến mãi"), DisplayFormat(DataFormatString = "{0:N0} VNĐ")]
+        [Display(Name = "Giá khuyến mãi"), DisplayFormat(DataFormatString = "{0:N0} đ")]
         public decimal PriceSale { get; set; } = decimal.Zero;
 
-        [DisplayFormat(DataFormatString = "{0:N0} VNĐ")]
+        [DisplayFormat(DataFormatString = "{0:N0} đ")]
         public decimal FinalPrice
         {
             get
@@ -59,7 +53,7 @@ namespace Evarosa.Models
             }
         }
 
-        [DisplayFormat(DataFormatString = "{0:N0} VNĐ")]
+        [DisplayFormat(DataFormatString = "{0:N0} đ")]
         public decimal SavePrice
         {
             get
@@ -102,14 +96,22 @@ namespace Evarosa.Models
         [Display(Name = "Ngày tạo")]
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
-        public string? GetAvatar()
+        [Display(Name = "Ảnh đại diện")]
+        public string? Avatar
         {
-            return Images?.Split(',').First() ?? null;
+            get
+            {
+                return Images?.Split(',')[0];
+            }
         }
 
-        public string[] GetImages()
+        [Display(Name = "Danh sách ảnh")]
+        public string[] ArrImage
         {
-            return Images?.Split(',') ?? [];
+            get
+            {
+                return Images?.Split(',') ?? [];
+            }
         }
 
         [Display(Name = "Danh mục sản phẩm")]
@@ -124,9 +126,6 @@ namespace Evarosa.Models
         [Display(Name = "Danh mục cha")]
         public int? ParentCategoryId { get; set; }
 
-        [Display(Name = "Banner khuyến mãi")]
-        public int? BannerPromotionId { get; set; }
-
         [Required(ErrorMessage = "Phải có tên danh mục")]
         [StringLength(100, MinimumLength = 3, ErrorMessage = "{0} dài {1} đến {2}")]
         [Display(Name = "Tên danh mục")]
@@ -134,16 +133,10 @@ namespace Evarosa.Models
 
         [DataType(DataType.Text)]
         [Display(Name = "Mô tả ngắn")]
-        public string? Des { set; get; }
+        public string? Description { set; get; }
 
         [Display(Name = "Ảnh")]
         public string? Image { set; get; }
-
-        [Display(Name = "Biểu tượng")]
-        public string? Icon { set; get; }
-
-        [Display(Name = "Ảnh quảng cáo")]
-        public string? Banner { set; get; }
 
         [Display(Name = "Số thứ tự"), Required(ErrorMessage = "Bạn chưa nhập số thứ tự"), RegularExpression(@"\d+", ErrorMessage = "Chỉ nhập số nguyên dương"), UIHint("NumberBox")]
         public int Sort { get; set; } = 1;
@@ -151,9 +144,6 @@ namespace Evarosa.Models
         [DataType(DataType.Text)]
         [Display(Name = "Nội dung danh mục")]
         public string? Content { set; get; }
-
-        [Display(Name = "Hiển thị ở sản phẩm nổi bật")]
-        public bool ShowOutstanding { set; get; } = false;
 
         [Display(Name = "Hiển thị ở trang chủ")]
         public bool ShowHome { set; get; } = false;
@@ -164,8 +154,11 @@ namespace Evarosa.Models
         [Display(Name = "Hiển thị ở header")]
         public bool ShowHeader { set; get; } = false;
 
-        [Display(Name = "Hiển thị ở chân trang")]
-        public bool ShowFooter { set; get; } = false;
+        [Display(Name = "Hiển thị ở sản phẩm nổi bật")]
+        public bool ShowOutstanding { set; get; } = false;
+
+        [Display(Name = "Trưng bày sản phẩm ở trang chủ")]
+        public bool Display { set; get; } = false;
 
         [Display(Name = "Hoạt động")]
         public bool Active { set; get; } = true;
@@ -181,8 +174,6 @@ namespace Evarosa.Models
         [ForeignKey("ParentCategoryId")]
         [Display(Name = "Danh mục cha")]
         public ProductCategory ParentCategory { set; get; }
-
-        public Banner? BannerPromotion { set; get; }
 
         public virtual ICollection<Product> Products { get; set; }
     }

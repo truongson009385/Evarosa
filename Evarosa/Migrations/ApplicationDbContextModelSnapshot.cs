@@ -37,6 +37,9 @@ namespace Evarosa.Migrations
                         .HasMaxLength(60)
                         .HasColumnType("nvarchar(60)");
 
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
+
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -284,14 +287,6 @@ namespace Evarosa.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<string>("AboutVideo")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("Breadcrumb")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
                     b.Property<string>("ContactInfo")
                         .HasMaxLength(2000)
                         .HasColumnType("nvarchar(2000)");
@@ -316,6 +311,10 @@ namespace Evarosa.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
+                    b.Property<string>("FooterInfo")
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
                     b.Property<string>("GoogleAnalytics")
                         .HasMaxLength(4000)
                         .HasColumnType("nvarchar(4000)");
@@ -336,6 +335,10 @@ namespace Evarosa.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
+                    b.Property<string>("Instagram")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
                     b.Property<string>("Linkedin")
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
@@ -347,10 +350,6 @@ namespace Evarosa.Migrations
                     b.Property<string>("PassWordMail")
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("Pinterest")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("Place")
                         .HasColumnType("nvarchar(max)");
@@ -687,7 +686,7 @@ namespace Evarosa.Migrations
                     b.Property<int>("ProductCategoryId")
                         .HasColumnType("int");
 
-                    b.Property<string>("ShortDes")
+                    b.Property<string>("ShortDescription")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("ShowHome")
@@ -698,12 +697,6 @@ namespace Evarosa.Migrations
 
                     b.Property<int>("Sort")
                         .HasColumnType("int");
-
-                    b.Property<string>("TextOrder")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TextSize")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
                         .HasMaxLength(200)
@@ -735,29 +728,20 @@ namespace Evarosa.Migrations
                     b.Property<bool>("Active")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Banner")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("BannerPromotionId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Des")
+                    b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Icon")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("Display")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("ParentCategoryId")
                         .HasColumnType("int");
-
-                    b.Property<bool>("ShowFooter")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("ShowHeader")
                         .HasColumnType("bit");
@@ -785,8 +769,6 @@ namespace Evarosa.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BannerPromotionId");
 
                     b.HasIndex("ParentCategoryId");
 
@@ -938,15 +920,9 @@ namespace Evarosa.Migrations
 
             modelBuilder.Entity("Evarosa.Models.ProductCategory", b =>
                 {
-                    b.HasOne("Evarosa.Models.Banner", "BannerPromotion")
-                        .WithMany()
-                        .HasForeignKey("BannerPromotionId");
-
                     b.HasOne("Evarosa.Models.ProductCategory", "ParentCategory")
                         .WithMany("CategoryChildren")
                         .HasForeignKey("ParentCategoryId");
-
-                    b.Navigation("BannerPromotion");
 
                     b.Navigation("ParentCategory");
                 });

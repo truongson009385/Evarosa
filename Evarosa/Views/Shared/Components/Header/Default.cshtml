@@ -1,9 +1,19 @@
-﻿<header>
+﻿@model HeaderViewModel
+@inject IAppService AppService
+
+<header>
     <div class="container">
         <div class="row py-3">
             <div class="col-lg-2 d-flex align-items-center">
                 <a asp-controller="Home" asp-action="Index" class="logo">
-                    <img src="~/images/logo.jpg" alt="logo" />
+                    @if (!string.IsNullOrEmpty(AppService.Config.Image))
+                    {
+                        <img src="@PathSystem.Combine("/contents/system/", AppService.Config.Image)" alt="logo" />
+                    }
+                    else
+                    {
+                        <img src="~/images/logo.png" alt="logo" />
+                    }
                 </a>
             </div>
             <div class="col-lg-8 d-flex justify-content-center align-items-center">
@@ -11,9 +21,10 @@
                     <div class="input-group-prepend">
                         <select class="custom-select">
                             <option selected>Tìm theo</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
+                            @foreach (var item in Model.SelectCategories)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
                         </select>
                     </div>
                     <input type="text" class="form-control" placeholder="Tìm sản phẩm, danh mục hay thương hiệu">
@@ -27,7 +38,7 @@
             <div class="col-lg-2">
                 <ul class="header-links">
                     <li>
-                        <a href="" class="link-icon mr-4">
+                        <a asp-controller="ShoppingCart" asp-action="Index" class="link-icon mr-4">
                             <div class="icon">
                                 <span class="count">9</span>
                                 <i class="fa-solid fa-cart-minus"></i>
@@ -76,21 +87,44 @@
                 <li>
                     <a asp-controller="Home" asp-action="About">Giới thiệu</a>
                 </li>
-                <li>
-                    <a href="">Mỹ phẩm</a>
-                </li>
-                <li>
-                    <a href="">thực phẩm chức năng</a>
-                </li>
-                <li>
-                    <a href="">hotdeal</a>
-                </li>
-                <li>
-                    <a href="">nội y</a>
-                </li>
-                <li>
-                    <a href="">tin tức - sự kiện</a>
-                </li>
+                @foreach (var item in Model.ProductCategories)
+                {
+                    <li>
+                        <a asp-controller="Home" asp-action="ListProduct" asp-route-url="@item.Url">
+                            @item.Title
+                        </a>
+                        @if (item.CategoryChildren.Any())
+                        {
+                            <ul class="submenu">
+                                @foreach (var chil in item.CategoryChildren)
+                                {
+                                    <li>
+                                        <a asp-controller="Home" asp-action="ListProduct" asp-route-url="@chil.Url">@chil.Title</a>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                    </li>
+                }
+                @foreach (var item in Model.ArticleCategories)
+                {
+                    <li>
+                        <a asp-controller="Home" asp-action="ListArticle" asp-route-url="@item.Url">
+                            @item.Title
+                        </a>
+                        @if (item.CategoryChildren.Any())
+                        {
+                            <ul class="submenu">
+                                @foreach (var chil in item.CategoryChildren)
+                                {
+                                    <li>
+                                        <a asp-controller="Home" asp-action="ListArticle" asp-route-url="@chil.Url">@chil.Title</a>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                    </li>
+                }
                 <li>
                     <a asp-controller="Home" asp-action="Contact">Liên hệ</a>
                 </li>

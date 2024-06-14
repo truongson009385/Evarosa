@@ -47,9 +47,9 @@
                                 <th scope="row" class="info">
                                     <div class="media">
                                         <a class="d-block" asp-controller="Home" asp-action="ProductDetails" asp-route-url="@item.Product.Url">
-                                            @if (!string.IsNullOrEmpty(item.Product.GetAvatar()))
+                                            @if (!string.IsNullOrEmpty(item.Product.Avatar))
                                             {
-                                                <img class="mr-2" src="@PathSystem.Combine("/contents/products", item.Product.GetAvatar())" alt="" />
+                                                <img class="mr-2" src="@PathSystem.Combine("/contents/products", item.Product.Avatar)" alt="" />
                                             }
                                             else
                                             {
@@ -98,7 +98,7 @@
                     <tfoot>
                         <tr>
                             <td scope="row" colspan="2">
-                                <a asp-controller="ShoppingCart" asp-action="Checkout" class="button-1">
+                                <a asp-controller="ShoppingCart" asp-action="Checkout" class="btn btn-block btn-primary">
                                     Tiến hành thanh toán
                                 </a>
                             </td>

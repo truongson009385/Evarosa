@@ -1,0 +1,197 @@
+﻿@model PageProductViewModel
+
+@{
+    ViewData["Title"] = Model.Product.Title ?? Model.Product.Name;
+    ViewData["Description"] = Model.Product.ShortDescription ?? Model.Product.Description;
+    ViewData["Canonical"] = Url.Action("ProductDetails", "Home", new { url = Model.Product.Url }, protocol: Context.Request.Scheme);
+
+    if (Model.Product.Avatar != null)
+    {
+        ViewData["ImageShare"] = Context.Request.Scheme + "://" + Context.Request.Host + System.IO.Path.Combine("/contents/products/", Model.Product.Avatar);
+    }
+
+    var breadcrumb = new BreadcrumbViewModel
+    {
+        Path = new List<BreadcrumbItem>
+        {
+            new BreadcrumbItem
+            {
+                Key = "<i class='fa-solid fa-house mr-2'></i>Trang chủ",
+                Value = Url.Action("Index", "Home")
+            },
+            new BreadcrumbItem
+            {
+                Key = Model.Product.ProductCategory.Title,
+                Value = Model.Product.ProductCategory.Url
+            },
+            new BreadcrumbItem
+            {
+                Key = Model.Product.Name,
+                Value = null
+            }
+        }
+    };
+}
+
+@await Html.PartialAsync("_breadcrumb", breadcrumb)
+
+<div class="container py-5">
+    <div class="row mb-5">
+        <div class="col-md-6 mb-4 mb-md-0">
+            @if (Model.Product.ArrImage.Length > 0)
+            {
+                <div class="product-slider-main">
+                    @foreach (var img in Model.Product.ArrImage)
+                    {
+                        <div class="slide" data-fancybox="san-pham" data-src="@PathSystem.Combine("/contents/products/", img)">
+                            <img src="@PathSystem.Combine("/contents/products/", img)" alt="">
+                        </div>
+                    }
+                </div>
+                <div class="product-slider-thmb">
+                    @foreach (var img in Model.Product.ArrImage)
+                    {
+                        <div class="slide">
+                            <img src="@PathSystem.Combine("/contents/products/", img)" alt="">
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+        <div class="col-md-6">
+            <h1 class="product-name">@Model.Product.Name</h1>
+            <p class="product-price mb-4">
+                <span class="price">
+                    @if (Model.Product is { FinalPrice: > 0 })
+                    {
+                        @Html.DisplayFor(m => m.Product.FinalPrice)
+                    }
+                    else
+                    {
+                        @:Liên hệ
+                    }
+                </span>
+                @if (Model.Product is { Percent: > 0, FinalPrice: > 0 })
+                {
+                    <span class="price-old">Giá cũ: <del>@Html.DisplayFor(m => m.Product.Price)</del></span>
+                    <span class="price-save">Bạn tiết kiệm: <strong>@Html.DisplayFor(m => m.Product.SavePrice) <sup>(@(Model.Product.Percent)%)</sup></strong></span>
+                }
+            </p>
+
+            <p class="product-text">
+                <span>Mã: </span><strong>@(!string.IsNullOrEmpty(Model.Product.MaSP) ? Model.Product.MaSP : "Chưa cập nhật")</strong>
+            </p>
+
+            <form class="mb-4" id="addToCart">
+                <input name="id" type="hidden" value="@Model.Product.Id" />
+
+                <div class="product-number mb-4">
+                    <label>Số lượng:</label>
+                    <input class="input-number" type="number" name="qty" value="1" min="1" max="999" />
+                </div>
+                <div class="product-buttons">
+                    <button type="submit" class="btn btn-primary">
+                        Thêm vào giỏ hàng
+                    </button>
+                    <a href="javascript:;" onclick="BuyNow()" class="btn btn-outline-primary">
+                        Mua ngay
+                    </a>
+                </div>
+            </form>
+
+            @if (!string.IsNullOrEmpty(Model.Product.ShortDescription))
+            {
+                <div class="product-des mb-4">
+                    <h2>Mô tả</h2>
+                    <p>
+                        @Model.Product.ShortDescription
+                    </p>
+                </div>
+            }
+
+            <div class="page-share">
+                <p>Chia sẻ:</p>
+                <ul>
+                    <li>
+                        <a href="javascipt:;" onclick="window.open('https://www.facebook.com/sharer.php?u='+encodeURIComponent(location.href)+'&amp;t='+encodeURIComponent(document.title));return false">
+                            <img src="~/images/facebook.png" alt="FB" />
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascipt:;" onclick="window.open('mailto:?subject=%22'+encodeURIComponent(document.title)+'%22&body=Read%20the%20article%20%22'+encodeURIComponent(document.title)+'%22%20on%20'+encodeURIComponent(location.href));return false">
+                            <img src="~/images/google-plus.png" alt="Google" />
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascipt:;" onclick="window.open('https://twitter.com/intent/tweet?url='+encodeURIComponent(location.href)+'&amp;text='+encodeURIComponent(document.title));return false">
+                            <img src="~/images/twitter.png" alt="X" />
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascipt:;" onclick="window.open('whatsapp://send?text='+encodeURIComponent(document.title)+'%20'+encodeURIComponent(location.href));return false">
+                            <img src="~/images/messenger.png" alt="Messenger" />
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascipt:;" onclick="window.open('http://pinterest.com/pin/create/button/?url='+encodeURIComponent(location.href)+'&description='+encodeURIComponent(document.title));return false">
+                            <img src="~/images/printerest.svg" alt="Pinterest" />
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-9 mb-4 mb-md-0">
+            <div class="product-content">
+                <h2>Mô tả</h2>
+                <article>
+                    @if (Model.Product.Content != null)
+                    {
+                        @Html.Raw(Model.Product.Content)
+                    }
+                    else
+                    {
+                        <div class="alert alert-info mb-0" role="alert">
+                            Nội dung chưa được cập nhật!
+                        </div>
+                    }
+                </article>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="product-list">
+                <h2>Sản phẩm tương tự</h2>
+                <div class="wrapper">
+                    @foreach (var item in Model.Products)
+                    {
+                        <a asp-controller="Home" asp-action="ProductDetails" asp-route-url="@item.Url" class="item media">
+                            @if (!string.IsNullOrEmpty(item.Avatar))
+                            {
+                                <img class="mr-2" src="@PathSystem.Combine("/contents/products", item.Avatar)" alt="@item.Avatar" />
+                            } else
+                            {
+                                <img class="mr-2" src="~/images/no-image.jpg" alt="no-image" />
+                            }
+                            <div class="media-body">
+                                <h3>
+                                    @item.Name
+                                </h3>
+                                <p>
+                                    @if (item is { FinalPrice: > 0 })
+                                    {
+                                        @Html.DisplayFor(m => m.Product.FinalPrice)
+                                    }
+                                    else
+                                    {
+                                        @:Liên hệ
+                                    }
+                                </p>
+                            </div>
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

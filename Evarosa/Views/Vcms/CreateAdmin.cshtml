@@ -19,6 +19,12 @@
         <table class="form_table">
             <tbody>
                 <tr>
+                    <td class="form_name">@Html.LabelFor(model => model.Admin.Role)</td>
+                    <td class="form_text">
+                        <select asp-for="Admin.Role" asp-items="Html.GetEnumSelectList<AdminRole>()"></select>
+                    </td>
+                </tr>
+                <tr>
                     <td class="form_name">@Html.LabelFor(model => model.Admin.Username)</td>
                     <td class="form_text">
                         <input asp-for="Admin.Username" />

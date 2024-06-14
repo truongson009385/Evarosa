@@ -2,20 +2,6 @@
 @inject IAppService AppService
 
 <div class="breadcrumb-wrapper">
-    @if (!string.IsNullOrEmpty(Model.Image))
-    {
-        <div class="breadcrumb-image">
-            <img src="@Model.Image" alt="@Model.Image" />
-        </div>
-    } else
-    {
-        @if (!string.IsNullOrEmpty(AppService.Config.Breadcrumb))
-        {
-            <div class="breadcrumb-image">
-                <img src="@PathSystem.Combine("/contents/system", AppService.Config.Breadcrumb)?w=1920" alt="@AppService.Config.Breadcrumb" />
-            </div>
-        }
-    }
     <nav class="breadcrumb-nav" aria-label="breadcrumb">
         <div class="container">
             <ol class="breadcrumb">
