@@ -1,0 +1,37 @@
+﻿@model PageProductViewModel
+
+<div class="filterbar-sort mb-3">
+    <p>Hiển thị 1–@Model.ListProduct.PageSize của @Model.ListProduct.TotalItemCount kết quả</p>
+    <select asp-for="Sort" class="form-control by-sort">
+        <option value="">Thứ tự theo mặc định</option>
+        <option value="name-desc">Xếp từ A-Z</option>
+        <option value="name-asc">Xếp từ Z-A</option>
+        <option value="date-asc">Xếp từ mới nhất</option>
+        <option value="date-desc">Xếp từ cũ hơn</option>
+    </select>
+</div>
+
+@if (Model.ListProduct.Count <= 0)
+{
+    <div class="alert alert-info" role="alert">
+        Nội dung chưa được cập nhật!
+    </div>
+}
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 mb-4">
+    @foreach (var item in Model.ListProduct)
+    {
+        <div class="col px-2 mb-3">
+            <partial name="ItemProduct" model="item" />
+        </div>
+    }
+</div>
+@if (Model.ListProduct.PageCount > 1)
+{
+    @Html.PagedListPager(Model.ListProduct, page => Url.Action("ListProduct", "Home", new { 
+        page, 
+        term= Model.Term,
+        url = Model.Url, 
+        minMax = Model.MinMax,
+        typeSort = Model.Sort,
+    }))
+}

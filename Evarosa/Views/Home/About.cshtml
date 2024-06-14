@@ -1,0 +1,81 @@
+﻿@model PageArticleViewModel
+@using System.Globalization
+
+@{
+    ViewData["Title"] = "Giới thiệu";
+
+    ViewData["Description"] = Model.Article.DescriptionMeta ?? ViewData["Title"];
+    ViewData["Canonical"] = Url.Action("AboutUs", "Home", new { }, protocol: Context.Request.Scheme);
+    if (Model.Article.Image != null)
+    {
+        ViewData["ImageShare"] = Context.Request.Scheme + "://" + Context.Request.Host + System.IO.Path.Combine("/contents/blog/", Model.Article.Image);
+    }
+
+    var category = Model.Article.ArticleCategory;
+
+    var breadcrumb = new BreadcrumbViewModel
+    {
+        Path = new List<BreadcrumbItem>
+        {
+            new BreadcrumbItem
+            {
+                Key = "<i class='fa-solid fa-house mr-2'></i>Trang chủ",
+                Value = Url.Action("Index", "Home")
+            },
+            new BreadcrumbItem
+            {
+                Key = ViewBag.Title,
+                Value = null
+            }
+        }
+    };
+    var ci = CultureInfo.GetCultureInfo("vi-VN");
+}
+
+@await Html.PartialAsync("_breadcrumb", breadcrumb)
+
+<div class="container pb-5">
+    <h1 class="page-title text-center mb-4">@ViewData["Title"]</h1>
+    @if (!string.IsNullOrEmpty(Model.Article.Body))
+    {
+        <article class="body-content">
+            @Html.Raw(Model.Article.Body)
+        </article>
+    } else
+    {
+        <div class="alert alert-info" role="alert">
+            Nội dung chưa được cập nhật
+        </div>
+    }
+    <div class="page-share mt-4">
+        <p>Chia sẻ:</p>
+        <ul>
+            <li>
+                <a href="javascipt:;" onclick="window.open('https://www.facebook.com/sharer.php?u='+encodeURIComponent(location.href)+'&amp;t='+encodeURIComponent(document.title));return false">
+                    <img src="~/images/facebook.png" />
+                </a>
+            </li>
+            <li>
+                <a href="javascipt:;" onclick="window.open('mailto:?subject=%22'+encodeURIComponent(document.title)+'%22&body=Read%20the%20article%20%22'+encodeURIComponent(document.title)+'%22%20on%20'+encodeURIComponent(location.href));return false">
+                    <img src="~/images/google-plus.png" />
+                </a>
+            </li>
+            <li>
+                <a href="javascipt:;" onclick="window.open('https://twitter.com/intent/tweet?url='+encodeURIComponent(location.href)+'&amp;text='+encodeURIComponent(document.title));return false">
+                    <img src="~/images/twitter.png" />
+                </a>
+            </li>
+            <li>
+                <a href="javascipt:;" onclick="window.open('whatsapp://send?text='+encodeURIComponent(document.title)+'%20'+encodeURIComponent(location.href));return false">
+                    <img src="~/images/messenger.png" />
+                </a>
+            </li>
+            <li>
+                <a href="javascipt:;" onclick="window.open('http://pinterest.com/pin/create/button/?url='+encodeURIComponent(location.href)+'&description='+encodeURIComponent(document.title));return false">
+                    <img src="~/images/printerest.svg" />
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="fb-comments" data-href="@ViewData["Canonical"]" data-numposts="10" data-width="100%"></div>
+</div>

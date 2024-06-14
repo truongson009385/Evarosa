@@ -1,0 +1,24 @@
+﻿@model Article
+
+<div class="item-article">
+    <a class="avatar" asp-controller="Home" asp-action="ArticleDetails" asp-route-url="@Model.Url">
+        @if (!string.IsNullOrEmpty(Model.Image))
+        {
+            <img src="@PathSystem.Combine("/contents/blog", Model.Image)?w=250" alt="@Model.Image" />
+        }
+        else
+        {
+            <img src="~/images/no-image.jpg" alt="no-image" />
+        }
+    </a>
+    @if (Model.CreatedAt != null)
+    {
+        <p class="date"><i class="fa-regular fa-calendar-days mr-2"></i>@Model.CreatedAt.ToString("dd, MMMM yyyy")</p>
+    }
+    <a class="name" asp-controller="Home" asp-action="ArticleDetails" asp-route-url="@Model.Url">
+        <h3>@Model.Name</h3>
+    </a>
+    <p class="text">
+        @Model.ShortDescription
+    </p>
+</div>

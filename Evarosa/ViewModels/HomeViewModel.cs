@@ -14,6 +14,11 @@ namespace Evarosa.ViewModels
         public IEnumerable<Article> Articles { get; set; } = new List<Article>();
     }
 
+    public class FilterBarViewModel
+    {
+        public IEnumerable<ProductCategory> ProductCategories { get; set; } = new List<ProductCategory>();
+    }
+
     public class HeaderViewModel
     {
         public IEnumerable<ProductCategory> ProductCategories { get; set; } = new List<ProductCategory>();
@@ -35,5 +40,20 @@ namespace Evarosa.ViewModels
         public IEnumerable<Product> Products { get; set; } = new List<Product>();
         public IEnumerable<ProductCategory> ProductCategories { get; set; } = new List<ProductCategory>();
         public ProductCategory ProductCategory { get; set; } = new ProductCategory();
+    }
+
+    public class PageArticleViewModel
+    {
+        public IPagedList<Article> ListArticle { get; set; }
+        public Article Article { get; set; } = new Article();
+        public IEnumerable<Article> Articles { get; set; } = new List<Article>();
+        public IEnumerable<Article> SuKien { get; set; } = new List<Article>();
+        public IEnumerable<ArticleCategory> ArticleCategories { get; set; } = new List<ArticleCategory>();
+        public ArticleCategory ArticleCategory { get; set; } = new();
+    }
+
+    public class PageContactViewModel
+    {
+        public Contact Contact { get; set; } = new Contact();
     }
 }

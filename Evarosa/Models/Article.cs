@@ -42,6 +42,8 @@ namespace Evarosa.Models
         [Display(Name = "Số thứ tự"), Required(ErrorMessage = "Bạn chưa nhập số thứ tự"), UIHint("NumberBox"), RegularExpression(@"\d+", ErrorMessage = "Chỉ nhập số nguyên dương")]
         public int Sort { get; set; } = 1;
 
+        public int Views { set; get; }
+
         [Display(Name = "Ngày tạo")]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime CreatedAt { set; get; } = DateTime.UtcNow;
@@ -96,11 +98,15 @@ namespace Evarosa.Models
 
         [Display(Name = "Loại danh mục")]
         public TypeArticle Type { get; set; }
+
+
     }
 
     public enum TypeArticle
     {
         [Display(Name = "Tin tức")]
         TinTuc,
+        [Display(Name = "Giới thiệu")]
+        GioiThieu,
     }
 }

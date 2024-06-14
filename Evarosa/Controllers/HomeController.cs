@@ -1,13 +1,16 @@
-using Evarosa.Data;
+﻿using Evarosa.Data;
 using Evarosa.Models;
+using Evarosa.Services;
+using Evarosa.Services.Impl;
 using Evarosa.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using X.PagedList;
 
 namespace Evarosa.Controllers
 {
-    public class HomeController(UnitOfWork unitOfWork) : Controller
+    public class HomeController(UnitOfWork unitOfWork, IMailService mailService, IAppService appService) : Controller
     {
 
         public async Task<IActionResult> Index()
@@ -89,6 +92,22 @@ namespace Evarosa.Controllers
             return View(model);
         }
 
+        [Route("gioi-thieu")]
+        public async Task<IActionResult> About()
+        {
+            var article = await unitOfWork.Article
+                .GetAll(
+                    predicate: m => m.ArticleCategory.Type == TypeArticle.GioiThieu && m.Active,
+                    orderBy: m => m.OrderByDescending(o => o.Sort)
+                ).FirstOrDefaultAsync();
+
+            var model = new PageArticleViewModel
+            {
+                Article = article ?? new Article()
+            };
+            return View(model);
+        }
+
 
         [Route("{url}.html", Order = 0)]
         public async Task<IActionResult> ProductDetails(string url)
@@ -125,10 +144,212 @@ namespace Evarosa.Controllers
             return View(model);
         }
 
-        public IActionResult AllProduct()
+        [Route("products")]
+        public IActionResult AllProduct(string? danhmuc, int? page, string? typeSort, string term = "")
         {
-            return View();
+            var list = GetListProduct(page, danhmuc, term, typeSort);
+
+            var model = new PageProductViewModel
+            {
+                ListProduct = list,
+                Term = term,
+                Sort = typeSort,
+                Url = danhmuc
+            };
+            return View(model);
         }
+
+        public IActionResult AllProductView(int? page, string? typeSort, string term = "")
+        {
+            var list = GetListProduct(page, null, term, typeSort);
+
+            var model = new PageProductViewModel
+            {
+                ListProduct = list,
+                Term = term,
+                Sort = typeSort,
+            };
+            return PartialView(model);
+        }
+
+        [Route("{url:regex(^(?!.*(home|vcms|article|productvcms|upload|banner|contact)).*$)}", Order = 1)]
+        public async Task<IActionResult> ListProduct(int? page, string url, string? typeSort, string term = "")
+        {
+            var category = await unitOfWork.ProductCategory
+                .GetAll(
+                    predicate: m => m.Url == url && m.Title.Contains(term) && m.Active
+                )
+                .FirstOrDefaultAsync();
+
+            if (category == null) return NotFound();
+
+            var list = GetListProduct(page, url, term, typeSort);
+
+            var model = new PageProductViewModel
+            {
+                ProductCategory = category,
+                ListProduct = list,
+                Term = term,
+                Url = url,
+                Sort = typeSort,
+            };
+            return View(model);
+        }
+
+        public IPagedList<Product> GetListProduct(int? page, string? url, string term = "", string typeSort = "", bool isPromotion = false)
+        {
+            int pageNumber = page ?? 1;
+
+            var productsQuery = unitOfWork.Product
+                .GetAll(
+                    predicate: m => m.Name.Contains(term) && m.Active,
+                    include: m => m.Include(l => l.ProductCategory).ThenInclude(l => l.ParentCategory)
+                );
+
+            if (!string.IsNullOrEmpty(url))
+            {
+                var category = unitOfWork.ProductCategory.GetAll(
+                        predicate: m => m.Url == url
+                    ).FirstOrDefault();
+
+                if (category != null)
+                {
+                    productsQuery = productsQuery.Where(m =>
+                        m.ProductCategoryId == category.Id ||
+                        m.ProductCategory.ParentCategoryId == category.Id ||
+                        m.ProductCategory.ParentCategory.ParentCategoryId == category.Id);
+                }
+            }
+
+            productsQuery = typeSort switch
+            {
+                "name-desc" => productsQuery.OrderBy(p => p.Name),
+                "name-asc" => productsQuery.OrderByDescending(p => p.Name),
+                "date-desc" => productsQuery.OrderBy(p => p.CreatedAt),
+                "date-asc" => productsQuery.OrderByDescending(p => p.CreatedAt),
+                _ => productsQuery.OrderByDescending(p => p.Sort)
+            };
+
+            var filteredProducts = productsQuery.AsEnumerable();
+
+            if (isPromotion)
+            {
+                filteredProducts = filteredProducts.Where(p => p.Percent > 0);
+            }
+
+            return filteredProducts.ToPagedList(pageNumber, 12);
+        }
+
+        [Route("blog/{url}.html", Order = 0)]
+        public async Task<IActionResult> ArticleDetails(string url)
+        {
+            var article = await unitOfWork.Article
+                .GetAll(
+                    predicate: m => m.Url == url,
+                    include: m => m.Include(l => l.ArticleCategory),
+                    disableTracking: false
+                ).FirstOrDefaultAsync();
+
+            if (article == null) return NotFound();
+
+            article.Views += 1;
+            await unitOfWork.CommitAsync();
+
+            var articles = await unitOfWork.Article.GetAllAsync(
+                    predicate: a => a.ArticleCategoryId == article.ArticleCategoryId && a.Id != article.Id,
+                    include: a => a.Include(l => l.ArticleCategory),
+                    orderBy: a => a.OrderByDescending(a => a.Sort),
+                    take: 4
+                );
+
+            var model = new PageArticleViewModel
+            {
+                Article = article,
+                Articles = articles,
+            };
+            return View(model);
+        }
+
+        [Route("blog")]
+        public async Task<IActionResult> AllArticle(int? page, string term = "")
+        {
+            var pageNumber = page ?? 1;
+
+            var listArticle = await unitOfWork.Article
+                .GetPagedListAsync(
+                    predicate: m => m.Name.Contains(term) && m.Active,
+                    orderBy: a => a.OrderByDescending(c => c.Sort),
+                    include: a => a.Include(l => l.ArticleCategory),
+                    pageIndex: pageNumber,
+                    pageSize: 9
+                );
+
+            var model = new PageArticleViewModel
+            {
+                ListArticle = listArticle,
+            };
+            return View(model);
+        }
+
+        [Route("blog/{url:regex(^(?!.*(home|vcms|article|productvcms|upload|banner|contact)).*$)}", Order = 1)]
+        public async Task<IActionResult> ListArticle(int? page, string url, string term = "")
+        {
+            int pageNumber = page ?? 1;
+
+            var category = await unitOfWork.ArticleCategory
+                .GetAll(
+                    predicate: m => m.Url == url && m.Title.Contains(term) && m.Active
+                ).FirstOrDefaultAsync();
+
+            if (category == null) return NotFound();
+
+            var listArticle = await unitOfWork.Article
+                .GetPagedListAsync(
+                    predicate: m => m.Active &&  (m.ArticleCategoryId == category.Id || m.ArticleCategory.ParentCategoryId == category.Id),
+                    orderBy: a => a.OrderByDescending(c => c.Sort),
+                    include: a => a.Include(l => l.ArticleCategory),
+                    pageIndex: pageNumber,
+                    pageSize: 9
+                );
+
+            var model = new PageArticleViewModel
+            {
+                ArticleCategory = category,
+                ListArticle = listArticle
+            };
+            return View(model);
+        }
+
+        [Route("lien-he")]
+        public IActionResult Contact() => View();
+
+        [HttpPost]
+        public async Task<IActionResult> ContactStore(Contact contact)
+        {
+            if (ModelState.IsValid)
+            {
+                await unitOfWork.Contact.InsertAsync(contact);
+                await unitOfWork.CommitAsync();
+
+                var subjectMail = "Email liên hệ từ website: " + Request.Host;
+                var bodyMail = $"<p>Tên người liên hệ: {contact.FullName},</p>" +
+                               $"<p>Số điện thoại: {contact.PhoneNumber},</p>" +
+                               $"<p>Email: {contact.Email},</p>" +
+                               $"<p>Nội dung: {contact.Body}</p>";
+
+                var mailData = new MailData
+                {
+                    EmailToId = appService.Config.Email,
+                    EmailSubject = subjectMail,
+                    EmailBody = bodyMail
+                };
+
+                await mailService.SendEmailAsync(mailData);
+                return Json(new { status = true, msg = "Gửi liên hệ thành công.\nChúng tôi sẽ liên lạc với bạn sớm nhất có thể." });
+            }
+            return Json(new { status = false, msg = "Quá trình thực hiện không thành công." });
+        }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

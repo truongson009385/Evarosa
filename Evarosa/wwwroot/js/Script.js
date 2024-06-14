@@ -273,3 +273,64 @@ $(document).ready(function () {
         });
     });
 });
+
+function ListProductJS() {
+    $(".by-sort").change(function () {
+        let cate = $(".filter-by-category").val();
+        let sort = $(".by-sort").val();
+
+        $.ajax({
+            url: "/Home/ListProductView",
+            type: "GET",
+            data: {
+                url: cate,
+                typeSort: sort,
+            }
+        }).done(function (data) {
+            $("#ListProductView").empty();
+            $("#ListProductView").html(data);
+            ListProductJS()
+
+            var currentURL = window.location.href;
+
+            var urlObject = new URL(currentURL);
+
+            var searchParams = urlObject.searchParams;
+
+            searchParams.set("typeSort", sort);
+
+            var newURL = urlObject.href;
+
+            window.history.pushState({ path: newURL }, "", newURL);
+        });
+    });
+}
+
+function AllProductJS() {
+    $(".by-sort").change(function () {
+        let sort = $(".by-sort").val();
+
+        $.ajax({
+            url: "/Home/AllProductView",
+            type: "GET",
+            data: {
+                typeSort: sort,
+            }
+        }).done(function (data) {
+            $("#AllProductView").empty();
+            $("#AllProductView").html(data);
+            AllProductJS()
+            var currentURL = window.location.href;
+
+            var urlObject = new URL(currentURL);
+
+            var searchParams = urlObject.searchParams;
+
+            searchParams.set("typeSort", sort);
+
+            var newURL = urlObject.href;
+
+            window.history.pushState({ path: newURL }, "", newURL);
+        });
+    });
+}

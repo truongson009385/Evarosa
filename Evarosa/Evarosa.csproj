@@ -31,6 +31,7 @@
     <None Include="Views\ProductVcms\ProductCategory.cshtml" />
     <None Include="Views\ProductVcms\UpdateProduct.cshtml" />
     <None Include="Views\ProductVcms\UpdateProductCategory.cshtml" />
+    <None Include="Views\Shared\Components\FilterBar\Default.cshtml" />
     <None Include="Views\Shared\DisplayTemplates\ImageFeedback.cshtml" />
     <None Include="Views\Shared\EditorTemplates\CheckBox.cshtml" />
     <None Include="Views\Shared\EditorTemplates\DateTimePicker.cshtml" />

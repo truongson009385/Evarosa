@@ -1,0 +1,111 @@
+﻿@model PageContactViewModel
+@inject IAppService AppService
+
+@{
+    ViewData["Title"] = "Liên hệ";
+    ViewData["Canonical"] = Url.Action("Contact", "Home", null, protocol: Context.Request.Scheme);
+
+    var breadcrumb = new BreadcrumbViewModel
+    {
+        Path = new List<BreadcrumbItem>
+        {
+            new BreadcrumbItem
+            {
+                Key = "<i class='fa-solid fa-house mr-2'></i>Trang chủ",
+                Value = Url.Action("Index", "Home")
+            },
+            new BreadcrumbItem
+            {
+                Key = ViewBag.Title,
+                Value = null
+            }
+        }
+    };
+}
+
+<partial name="_breadcrumb" model="breadcrumb" />
+
+<form id="form-contact">
+    <div class="container pb-5">
+        <h1 class="page-title text-center mb-5">
+            @ViewBag.Title
+        </h1>
+        <div class="row">
+            <div class="col-lg-6 mb-5">
+                <div class="wrapper_contact mb-5">
+                    <h2 class="name_contact">
+                        @AppService.Config.Title
+                    </h2>
+                    <ul class="info_contact">
+                        <li>
+                            Địa chỉ: <a href="#">@AppService.Config.Place</a>
+                        </li>
+                        <li>
+                            Điện thoại: <a href="tel:@AppService.Config.Hotline">@AppService.Config.Hotline</a>
+                        </li>
+                        <li>
+                            Email: <a href="mailto:@(AppService.Config.Email)">@AppService.Config.Email</a>
+                        </li>
+                    </ul>
+                    <ul class="info_media">
+                        <li>
+                            <a href="@AppService.Config.Facebook" rel="nofollow" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
+                        </li>
+                        <li>
+                            <a href="@AppService.Config.Twitter" rel="nofollow" target="_blank"><i class="fa-brands fa-twitter"></i></a>
+                        </li>
+                        <li>
+                            <a href="@AppService.Config.Youtube" rel="nofollow" target="_blank"><i class="fa-brands fa-youtube"></i></a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="form_contact">
+                    <h2 class="name_contact mb-4">Gửi thông tin</h2>
+                    <div class="row row-cols-1 row-cols-md-2">
+                        <div class="col mb-3">
+                            <label for="fullname" class="form-label">Họ và tên</label>
+                            <input type="text" class="form-control" asp-for="Contact.FullName" id="fullname">
+                            <span asp-validation-for="Contact.FullName" class="text-danger"></span>
+                        </div>
+                        <div class="col mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="text" class="form-control" asp-for="Contact.Email" id="email">
+                            <span asp-validation-for="Contact.Email" class="text-danger"></span>
+                        </div>
+                        <div class="col mb-3">
+                            <label for="phone" class="form-label">Số điện thoại</label>
+                            <input type="text" class="form-control" asp-for="Contact.PhoneNumber" id="phone">
+                            <span asp-validation-for="Contact.PhoneNumber" class="text-danger"></span>
+                        </div>
+                        <div class="col mb-3">
+                            <label for="address" class="form-label">Địa chỉ</label>
+                            <input type="text" class="form-control" asp-for="Contact.Address" id="address">
+                            <span asp-validation-for="Contact.Address" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="body" class="form-label">Nội dung</label>
+                        <textarea class="form-control" asp-for="Contact.Body" id="body" rows="5"></textarea>
+                        <span asp-validation-for="Contact.Body" class="text-danger"></span>
+                    </div>
+                    <button class="button-1">
+                        Gửi
+                    </button>
+                </div>
+            </div>
+            <div class="col-lg-6 mb-5 px-3 px-lg-5">
+                <h3 class="name_contact mb-4">Google map</h3>
+                <div class="contact_map">
+                    @Html.Raw(AppService.Config.GoogleMap)
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+@section scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,0 +1,53 @@
+﻿@model PageArticleViewModel
+
+@{
+    ViewBag.Title = Model.ArticleCategory.Title;
+    ViewBag.Description = Model.ArticleCategory.Description ?? Model.ArticleCategory.Title;
+    ViewData["Canonical"] = Url.Action("ListArticle", "Home", new { url = Model.ArticleCategory.Url }, protocol: Context.Request.Scheme);
+
+    var breadcrumb = new BreadcrumbViewModel
+    {
+        Path = new List<BreadcrumbItem>
+        {
+            new()
+            {
+                Key = "<i class='fa-solid fa-house mr-2'></i>Trang chủ",
+                Value = Url.Action("Index", "Home")
+            },
+            new()
+            {
+                Key = ViewBag.Title,
+                Value = null
+            }
+        }
+    };
+}
+
+<partial name="_breadcrumb" model="breadcrumb" />
+
+<div class="container pb-5">
+    <h1 class="page-title text-center mb-5">
+        @ViewBag.Title
+    </h1>
+    @if (Model.ListArticle.Count <= 0)
+    {
+        <div class="alert alert-info" role="alert">
+            Nội dung chưa được cập nhật!
+        </div>
+    }
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 mx-n2 mb-4">
+        @foreach (var item in Model.ListArticle)
+        {
+            <div class="col px-2 mb-3">
+                <partial name="~/Views/Home/ItemArticle.cshtml" model="item" />
+            </div>
+        }
+    </div>
+    @if (Model.ListArticle.PageCount > 1)
+    {
+        @Html.PagedListPager(Model.ListArticle, page => Url.Action("ListArticle", "Home", new { page }))
+    }
+</div>
+
+
+

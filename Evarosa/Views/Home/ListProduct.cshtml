@@ -1,17 +1,20 @@
-﻿@{
-    ViewBag.Title = "Sản phẩm";
-    ViewData["Canonical"] = Url.Action("AllProduct", "Home", null, protocol: Context.Request.Scheme);
+﻿@model PageProductViewModel
+
+@{
+    ViewBag.Title = Model.ProductCategory.Title;
+    ViewBag.Description = Model.ProductCategory.Description ?? Model.ProductCategory.Title;
+    ViewData["Canonical"] = Url.Action("ListProduct", "Home", new { url = Model.ProductCategory.Url }, protocol: Context.Request.Scheme);
 
     var breadcrumb = new BreadcrumbViewModel
     {
         Path = new List<BreadcrumbItem>
         {
-            new BreadcrumbItem
+            new()
             {
                 Key = "<i class='fa-solid fa-house mr-2'></i>Trang chủ",
                 Value = Url.Action("Index", "Home")
             },
-            new BreadcrumbItem
+            new()
             {
                 Key = ViewBag.Title,
                 Value = null
@@ -25,16 +28,17 @@
 <div class="container pb-5">
     <div class="row">
         <div class="col-lg-3 order-1 order-lg-0">
+            <input class="filter-by-category" type="hidden" name="category" value="@Model.ProductCategory.Url" />
             @await Component.InvokeAsync("FilterBar")
         </div>
-        <div class="col-lg-9 order-0 order-lg-1" id="AllProductView">
-            <partial name="AllProductView" model="Model" />
+        <div class="col-lg-9 order-0 order-lg-1" id="ListProductView">
+            <partial name="ListProductView" model="Model" />
         </div>
     </div>
 </div>
 
 @section Scripts {
     <script>
-        AllProductJS();
+        ListProductJS();
     </script>
 }

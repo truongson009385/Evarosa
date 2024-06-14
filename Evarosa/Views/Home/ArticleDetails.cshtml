@@ -1,0 +1,97 @@
+﻿@model PageArticleViewModel
+@using System.Globalization
+
+@{
+    ViewData["Title"] = Model.Article.TitleMeta ?? Model.Article.Name;
+    ViewData["Description"] = Model.Article.DescriptionMeta ?? Model.Article.ShortDescription;
+    ViewData["Canonical"] = Url.Action("ArticleDetails", "Home", new { url = Model.Article.Url }, protocol: Context.Request.Scheme);
+    if (Model.Article.Image != null)
+    {
+        ViewData["ImageShare"] = Context.Request.Scheme + "://" + Context.Request.Host + System.IO.Path.Combine("/contents/blog/", Model.Article.Image);
+    }
+
+    var category = Model.Article.ArticleCategory;
+
+    var breadcrumb = new BreadcrumbViewModel
+    {
+        Path = new List<BreadcrumbItem>
+        {
+            new BreadcrumbItem
+            {
+                Key = "<i class='fa-solid fa-house mr-2'></i>Trang chủ",
+                Value = Url.Action("Index", "Home")
+            },
+            new BreadcrumbItem
+            {
+                Key = category.Title,
+                Value = Url.Action("ListArticle", "Home", new { url = category.Url })
+            },
+            new BreadcrumbItem
+            {
+                Key = ViewBag.Title,
+                Value = null
+            }
+        }
+    };
+    var ci = CultureInfo.GetCultureInfo("vi-VN");
+}
+
+@await Html.PartialAsync("_breadcrumb", breadcrumb)
+
+<div class="container pb-5">
+    <h1 class="page-title mb-3">@Model.Article.Name</h1>
+    <div class="page-info mb-4">
+        <p class="text-muted"><i class="fa-regular fa-clock mr-2"></i>@Model.Article.CreatedAt.ToString("dd MMMM, yyyy", ci)</p>
+        <p class="text-muted"><i class="fa-regular fa-eye mr-2"></i>@Model.Article.Views</p>
+    </div>
+    @if (!string.IsNullOrEmpty(Model.Article.Body))
+    {
+        <div id="toctoc"></div>
+        <article class="body-content">
+            @Html.Raw(Model.Article.Body)
+        </article>
+    }
+    <div class="page-share mt-4">
+        <p>Chia sẻ:</p>
+        <ul>
+            <li>
+                <a href="javascipt:;" onclick="window.open('https://www.facebook.com/sharer.php?u='+encodeURIComponent(location.href)+'&amp;t='+encodeURIComponent(document.title));return false">
+                    <img src="~/images/facebook.png" alt="Fb"/>
+                </a>
+            </li>
+            <li>
+                <a href="javascipt:;" onclick="window.open('mailto:?subject=%22'+encodeURIComponent(document.title)+'%22&body=Read%20the%20article%20%22'+encodeURIComponent(document.title)+'%22%20on%20'+encodeURIComponent(location.href));return false">
+                    <img src="~/images/google-plus.png" alt="Google"/>
+                </a>
+            </li>
+            <li>
+                <a href="javascipt:;" onclick="window.open('https://twitter.com/intent/tweet?url='+encodeURIComponent(location.href)+'&amp;text='+encodeURIComponent(document.title));return false">
+                    <img src="~/images/twitter.png" alt="X"/>
+                </a>
+            </li>
+            <li>
+                <a href="javascipt:;" onclick="window.open('whatsapp://send?text='+encodeURIComponent(document.title)+'%20'+encodeURIComponent(location.href));return false">
+                    <img src="~/images/messenger.png" alt="Messenger"/>
+                </a>
+            </li>
+            <li>
+                <a href="javascipt:;" onclick="window.open('http://pinterest.com/pin/create/button/?url='+encodeURIComponent(location.href)+'&description='+encodeURIComponent(document.title));return false">
+                    <img src="~/images/printerest.svg" alt="Pinterest"/>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="fb-comments" data-href="@ViewData["Canonical"]" data-numposts="10" data-width="100%"></div>
+    @if (Model.Articles.Any())
+    {
+        <div class="title text-center my-4">Bài viết khác</div>
+        <div class="row mx-n2 mb-n3">
+            @foreach (var article in Model.Articles)
+            {
+                <div class="col-lg-3 col-md-4 col-sm-6 px-2 mb-3">
+                    <partial name="~/Views/Home/ItemArticle.cshtml" model="article" />
+                </div>
+            }
+        </div>
+    }
+</div>
