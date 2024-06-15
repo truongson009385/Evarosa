@@ -274,8 +274,6 @@ namespace Evarosa.Controllers
                 config.Title = model.Title;
                 config.Description = model.Description;
                 config.GoogleAnalytics = model.GoogleAnalytics;
-                config.EmailConfig = model.EmailConfig;
-                config.PassWordMail = model.PassWordMail;
 
                 //Mạng xã hội
                 config.Facebook = model.Facebook;

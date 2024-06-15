@@ -1,4 +1,5 @@
 ﻿using Evarosa.Data;
+using Evarosa.Models;
 using Evarosa.Services.Impl;
 using Evarosa.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -66,6 +67,12 @@ namespace Evarosa.ViewComponents
                     selector: m => new { m.Id, m.Title }
                 );
             model.SelectCategories = new SelectList(categories, "Id", "Title");
+
+            model.Count = cart.GetCount();
+            model.CartMini = new CartMiniViewModel
+            {
+                CartItems = cart.GetCartItems()
+            };
 
             return View(model);
         }

@@ -123,6 +123,35 @@
             return false;
         }
     });
+
+     $("#form-contact").on("submit", function (e) {
+        e.preventDefault();
+
+        if ($(this).valid()) {
+            $.ajax({
+                type: "POST",
+                url: "/Home/ContactStore",
+                data: $(this).serialize(),
+                success: function (data) {
+                    if (data.status) {
+                        Swal.fire({
+                            title: "Thành công!",
+                            text: data.msg,
+                            icon: "success"
+                        });
+                        $("#form-contact").trigger("reset");
+                    }
+                },
+                error: function (error) {
+                    Swal.fire({
+                        title: "Thất bại!",
+                        text: "Đã có lỗi xảy ra trong quá trình xử lý!",
+                        icon: "error"
+                    });
+                }
+            });
+        }
+    });
 })
 
 

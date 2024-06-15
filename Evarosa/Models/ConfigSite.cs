@@ -17,12 +17,6 @@ namespace Evarosa.Models
         [StringLength(4000, ErrorMessage = "Tối đa 4000 ký tự"), Display(Name = "Mã Google Analytics"), UIHint("TextArea")]
         public string? GoogleAnalytics { get; set; }
 
-        [StringLength(50, ErrorMessage = "Tối đa 50 ký tự"), Display(Name = "Tài khoản Mail"), UIHint("TextBox")]
-        public string? EmailConfig { get; set; }
-
-        [Display(Name = "Mật khẩu Mail"), StringLength(200, ErrorMessage = "Tối đa 200 ký tự"), UIHint("TextBox")]
-        public string? PassWordMail { get; set; }
-
         //Mạng xã hội
         [StringLength(500, ErrorMessage = "Tối đa 500 ký tự"), Display(Name = "Đường dẫn Facebook"),
          Url(ErrorMessage = "Đường dẫn không chính xác"), UIHint("TextBox")]
