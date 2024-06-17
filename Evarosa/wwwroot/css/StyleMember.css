@@ -270,3 +270,45 @@ table.member-table th {
     border-bottom: 0;
   }
 }
+@media (max-width: 768px) {
+  .avatar-upload {
+    max-width: 160px;
+  }
+  .avatar-upload .avatar-preview {
+    width: 160px;
+    height: 160px;
+  }
+  .avatar-upload .avatar-edit input + label {
+    width: 35px;
+    height: 35px;
+  }
+  .avatar-upload .avatar-edit input + label:after {
+    font-size: 16px;
+    width: 35px;
+    height: 35px;
+  }
+  .member-name {
+    font-size: 20px;
+  }
+  .member-numbers {
+    width: 100%;
+    flex-direction: column;
+    padding: 0;
+  }
+  .member-numbers li {
+    padding: 20px;
+  }
+  .member-numbers li:not(:last-child) {
+    border-bottom: 1px solid #cdcdcd;
+  }
+  .member-menu {
+    width: 86%;
+    height: 68px;
+    margin: 0 auto;
+    overflow-x: auto;
+    justify-content: start;
+  }
+  .member-menu a {
+    white-space: nowrap;
+  }
+}

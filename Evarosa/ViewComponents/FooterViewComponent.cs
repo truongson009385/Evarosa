@@ -28,7 +28,7 @@ namespace Evarosa.ViewComponents
                     {
                         Id = m.Id,
                         Title = m.Title,
-                        Articles = qrArticle.Where(m => m.ArticleCategoryId == m.Id).Take(6).ToList()
+                        Articles = qrArticle.Where(a => a.ArticleCategoryId == m.Id).Take(6).ToList()
                     }
                 ).FirstOrDefault();
 

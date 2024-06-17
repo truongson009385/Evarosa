@@ -25,7 +25,33 @@
         slidesToScroll: 5,
         speed: 800,
         arrows: true,
-        dots: true
+        dots: true,
+        responsive: [
+            {
+                breakpoint: 1024,
+                settings: {
+                    slidesToShow: 3,
+                    slidesToScroll: 3,
+                    arrows: false,
+                }
+            },
+            {
+                breakpoint: 768,
+                settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 2,
+                    arrows: false,
+                }
+            },
+            {
+                breakpoint: 540,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
+                    arrows: false,
+                }
+            }
+        ]
     });
 
     $('.partner-slider').slick({
@@ -34,7 +60,25 @@
         slidesToScroll: 5,
         speed: 800,
         arrows: true,
-        dots: true
+        dots: true,
+        responsive: [
+            {
+                breakpoint: 1024,
+                settings: {
+                    slidesToShow: 3,
+                    slidesToScroll: 3,
+                    arrows: false,
+                }
+            },
+            {
+                breakpoint: 768,
+                settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 2,
+                    arrows: false,
+                }
+            }
+        ]
     });
 
     $(".outstanding-tabs > li").click(function () {
@@ -373,4 +417,14 @@ function AllProductJS() {
             window.history.pushState({ path: newURL }, "", newURL);
         });
     });
+}
+
+function menuOpen() {
+    $(".nav-mobi").addClass("active");
+}
+function menuClose() {
+    $(".nav-mobi").removeClass("active");
+}
+function toggleSubmenu(button) {
+    $(button).closest("li").children("ul").slideToggle();
 }

@@ -2,8 +2,17 @@
 @inject IAppService AppService
 
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = AppService.Config.Title;
+    ViewData["Description"] = AppService.Config.Description;
+    ViewData["Canonical"] = Url.Action("Index", "Home", null, protocol: Context.Request.Scheme);
+
+    if (!string.IsNullOrEmpty(AppService.Config.AboutImage))
+    {
+        ViewData["ImageShare"] = Context.Request.Scheme + "://" + Context.Request.Host + System.IO.Path.Combine("/contents/system/", AppService.Config.AboutImage);
+    }
 }
+
+<h1 class="d-none">@ViewData["Title"]</h1>
 
 @if (Model.Banner.Any())
 {
@@ -92,7 +101,7 @@
     {
         <div class="container py-5">
             <h2 class="section-title line-bottom mb-4">@item.Title</h2>
-            <div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 mx-n2 mb-n3">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 mx-n2 mb-n3">
                 @foreach (var product in item.Products)
                 {
                     <div class="col px-2 mb-3">
@@ -149,8 +158,8 @@
 }
 
 <div class="container py-5">
-    <div class="row">
-        <div class="col-lg-6">
+    <div class="row mb-n4">
+        <div class="col-lg-6 mb-4">
             <p class="about-text mb-2">Về chúng tôi</p>
             <h2 class="about-title mb-3">@AppService.Config.AboutTitle</h2>
             <div class="about-content mb-3">

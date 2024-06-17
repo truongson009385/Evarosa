@@ -1,7 +1,7 @@
 ﻿@model HeaderViewModel
 @inject IAppService AppService
 
-<header>
+<header class="d-none d-lg-block">
     <div class="container">
         <div class="row py-3">
             <div class="col-lg-2 d-flex align-items-center">
@@ -75,6 +75,15 @@
                             } else
                             {
                                 <li>
+                                    <a asp-controller="Member" asp-action="ChangePassword">Đổi mật khẩu</a>
+                                </li>
+                                <li>
+                                    <a asp-controller="Member" asp-action="ListAddress">Địa chỉ</a>
+                                </li>
+                                <li>
+                                    <a asp-controller="Member" asp-action="ListOrder">Đơn hàng</a>
+                                </li>
+                                <li>
                                     <form asp-controller="Member" asp-action="Logout" method="post">
                                         <button type="submit">Đăng xuất</button>
                                     </form>
@@ -138,3 +147,145 @@
         </nav>
     </div>
 </header>
+
+
+<nav class="d-block d-lg-none nav-mobi">
+    <div class="container">
+        <div class="row">
+            <div class="col-2 d-flex align-items-center">
+                <button type="button" class="btn" onclick="menuOpen()">
+                    <i class="fa-regular fa-bars"></i>
+                </button>
+            </div>
+            <div class="col-8 d-flex justify-content-center align-items-center">
+                <a class="logo" asp-action="Index" asp-controller="Home">
+                    @if (AppService.Config.Image != null)
+                    {
+                        <img src="@PathSystem.Combine("/contents/system", AppService.Config.Image)" alt="logo" />
+                    }
+                    else
+                    {
+                        <img src="~/images/logo.png" alt="logo" />
+                    }
+                </a>
+            </div>
+            <div class="col-2 d-flex align-items-center justify-content-end">
+                <div class="member-mobi">
+                    <a href="javascript:;" class="btn">
+                        <i class="fa-solid fa-user"></i>
+                    </a>
+
+                    <ul class="drop-menu">
+                        @if (!User.Identity.IsAuthenticated)
+                        {
+                            <li>
+                                <a asp-controller="Member" asp-action="Login">Đăng nhập</a>
+                            </li>
+                            <li>
+                                <a asp-controller="Member" asp-action="Register">Đăng ký</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li>
+                                <a asp-controller="Member" asp-action="ChangePassword">Thông tin tài khoản</a>
+                            </li>
+                            <li>
+                                <a asp-controller="Member" asp-action="ChangePassword">Đổi mật khẩu</a>
+                            </li>
+                            <li>
+                                <a asp-controller="Member" asp-action="ListAddress">Địa chỉ</a>
+                            </li>
+                            <li>
+                                <a asp-controller="Member" asp-action="ListOrder">Đơn hàng</a>
+                            </li>
+                            <li>
+                                <form asp-controller="Member" asp-action="Logout" method="post">
+                                    <button type="submit">Đăng xuất</button>
+                                </form>
+                            </li>
+                        }
+                    </ul>
+                </div>
+                <div class="shoppingcart-wrapper">
+                    <a href="javascript:;" class="shoppingcart">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        <span class="count">@Model.Count</span>
+                    </a>
+                    <div class="shoppingcart-mini">
+                        <partial name="~/Views/ShoppingCart/CartMini.cshtml" model="Model.CartMini" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <ul class="nav-mobi-menu">
+        <li class="search">
+            <form asp-action="AllProduct" asp-controller="Home" method="get">
+                <input name="term" type="text" placeholder="Tìm sản phẩm mong muốn ..." />
+                <button type="submit">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </form>
+        </li>
+        <li>
+            <a asp-controller="Home" asp-action="Index" class="home">
+                <i class="fa-sharp fa-solid fa-house"></i>
+            </a>
+        </li>
+        <li>
+            <a asp-controller="Home" asp-action="AboutUs">
+                Giới thiệu
+            </a>
+        </li>
+        @foreach (var item in Model.ProductCategories)
+        {
+            <li>
+                <a asp-action="ListProduct" asp-controller="Home" asp-route-url="@item.Url">@item.Title</a>
+                @if (item.CategoryChildren.Any())
+                {
+                    <button type="button" onclick="toggleSubmenu(this)"><i class="fa-solid fa-caret-down"></i></button>
+                    <ul>
+                        @foreach (var chil in item.CategoryChildren)
+                        {
+                            <li>
+                                <a asp-action="ListProduct" asp-controller="Home" asp-route-url="@chil.Url">@chil.Title</a>
+                            </li>
+                        }
+                    </ul>
+                }
+            </li>
+        }
+        @foreach (var item in Model.ArticleCategories)
+        {
+            <li>
+                <a asp-action="ListArticle" asp-controller="Home" asp-route-url="@item.Url">@item.Title</a>
+                @if (item.CategoryChildren.Any())
+                {
+                    <button type="button" onclick="toggleSubmenu(this)"><i class="fa-solid fa-caret-down"></i></button>
+                    <ul>
+                        @foreach (var chil in item.CategoryChildren)
+                        {
+                            <li>
+                                <a asp-action="ListArticle" asp-controller="Home" asp-route-url="@chil.Url">@chil.Title</a>
+                            </li>
+                        }
+                    </ul>
+                }
+            </li>
+        }
+        <li>
+            <a asp-controller="Home" asp-action="Contact" class="button-1">
+                Liên hệ
+            </a>
+        </li>
+        <li class="social-media">
+            <a href="@AppService.Config.Facebook" rel="nofollow" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="@AppService.Config.Twitter" rel="nofollow" target="_blank"><i class="fa-brands fa-twitter"></i></a>
+            <a href="@AppService.Config.Youtube" rel="nofollow" target="_blank"><i class="fa-brands fa-youtube"></i></a>
+        </li>
+    </ul>
+    <div class="bg-close" onclick="menuClose()">
+        <button type="button"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+</nav>
