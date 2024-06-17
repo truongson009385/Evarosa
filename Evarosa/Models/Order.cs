@@ -27,7 +27,7 @@ namespace Evarosa.Models
         [ForeignKey("Receiver")]
         public int ReceiverId { get; set; }
 
-        [Display(Name = "Ngày tạo"), DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
+        [Display(Name = "Ngày tạo"), DisplayFormat(DataFormatString = "{0:HH:mm - dd/MM/yyyy}")]
         public DateTime CreateDate { get; set; }
 
         [Display(Name = "Ngày vận chuyển"), DataType(DataType.DateTime)]
@@ -38,6 +38,7 @@ namespace Evarosa.Models
         public decimal ShipFee { get; set; }
 
         [Display(Name = "Thanh toán trước")]
+        [DisplayFormat(DataFormatString = "{0:N0} đ")]
         public decimal Prepayment { get; set; }
 
         [Display(Name = "Hình thức thanh toán")]
@@ -57,14 +58,6 @@ namespace Evarosa.Models
 
         [DisplayFormat(DataFormatString = "{0:N0} đ")]
         public decimal? Total { get; set; }
-
-        public int TotalProds
-        {
-            get
-            {
-                return OrderDetails.Sum(m => (int?)m.Quantity) ?? 0;
-            }
-        }
 
         [DisplayFormat(DataFormatString = "{0:N0} đ")]
         public decimal? TotalFee

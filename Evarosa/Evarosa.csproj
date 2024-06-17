@@ -417,4 +417,12 @@
     <Folder Include="Uploads\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Member\OrderDetails.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\Member\OrderDetails.cshtml" />
+  </ItemGroup>
+
 </Project>

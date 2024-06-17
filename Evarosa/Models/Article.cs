@@ -39,6 +39,9 @@ namespace Evarosa.Models
         [Display(Name = "Hiển thị ở trang chủ")]
         public bool ShowHome { set; get; }
 
+        [Display(Name = "Hiển thị chân trang")]
+        public bool ShowFooter { get; set; }
+
         [Display(Name = "Số thứ tự"), Required(ErrorMessage = "Bạn chưa nhập số thứ tự"), UIHint("NumberBox"), RegularExpression(@"\d+", ErrorMessage = "Chỉ nhập số nguyên dương")]
         public int Sort { get; set; } = 1;
 
@@ -79,8 +82,8 @@ namespace Evarosa.Models
         [Display(Name = "Hiển thị trang chủ")]
         public bool ShowHome { get; set; }
 
-        [Display(Name = "Hiển thị bài viết trang chủ")]
-        public bool ShowArticle { get; set; }
+        [Display(Name = "Hiển thị chân trang")]
+        public bool ShowFooter { get; set; }
 
         [Display(Name = "Url")]
         public string Url { set; get; }

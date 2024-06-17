@@ -17,7 +17,10 @@ namespace Evarosa.ViewComponents
 
             var model = new MemberComponentViewModel
             {
-                Member = member
+                Member = member,
+                Addresses = unitOfWork.MemberAddress.Count(m => m.MemberId == member.Id),
+                Orders = unitOfWork.Order.Count(m => m.MemberId == member.Id),
+                Total = unitOfWork.Order.GetAll(predicate: m => m.MemberId == member.Id).Sum(m => m.Total + m.ShipFee),
             };
             return View(model);
         }

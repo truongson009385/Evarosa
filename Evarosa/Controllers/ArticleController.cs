@@ -248,6 +248,7 @@ namespace Evarosa.Controllers
             article.Name = model.Article.Name;
             article.Active = model.Article.Active;
             article.ShowHome = model.Article.ShowHome;
+            article.ShowFooter = model.Article.ShowFooter;
             article.Sort = model.Article.Sort;
 
             await unitOfWork.CommitAsync();

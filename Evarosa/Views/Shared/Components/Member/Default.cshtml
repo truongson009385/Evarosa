@@ -21,16 +21,16 @@
 <h2 class="member-name mb-4">@Model.Member.FullName</h2>
 <ul class="member-numbers mb-4">
     <li>
-        <span class="name">Yêu thích</span>
-        <span class="value">888</span>
+        <span class="name">Địa chỉ</span>
+        <span class="value">@Model.Addresses</span>
     </li>
     <li>
         <span class="name">Đơn hàng</span>
-        <span class="value">888</span>
+        <span class="value">@Model.Orders</span>
     </li>
     <li>
         <span class="name">Tổng tiền</span>
-        <span class="value">8,888,888 VNĐ</span>
+        <span class="value">@Html.DisplayFor(m => m.Total)</span>
     </li>
 </ul>
 <ul class="member-menu mt-4 mb-5">

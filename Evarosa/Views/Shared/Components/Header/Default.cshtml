@@ -19,7 +19,7 @@
             <div class="col-lg-8 d-flex justify-content-center align-items-center">
                 <form asp-controller="Home" asp-action="AllProduct" method="get" class="input-group search">
                     <div class="input-group-prepend">
-                        <select name="category" class="custom-select">
+                        <select name="category" class="custom-select" style="width: 128px;">
                             <option selected>Tìm theo</option>
                             @foreach (var item in Model.SelectCategories)
                             {

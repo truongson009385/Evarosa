@@ -134,5 +134,11 @@ namespace Evarosa.ViewModels
     {
         public Member Member { get; set; }
 
+        public int Addresses { get; set; } = 0;
+        public int Orders { get; set; } = 0;
+        [DisplayFormat(DataFormatString = "{0:N0} đ")]
+        public decimal? Total { get; set; } = decimal.Zero;
+
+
     }
 }

@@ -595,5 +595,24 @@ namespace Evarosa.Controllers
             };
             return View(model);
         }
+
+        [Route("member/don-hang/{code}")]
+        public async Task<IActionResult> OrderDetails(string code)
+        {
+            var order = await _unitOfWork.Order.GetAll(
+                    predicate: m => m.OrderCode == code,
+                    include: m => m
+                        .Include(l => l.OrderDetails)
+                        .ThenInclude(l => l.Product)
+                        .Include(l => l.Customer)
+                        .Include(l => l.City)
+                        .Include(l => l.District)
+                        .Include(l => l.Ward)
+                ).FirstOrDefaultAsync();
+
+            if (order == null) return NotFound();
+
+            return View(order);
+        }
     }
 }

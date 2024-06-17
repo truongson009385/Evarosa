@@ -28,6 +28,11 @@ namespace Evarosa.ViewModels
         public IEnumerable<ArticleCategory> ArticleCategories { get; set; } = new List<ArticleCategory>();
     }
 
+    public class FooterViewModel
+    {
+        public ArticleCategory? ArticleCategory { get; set; }
+    }
+
     public class PageProductViewModel
     {
         public string Term { get; set; }
