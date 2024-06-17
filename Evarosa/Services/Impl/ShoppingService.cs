@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Evarosa.Data;
 using Evarosa.Models;
+using System.Security.Claims;
 
 namespace Evarosa.Services.Impl
 {
@@ -181,9 +182,9 @@ namespace Evarosa.Services.Impl
         {
             if (context.Session.GetString(CartSessionKey) == null)
             {
-                if (!string.IsNullOrWhiteSpace(context.User.Identity?.Name))
+                if (!string.IsNullOrWhiteSpace(context.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value))
                 {
-                    context.Session.SetString(CartSessionKey, context.User.Identity.Name);
+                    context.Session.SetString(CartSessionKey, context.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value);
                 }
                 else
                 {

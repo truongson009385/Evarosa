@@ -1,0 +1,20 @@
+﻿@inject IAppService _appService
+
+<div class="zalo-ben-phai">
+    <div class="hotline-phone-ring">
+        <div class="hotline-phone-ring-circle"></div>
+        <div class="hotline-phone-ring-circle-fill"></div>
+        <div class="hotline-phone-ring-img-circle"> <a href="@_appService.Config.Zalo" class="pps-btn-img">
+                <img src="~/images/zalo-logo.png" />
+        </div>
+    </div> <a href="@_appService.Config.Zalo"> </a>
+</div>
+
+<div class="hotline-phone-ring-wrap" id="hotline-phone-1">
+    <div class="hotline-phone-ring">
+        <div class="hotline-phone-ring-circle"></div>
+        <div class="hotline-phone-ring-circle-fill"></div>
+        <div class="hotline-phone-ring-img-circle"> <a href="tel:@_appService.Config.Hotline" class="pps-btn-img"> <i class="text-white fa-solid fa-phone-volume"></i> </a></div>
+    </div>
+    <div class="hotline-bar"> <a href="tel:@_appService.Config.Hotline"> <span class="text-hotline">@_appService.Config.Hotline</span> </a></div>
+</div>

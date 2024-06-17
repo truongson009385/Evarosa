@@ -1,5 +1,6 @@
 ﻿using Evarosa.Models;
 using System.ComponentModel.DataAnnotations;
+using X.PagedList;
 
 namespace Evarosa.ViewModels
 {
@@ -113,5 +114,25 @@ namespace Evarosa.ViewModels
         public string ConfirmPassword { get; set; }
 
         public string? Code { get; set; } = string.Empty;
+    }
+
+    public class MemberAddressViewModel
+    {
+        public IEnumerable<MemberAddress> MemberAddresses { get; set; } = new List<MemberAddress>();
+        public IPagedList<MemberAddress> ListMemberAddress { get; set; }
+
+    }
+
+    public class MemberOrderViewModel
+    {
+        public IPagedList<Order> ListOrder { get; set; }
+
+    }
+
+
+    public class MemberComponentViewModel
+    {
+        public Member Member { get; set; }
+
     }
 }

@@ -1,4 +1,6 @@
-﻿@functions {
+﻿@model MemberComponentViewModel
+
+@functions {
     public string Active(string? url)
     {
         string currentPath = Context.Request.Path;
@@ -12,11 +14,11 @@
         <label for="imageUpload"></label>
     </div>
     <div class="avatar-preview">
-        <div id="imagePreview" style="background-image: url('@Url.Content("~/images/no-image.jpg")');">
+        <div id="imagePreview" style="background-image: url('@(!string.IsNullOrEmpty(Model.Member.Image) ? Url.Content("/contents/members/" + Model.Member.Image) : Url.Content("~/images/no-image.jpg"))');">
         </div>
     </div>
 </div>
-<h2 class="member-name mb-4">Nguyễn Văn A</h2>
+<h2 class="member-name mb-4">@Model.Member.FullName</h2>
 <ul class="member-numbers mb-4">
     <li>
         <span class="name">Yêu thích</span>

@@ -44,6 +44,10 @@ namespace Evarosa.Models
         [DataType(DataType.Date)]
         public DateTime? BirthDate { get; set; }
 
-        public bool Active { get; set; }
+        [Display(Name = "Hoạt động")]
+        public bool Active { get; set; } = true;
+
+        public ICollection<MemberAddress> MemberAddresses { get; set; }
+        public ICollection<Order> Orders { get; set; }
     }
 }

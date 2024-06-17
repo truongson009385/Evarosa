@@ -93,7 +93,7 @@ namespace Evarosa.Models
         [Display(Name = "Số thứ tự"), Required(ErrorMessage = "Bạn chưa nhập số thứ tự"), RegularExpression(@"\d+", ErrorMessage = "Chỉ nhập số nguyên dương"), UIHint("NumberBox")]
         public int Sort { get; set; } = 1;
 
-        [Display(Name = "Ngày tạo")]
+        [Display(Name = "Ngày tạo"), DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
         [Display(Name = "Ảnh đại diện")]

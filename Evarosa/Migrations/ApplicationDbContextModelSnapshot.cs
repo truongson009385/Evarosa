@@ -538,6 +538,57 @@ namespace Evarosa.Migrations
                     b.ToTable("Members");
                 });
 
+            modelBuilder.Entity("Evarosa.Models.MemberAddress", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<int>("CityId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DistrictId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool>("IsDefault")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("MemberId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<int>("WardId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CityId");
+
+                    b.HasIndex("DistrictId");
+
+                    b.HasIndex("MemberId");
+
+                    b.HasIndex("WardId");
+
+                    b.ToTable("MemberAddresses");
+                });
+
             modelBuilder.Entity("Evarosa.Models.Order", b =>
                 {
                     b.Property<int>("Id")
@@ -561,6 +612,9 @@ namespace Evarosa.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("DistrictId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("MemberId")
                         .HasColumnType("int");
 
                     b.Property<string>("OrderCode")
@@ -602,6 +656,8 @@ namespace Evarosa.Migrations
                     b.HasIndex("CustomerId");
 
                     b.HasIndex("DistrictId");
+
+                    b.HasIndex("MemberId");
 
                     b.HasIndex("WardId");
 
@@ -848,6 +904,41 @@ namespace Evarosa.Migrations
                     b.Navigation("City");
                 });
 
+            modelBuilder.Entity("Evarosa.Models.MemberAddress", b =>
+                {
+                    b.HasOne("Evarosa.Models.City", "City")
+                        .WithMany()
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Evarosa.Models.District", "District")
+                        .WithMany()
+                        .HasForeignKey("DistrictId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Evarosa.Models.Member", "Member")
+                        .WithMany("MemberAddresses")
+                        .HasForeignKey("MemberId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Evarosa.Models.Ward", "Ward")
+                        .WithMany()
+                        .HasForeignKey("WardId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("City");
+
+                    b.Navigation("District");
+
+                    b.Navigation("Member");
+
+                    b.Navigation("Ward");
+                });
+
             modelBuilder.Entity("Evarosa.Models.Order", b =>
                 {
                     b.HasOne("Evarosa.Models.City", "City")
@@ -868,6 +959,10 @@ namespace Evarosa.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
+                    b.HasOne("Evarosa.Models.Member", "Member")
+                        .WithMany("Orders")
+                        .HasForeignKey("MemberId");
+
                     b.HasOne("Evarosa.Models.Ward", "Ward")
                         .WithMany()
                         .HasForeignKey("WardId")
@@ -879,6 +974,8 @@ namespace Evarosa.Migrations
                     b.Navigation("Customer");
 
                     b.Navigation("District");
+
+                    b.Navigation("Member");
 
                     b.Navigation("Ward");
                 });
@@ -943,6 +1040,13 @@ namespace Evarosa.Migrations
             modelBuilder.Entity("Evarosa.Models.City", b =>
                 {
                     b.Navigation("Districts");
+                });
+
+            modelBuilder.Entity("Evarosa.Models.Member", b =>
+                {
+                    b.Navigation("MemberAddresses");
+
+                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("Evarosa.Models.Order", b =>

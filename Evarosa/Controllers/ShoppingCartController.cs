@@ -7,6 +7,8 @@ using Evarosa.Services.Impl;
 using Evarosa.Services;
 using Evarosa.ViewModels;
 using System.Diagnostics;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Evarosa.Controllers
 {
@@ -133,7 +135,8 @@ namespace Evarosa.Controllers
         [Route("thanh-toan")]
         public async Task<IActionResult> Checkout()
         {
-            if (cart.GetCount() <= 0) return RedirectToAction("Index");
+            if (cart.GetCount() <= 0)
+                return RedirectToAction("Index");
 
             var cities = await _unitOfWork.City.GetAllAsync();
 
@@ -142,7 +145,47 @@ namespace Evarosa.Controllers
                 Cities = cities,
                 CartItems = cart.GetCartItems(),
                 Total = cart.GetTotal(),
+                Order = new Order()
             };
+
+            if (User.Identity.IsAuthenticated)
+            {
+                var emailClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+
+                var member = _unitOfWork.Member.GetAll(
+                        predicate: m => m.Email == emailClaim,
+                        include: m => m.Include(l => l.MemberAddresses.OrderByDescending(o => o.IsDefault))
+                    ).FirstOrDefault();
+
+                if (member != null)
+                {
+                    var address = member.MemberAddresses.FirstOrDefault();
+
+                    model.Order.MemberId = member.Id;
+                    model.Order.Customer = new Customer
+                    {
+                        FullName = member.FullName,
+                        Email = member.Email,
+                        PhoneNumber = member.PhoneNumber
+                    };
+
+                    if (address != null)
+                    {
+                        model.Order.CityId = address.CityId;
+                        model.Order.DistrictId = address.DistrictId;
+                        model.Order.WardId = address.WardId;
+
+                        ViewBag.Districts = new SelectList(await _unitOfWork.District.GetAllAsync(predicate: d => d.CityId == address.CityId), "Id", "Name");
+                        ViewBag.Wards = new SelectList(await _unitOfWork.Ward.GetAllAsync(predicate: w => w.DistrictID == address.DistrictId), "ID", "Name");
+
+                        model.Order.Address = address.Address;
+                        model.Order.Customer.PhoneNumber = address.PhoneNumber;
+                        model.Order.Customer.FullName = address.FullName;
+                    }
+
+                }
+            }
+
             return View(model);
         }
 

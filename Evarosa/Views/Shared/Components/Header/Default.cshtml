@@ -17,9 +17,9 @@
                 </a>
             </div>
             <div class="col-lg-8 d-flex justify-content-center align-items-center">
-                <div class="input-group search">
+                <form asp-controller="Home" asp-action="AllProduct" method="get" class="input-group search">
                     <div class="input-group-prepend">
-                        <select class="custom-select">
+                        <select name="category" class="custom-select">
                             <option selected>Tìm theo</option>
                             @foreach (var item in Model.SelectCategories)
                             {
@@ -27,13 +27,13 @@
                             }
                         </select>
                     </div>
-                    <input type="text" class="form-control" placeholder="Tìm sản phẩm, danh mục hay thương hiệu">
+                    <input type="text" name="term" class="form-control" placeholder="Tìm sản phẩm, danh mục hay thương hiệu">
                     <div class="input-group-append">
-                        <button class="btn btn-primary" type="button">
+                        <button class="btn btn-primary" type="submit">
                             <i class="fa-regular fa-magnifying-glass"></i>
                         </button>
                     </div>
-                </div>
+                </form>
             </div>
             <div class="col-lg-2">
                 <ul class="header-links">

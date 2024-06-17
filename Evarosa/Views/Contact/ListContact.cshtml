@@ -48,7 +48,12 @@
                     <td>@contact.Email</td>
                     <td>@contact.Address</td>
                     <td>@contact.Body</td>
-                    <td><a href="javascript:;" onclick="deletecontact('@contact.Id')">Xóa</a></td>
+                    <td>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a href="javascript:;" onclick="deletecontact('@contact.Id')">Xóa</a>
+                        }
+                    </td>
                 </tr>
             }
             @if (Model.ListContact.PageCount > 1)

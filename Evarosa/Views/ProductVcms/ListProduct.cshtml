@@ -104,9 +104,13 @@
                             </td>
                             <td>
                                 <a class="btn btn-warning mb-2" asp-action="UpdateProduct" asp-route-id="@item.Id" style="width: 110px;">Sửa</a>
-                                <a class="btn btn-danger" href="javascript:;" onclick="deleteFunc(@item.Id)" style="width: 110px;">
-                                    Xóa
-                                </a>
+
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <a class="btn btn-danger" href="javascript:;" onclick="deleteFunc(@item.Id)" style="width: 110px;">
+                                        Xóa
+                                    </a>
+                                }
                             </td>
                         </tr>
                     }

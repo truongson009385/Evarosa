@@ -121,7 +121,10 @@
             <td>
                 <a href="javascript:;" onclick="quickUpdate('@item.Id')">Cập nhật</a>
                 - <a asp-action="UpdateProductCategory" asp-route-id="@item.Id">Sửa</a>
-                - <a href="javascript:;" onclick="deleteFunc('@item.Id')" class="red-warring">Xóa</a>
+                @if (User.IsInRole("Admin"))
+                {
+                    @:- <a href="javascript:;" onclick="deleteFunc('@item.Id')" class="red-warring">Xóa</a>
+                }
             </td>
         </tr>
         if (item.CategoryChildren?.Count > 0)

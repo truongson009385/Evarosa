@@ -10,7 +10,7 @@ using X.PagedList;
 
 namespace Evarosa.Controllers
 {
-    [Authorize(AuthenticationSchemes = "vcms"), Authorize(Roles = "Admin,Editor,Order")]
+    [Authorize(AuthenticationSchemes = "vcms", Roles = "Admin,Editor")]
     public class OrderController : Controller
     {
         private readonly UnitOfWork _unitOfWork;
@@ -24,7 +24,6 @@ namespace Evarosa.Controllers
 
         #region City 
 
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ListCityFee(int? page, string term = "")
         {
             int pageNumber = page ?? 1;

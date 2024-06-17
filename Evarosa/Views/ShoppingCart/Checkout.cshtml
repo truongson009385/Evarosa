@@ -25,6 +25,7 @@
 
 <form asp-controller="ShoppingCart" asp-action="Checkout" method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    @Html.HiddenFor(m => m.Order.MemberId)
     <div class="container pb-5">
         <h1 class="page-title text-center mb-5">
             @ViewBag.Title
@@ -67,21 +68,21 @@
                                 }
                             </select>
                         </div>
-                        <span asp-validation-for="Order.City" class="text-danger" style="font-size: 14px; font-weight: 600;"></span>
+                        <span asp-validation-for="Order.CityId" class="text-danger" style="font-size: 14px; font-weight: 600;"></span>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Quận/Huyện *</label>
-                            <select id="districtDropdown" asp-for="Order.DistrictId" class="form-control select2">
+                            <select id="districtDropdown" asp-for="Order.DistrictId" asp-items="ViewBag.Districts" class="form-control select2">
                                 <option value="">Chọn Quận/Huyện</option>
                             </select>
                         </div>
-                        <span asp-validation-for="Order.District" class="text-danger" style="font-size: 14px; font-weight: 600;"></span>
+                        <span asp-validation-for="Order.DistrictId" class="text-danger" style="font-size: 14px; font-weight: 600;"></span>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Xã/Phường *</label>
-                            <select id="wardDropdown" asp-for="Order.WardId" class="form-control select2">
+                            <select id="wardDropdown" asp-for="Order.WardId" asp-items="ViewBag.Wards" class="form-control select2">
                                 <option value="">Chọn Xã/Phường</option>
                             </select>
                         </div>

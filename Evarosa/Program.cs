@@ -14,10 +14,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ApplicationDbContext") ?? throw new InvalidOperationException("Connection string 'ApplicationDbContext' not found.")));
 
 // Add services to the container.
-builder.Services.AddAuthentication(options =>
+builder.Services.AddAuthentication(o =>
 {
-    options.DefaultAuthenticateScheme = "member";
-    options.DefaultChallengeScheme = "member";
+    o.DefaultAuthenticateScheme = "member";
+    o.DefaultChallengeScheme = "member";
 })
     .AddCookie("member", o =>
     {
@@ -33,6 +33,8 @@ builder.Services.AddAuthentication(options =>
         o.ExpireTimeSpan = TimeSpan.FromMinutes(60);
         o.AccessDeniedPath = "/Vcms/AccessDenied";
     });
+
+
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpContextAccessor();
@@ -88,8 +90,8 @@ app.UseStaticFiles(new StaticFileOptions
 app.UseRouting();
 app.UseSession();
 
-app.UseAuthorization();
 app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",

@@ -10,7 +10,7 @@
         @if (!string.IsNullOrEmpty(ViewBag.Message))
         {
             <partial name="_resultmessage" model="ViewBag.Message" />
-        }
+        } 
         <h3 class="member-title">Thông tin cá nhân</h3>
         <form asp-action="Index" method="post" class="member-form">
             @Html.ValidationSummary(true)

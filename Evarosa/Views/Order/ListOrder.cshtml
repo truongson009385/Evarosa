@@ -130,14 +130,16 @@
                 </td>
                 <td>
                     <a href="javascript:;" onclick="loadOrder(@order.Id)">[Xem đơn]</a><br /><br />
-                    @if (order.Status == OrderStatus.Canceled)
+                    @if (User.IsInRole("Admin"))
                     {
-                        <a href="javascript:;" onclick="parmanentDeleteOrder(@order.Id)">[Xóa đơn]</a>
-                    }
-                    else
-                    {
-                        
+                        @if (order.Status == OrderStatus.Canceled)
+                        {
+                            <a href="javascript:;" onclick="parmanentDeleteOrder(@order.Id)">[Xóa đơn]</a>
+                        }
+                        else
+                        { 
                             <a href="javascript:;" onclick="deleteOrder(@order.Id)">[Hủy đơn]</a>
+                        }
                     }
                 </td>
             </tr>

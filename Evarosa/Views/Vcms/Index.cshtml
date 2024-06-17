@@ -45,6 +45,36 @@
     </div>
     <div class="col-sm-12 col-md-6 col-lg-3 mt-md-5 mt-3">
         <div class="overview-item">
+            <div class="icon icon-product"><i class="fal fa-box"></i></div>
+            <a class="stretched-link" href="@Url.Action("ListProduct","ProductVcms")">Sản phẩm</a>
+            <p class="counter">@Model.Products</p>
+            <div class="info">
+                <i class="fal fa-shopping-cart mr-1"></i> Cập nhật liên tục
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-6 col-lg-3 mt-md-5 mt-3">
+        <div class="overview-item">
+            <div class="icon icon-order"><i class="fal fa-shopping-basket"></i></div>
+            <a class="stretched-link" href="@Url.Action("ListOrder","Order")">Đơn hàng</a>
+            <p class="counter">@Model.Orders</p>
+            <div class="info">
+                <i class="fal fa-history mr-1"></i> Cập nhật liên tục
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-6 col-lg-3 mt-md-5 mt-3">
+        <div class="overview-item">
+            <div class="icon icon-video"><i class="fa-light fa-users"></i></div>
+            <a class="stretched-link" href="@Url.Action("ListMember","MemberVcms")">Thành viên</a>
+            <p class="counter">@Model.Members</p>
+            <div class="info">
+                <i class="fal fa-history mr-1"></i> Cập nhật liên tục
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-6 col-lg-3 mt-md-5 mt-3">
+        <div class="overview-item">
             <div class="icon icon-cart"><i class="fal fa-ad mr-1"></i></div>
             <a class="stretched-link" href="@Url.Action("ListBanner","Banner")">Quảng cáo</a>
             <p class="counter">@Model.Banners</p>

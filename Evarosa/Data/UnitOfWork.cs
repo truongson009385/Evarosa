@@ -22,6 +22,7 @@ namespace Evarosa.Data
         public Repository<City> City { get; set; }
         public Repository<District> District { get; set; }
         public Repository<Ward> Ward { get; set; }
+        public Repository<MemberAddress> MemberAddress { get; set; }
 
         public UnitOfWork(ApplicationDbContext db)
         {
@@ -42,6 +43,7 @@ namespace Evarosa.Data
             City = new Repository<City>(_db);
             District = new Repository<District>(_db);
             Ward = new Repository<Ward>(_db);
+            MemberAddress = new Repository<MemberAddress>(_db);
 
         }
 

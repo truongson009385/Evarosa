@@ -1,0 +1,126 @@
+﻿@model MemberVcmsViewModel
+
+@{
+    ViewBag.Title = "Danh sách thành viên";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="box_header">
+    <h2>@ViewBag.Title</h2>
+    <div class="list-group list-group-horizontal">
+        <a class="btn quick-link mr-2" asp-action="Member"><i class="fa-solid fa-pen mr-2"></i>Thêm mới</a>
+    </div>
+</div>
+
+@if (!string.IsNullOrEmpty(ViewBag.Message))
+{
+    <partial name="_resultmessage" model="ViewBag.Message" />
+}
+
+<div class="box_content">
+    <form class="mb-4" action="" method="get">
+        <div class="row">
+            <div class="col-3">
+                <label>Từ khóa</label>
+                <input name="term" asp-for="Term" />
+            </div>
+            <div class="col-3">
+                <label>Email</label>
+                <input name="term" asp-for="Email" />
+            </div>
+            <div class="col-3">
+                <label>Số điện thoại</label>
+                <input name="term" asp-for="Mobile" />
+            </div>
+            <div class="col-3 d-flex align-items-end">
+                <a asp-action="ListMember" class="btn-search mb-2">Quay lại</a>
+                <button type="submit" class="btn-search mb-2">Tìm kiếm</button>
+            </div>
+        </div>
+    </form>
+    <table class="list_table tablecenter table-striped">
+        <tbody>
+            <tr>
+                <th scope="col" style="width: 50px;">#</th>
+                <th scope="col">@Html.DisplayNameFor(m => m.Member.Image)</th>
+                <th scope="col">@Html.DisplayNameFor(m => m.Member.FullName)</th>
+                <th scope="col" style="width: 150px;">@Html.DisplayNameFor(m => m.Member.Email)</th>
+                <th scope="col" style="width: 150px;">@Html.DisplayNameFor(m => m.Member.PhoneNumber)</th>
+                <th scope="col" style="width: 150px;">@Html.DisplayNameFor(m => m.Member.Active)</th>
+                <th scope="col" style="width: 130px;"></th>
+            </tr>
+            @{
+                var i = (Model.ListMember.PageNumber - 1) * Model.ListMember.PageSize + 1;
+            }
+            @foreach (var item in Model.ListMember)
+            {
+                <tr data-id="@item.Id">
+                    <td scope="row">
+                        <input type="hidden" name="ProductId" value="@item.Id" />
+                        @(i++)
+                    </td>
+                    <td class="left">
+                        @if (item.Image != null)
+                        {
+                            <img src="@PathSystem.Combine("/contents/members", item.Image)" style="width: 100px; aspect-ratio: 1; object-fit: contain;" alt="" />
+                        }
+                        else
+                        {
+                            @:NO IMAGE
+                        }
+                    </td>
+                    <td class="left">@item.FullName</td>
+                    <td class="left">@item.Email</td>
+                    <td class="left">@item.PhoneNumber</td>
+                    <td class="left">
+                        @Html.DisplayFor(m => item.Active)
+                    </td>
+                    <td>
+                        <a class="btn btn-warning mb-2" asp-action="UpdateMember" asp-route-id="@item.Id" style="width: 110px;">
+                            Sửa
+                        </a>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a class="btn btn-danger" href="javascript:;" onclick="deleteFunc(@item.Id)" style="width: 110px;">
+                                Xóa
+                            </a>
+                        }
+                    </td>
+                </tr>
+            }
+            @if (Model.ListMember.PageCount > 1)
+            {
+                <tr>
+                    <td colspan="7">
+                        @Html.PagedListPager(Model.ListMember, page => Url.Action("ListMember", new { page, term = Model.Term, email = Model.Email, mobile = Model.Mobile }))
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script>
+        function deleteFunc(id) {
+            if (confirm("Bạn có chắc chắn xóa thành viên này không?")) {
+                $.post("/MemberVcms/DeleteMember", { id: id }, function (data) {
+                    if (data.success) {
+                        $.toast({
+                            text: 'Xóa thành viên thành công',
+                            position: 'bottom-right',
+                            icon: 'success'
+                        });
+                        $("tr[data-id='" + id + "']").fadeOut();
+                    }
+                    else {
+                        $.toast({
+                            text: 'Quá trình thực hiện không thành công. Hãy thử lại',
+                            icon: 'error'
+                        });
+                    }
+                });
+            }
+        }
+    </script>
+}

@@ -1,0 +1,136 @@
+﻿@model MemberAddress
+
+<div>
+    <form asp-controller="Member" asp-action="UpdateAddress">
+        @Html.HiddenFor(m => m.Id)
+        @Html.HiddenFor(m => m.MemberId)
+
+        <div class="form-row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    @Html.EditorFor(m => m.FullName)
+                </div>
+
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    @Html.EditorFor(m => m.PhoneNumber)
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label>Tỉnh/Thành phố *</label>
+                    <select id="cityDropdown" asp-for="CityId" class="form-control select2" asp-items="ViewBag.Cities">
+                        <option value="">Chọn Tỉnh/Thành phố</option>
+                    </select>
+                </div>
+                <span asp-validation-for="CityId" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Quận/Huyện *</label>
+                    <select id="districtDropdown" asp-for="DistrictId" class="form-control select2" asp-items="ViewBag.Districts">
+                        <option value="">Chọn Quận/Huyện</option>
+                    </select>
+                </div>
+                <span asp-validation-for="DistrictId" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Xã/Phường *</label>
+                    <select id="wardDropdown" asp-for="WardId" class="form-control select2" asp-items="ViewBag.Wards">
+                        <option value="">Chọn Xã/Phường</option>
+                    </select>
+                </div>
+                <span asp-validation-for="WardId" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Địa chỉ *</label>
+                    <input class="form-control" type="text" asp-for="Address" placeholder="Ví dụ: Số 20, ngõ 90" />
+                </div>
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-check mb-3">
+            <input class="form-check-input" asp-for="IsDefault" type="checkbox">
+            <label class="form-check-label" asp-for="IsDefault">Đặt làm địa chỉ mặc định</label>
+        </div>
+        <button type="submit" class="btn btn-primary">
+            Cập nhật
+        </button>
+    </form>
+</div>
+
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+<script>
+    $(function () {
+        $("#cityDropdown").change(function () {
+            var cityId = $(this).val();
+            if (cityId) {
+                $.ajax({
+                    url: "/quan-huyen",
+                    type: "GET",
+                    data: { cityId: cityId },
+                    success: function (response) {
+                        console.log(response);
+                        $("#districtDropdown").empty();
+                        $("#districtDropdown").append($("<option>").text("Chọn Quận/Huyện").attr("value", ""));
+                        $("#wardDropdown").empty();
+                        $("#wardDropdown").append($("<option>").text("Chọn Xã/Phường").attr("value", ""));
+                        $.each(response.districts, function (index, district) {
+                            $("#districtDropdown").append($("<option>").text(district.name).attr("value", district.id));
+                        });
+                    }
+                });
+            } else {
+                $("#districtDropdown").empty();
+                $("#districtDropdown").append($("<option>").text("Chọn Quận/Huyện").attr("value", ""));
+                $("#wardDropdown").empty();
+                $("#wardDropdown").append($("<option>").text("Chọn Xã/Phường").attr("value", ""));
+            }
+        });
+
+        // Function to populate wards based on selected district
+        $("#districtDropdown").change(function () {
+            var districtId = $(this).val();
+            if (districtId) {
+                $.ajax({
+                    url: "/xa-phuong",
+                    type: "GET",
+                    data: { districtId: districtId },
+                    success: function (response) {
+                        $("#wardDropdown").empty();
+                        $("#wardDropdown").append($("<option>").text("Chọn Xã/Phường").attr("value", ""));
+                        $.each(response.wards, function (index, ward) {
+                            $("#wardDropdown").append($("<option>").text(ward.name).attr("value", ward.id));
+                        });
+                    }
+                });
+            } else {
+                $("#wardDropdown").empty();
+                $("#wardDropdown").append($("<option>").text("Chọn Xã/Phường").attr("value", ""));
+            }
+        });
+
+        $("#wardDropdown").change(function () {
+            $.ajax({
+                url: "/shipfee",
+                type: "GET",
+                data: { cityId: $("#cityDropdown").val() },
+                success: function (data) {
+                    if (data.status) {
+                        $(".sum-value.shipfee").text(data.fee);
+                        $(".sum-value.total").text(data.total);
+                    }
+                }
+            });
+        });
+    })
+</script>

@@ -1,0 +1,55 @@
+﻿@model MemberOrderViewModel
+
+@{
+    ViewData["Title"] = "Đơn hàng";
+
+    var i = (Model.ListOrder.PageNumber - 1) * Model.ListOrder.PageSize + 1;
+}
+
+<div class="container my-5">
+    <div class="member-wrapper">
+        @await Component.InvokeAsync("Member")
+        @if (!string.IsNullOrEmpty(ViewBag.Message))
+        {
+            <partial name="_resultmessage" model="ViewBag.Message" />
+        }
+        <h3 class="member-title">Danh sách đơn hàng</h3>
+        <table class="member-table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Mã đơn hàng</th>
+                    <th scope="col">Trạng thái</th>
+                    <th scope="col">Ngày đặt</th>
+                    <th scope="col">Tổng tiền</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.ListOrder)
+                {
+                    <tr>
+                        <td>@(i++)</td>
+                        <td>#@(item.OrderCode)</td>
+                        <td>@item.Status.GetDisplayName()</td>
+                        <td>@Html.DisplayFor(m => item.CreateDate)</td>
+                        <td>@Html.DisplayFor(m => item.TotalFee)</td>
+                        <td>
+                            <a href="@Url.Action("DetailOrder", new { id = item.Id })">Xem thêm</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        @if (Model.ListOrder.PageCount > 1)
+        {
+            @Html.PagedListPager(Model.ListOrder, page => Url.Action("ListOrder", new { page }))
+        }
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

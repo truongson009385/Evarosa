@@ -44,7 +44,11 @@
                 <td>@Html.EditorFor(a => banner.Active, new { htmlAttributes = new { id = "Active" } })</td>
                 <td style="width: 160px;">
                     <a href="javascript:;" onclick="updateBanner('@banner.Id')">Cập nhật - </a>
-                    @Html.ActionLink("Sửa", "EditBanner", new { bannerId = banner.Id }) - <a href="javascript:;" onclick="deleteBanner('@banner.Id')">Xóa</a>
+                    @Html.ActionLink("Sửa", "EditBanner", new { bannerId = banner.Id }) 
+                    @if (User.IsInRole("Admin"))
+                    {
+                        @:- <a href="javascript:;" onclick="deleteBanner('@banner.Id')">Xóa</a>
+                    }
                 </td>
             </tr>
         }

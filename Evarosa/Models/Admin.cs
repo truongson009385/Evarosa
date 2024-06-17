@@ -30,6 +30,6 @@ namespace Evarosa.Models
         Editor,
 
         [Display(Name = "Người viết bài")]
-        Copywriter,
+        CopyWriter,
     }
 }

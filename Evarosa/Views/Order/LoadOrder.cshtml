@@ -45,11 +45,11 @@
         }
         <tr>
             <td colspan="5">Ship:</td>
-            <td>@Model.Order.ShipFee.ToString("N0")đ</td>
+            <td>@Html.DisplayFor(a => Model.Order.ShipFee)</td>
         </tr>
         <tr>
             <td colspan="5">Tổng tiền:</td>
-            <td>@Model.Order.TotalFee()?.ToString("N0")đ</td>
+            <td>@Html.DisplayFor(a => Model.Order.TotalFee)</td>
         </tr>
     </table>
     <div class="box_header">

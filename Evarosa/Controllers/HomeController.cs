@@ -3,6 +3,7 @@ using Evarosa.Models;
 using Evarosa.Services;
 using Evarosa.Services.Impl;
 using Evarosa.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
@@ -12,7 +13,6 @@ namespace Evarosa.Controllers
 {
     public class HomeController(UnitOfWork unitOfWork, IMailService mailService, IAppService appService) : Controller
     {
-
         public async Task<IActionResult> Index()
         {
             var model = new HomeViewModel();
@@ -145,16 +145,16 @@ namespace Evarosa.Controllers
         }
 
         [Route("products")]
-        public IActionResult AllProduct(string? danhmuc, int? page, string? typeSort, string term = "")
+        public IActionResult AllProduct(string? category, int? page, string? typeSort, string term = "")
         {
-            var list = GetListProduct(page, danhmuc, term, typeSort);
+            var list = GetListProduct(page, category, term, typeSort);
 
             var model = new PageProductViewModel
             {
                 ListProduct = list,
                 Term = term,
                 Sort = typeSort,
-                Url = danhmuc
+                Url = category
             };
             return View(model);
         }
@@ -167,6 +167,20 @@ namespace Evarosa.Controllers
             {
                 ListProduct = list,
                 Term = term,
+                Sort = typeSort,
+            };
+            return PartialView(model);
+        }
+
+        public IActionResult ListProductView(int? page, string url, string? typeSort, string term = "")
+        {
+            var list = GetListProduct(page, url, term, typeSort);
+
+            var model = new PageProductViewModel
+            {
+                ListProduct = list,
+                Term = term,
+                Url = url,
                 Sort = typeSort,
             };
             return PartialView(model);

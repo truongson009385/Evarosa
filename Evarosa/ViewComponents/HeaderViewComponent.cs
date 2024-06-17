@@ -64,9 +64,9 @@ namespace Evarosa.ViewComponents
 
             var categories = await unitOfWork.ProductCategory.GetAllAsync(
                     predicate: m => m.Active && m.ShowMenu,
-                    selector: m => new { m.Id, m.Title }
+                    selector: m => new { m.Id, m.Url, m.Title }
                 );
-            model.SelectCategories = new SelectList(categories, "Id", "Title");
+            model.SelectCategories = new SelectList(categories, "Url", "Title");
 
             model.Count = cart.GetCount();
             model.CartMini = new CartMiniViewModel

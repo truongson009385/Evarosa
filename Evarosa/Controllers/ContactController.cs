@@ -10,7 +10,7 @@ using X.PagedList;
 
 namespace Evarosa.Controllers
 {
-    [Authorize(AuthenticationSchemes = "vcms")]
+    [Authorize(AuthenticationSchemes = "vcms", Roles = "Admin,Editor")]
     public class ContactController(UnitOfWork unitOfWork, IFileService fileService) : Controller
     {
         #region Contact
@@ -30,7 +30,8 @@ namespace Evarosa.Controllers
             };
             return View(model);
         }
-        [HttpPost]
+
+        [HttpPost, Authorize(Roles = "Admin")]
         public async Task<bool> DeleteContact(int contactId = 0)
         {
             var contact = await unitOfWork.Contact.FindAsync(contactId);

@@ -27,6 +27,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<City> Cities { get; set; }
     public DbSet<District> Districts { get; set; }
     public DbSet<Ward> Wards { get; set; }
+    public DbSet<MemberAddress> MemberAddresses { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -41,6 +42,22 @@ public class ApplicationDbContext : DbContext
             .HasForeignKey(o => o.DistrictId)
             .OnDelete(DeleteBehavior.NoAction);
         modelBuilder.Entity<Order>()
+            .HasOne(o => o.Ward)
+            .WithMany()
+            .HasForeignKey(o => o.WardId)
+            .OnDelete(DeleteBehavior.NoAction);
+
+        modelBuilder.Entity<MemberAddress>()
+            .HasOne(o => o.City)
+            .WithMany()
+            .HasForeignKey(o => o.CityId)
+            .OnDelete(DeleteBehavior.NoAction);
+        modelBuilder.Entity<MemberAddress>()
+            .HasOne(o => o.District)
+            .WithMany()
+            .HasForeignKey(o => o.DistrictId)
+            .OnDelete(DeleteBehavior.NoAction);
+        modelBuilder.Entity<MemberAddress>()
             .HasOne(o => o.Ward)
             .WithMany()
             .HasForeignKey(o => o.WardId)

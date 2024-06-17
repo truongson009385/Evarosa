@@ -9,6 +9,8 @@ namespace Evarosa.Models
         [Key]
         public int Id { get; set; }
 
+        public int? MemberId { get; set; }
+
         [Display(Name = "Mã đơn hàng")]
         [StringLength(50)]
         public string OrderCode { get; set; }
@@ -25,13 +27,14 @@ namespace Evarosa.Models
         [ForeignKey("Receiver")]
         public int ReceiverId { get; set; }
 
-        [Display(Name = "Ngày tạo"), DataType(DataType.DateTime)]
+        [Display(Name = "Ngày tạo"), DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime CreateDate { get; set; }
 
         [Display(Name = "Ngày vận chuyển"), DataType(DataType.DateTime)]
         public DateTime TransportDate { get; set; }
 
         [Display(Name = "Phí vận chuyển")]
+        [DisplayFormat(DataFormatString = "{0:N0} đ")]
         public decimal ShipFee { get; set; }
 
         [Display(Name = "Thanh toán trước")]
@@ -52,21 +55,33 @@ namespace Evarosa.Models
         [Display(Name = "Địa chỉ"), StringLength(500, ErrorMessage = "Tối đa 500 ký tự"), Required(ErrorMessage = "Bạn hãy nhập địa chỉ")]
         public string Address { get; set; }
 
+        [DisplayFormat(DataFormatString = "{0:N0} đ")]
         public decimal? Total { get; set; }
 
-        public int TotalProds()
+        public int TotalProds
         {
-            return OrderDetails.Sum(m => (int?)m.Quantity) ?? 0;
+            get
+            {
+                return OrderDetails.Sum(m => (int?)m.Quantity) ?? 0;
+            }
         }
 
-        public decimal? TotalFee()
+        [DisplayFormat(DataFormatString = "{0:N0} đ")]
+        public decimal? TotalFee
         {
-            return Total + ShipFee;
+            get
+            {
+                return Total + ShipFee;
+            }
         }
 
-        public decimal? TotalDebt()
+        [DisplayFormat(DataFormatString = "{0:N0} đ")]
+        public decimal? TotalDebt
         {
-            return TotalFee() - Prepayment;
+            get
+            {
+                return TotalFee - Prepayment;
+            }
         }
 
         public Order()
@@ -82,6 +97,7 @@ namespace Evarosa.Models
 		public virtual City City { get; set; }
 		public virtual District District { get; set; }
         public virtual Ward Ward { get; set; }
+        public Member? Member { get; set; }
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
     }
 

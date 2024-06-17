@@ -1,6 +1,7 @@
 ﻿using Evarosa.Data;
 using Evarosa.Models;
 using Evarosa.Services;
+using Evarosa.Services.Impl;
 using Evarosa.Utils;
 using Evarosa.ViewModels;
 using Microsoft.AspNetCore.Authentication;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Identity.Client;
@@ -46,6 +48,8 @@ namespace Evarosa.Controllers
             _pepper = Environment.GetEnvironmentVariable("vico@123");
             _mailService = mailService;
         }
+
+        public ShoppingService cart => ShoppingService.GetCart(HttpContext, _unitOfWork);
 
         private Member? GetMember()
         {
@@ -121,16 +125,17 @@ namespace Evarosa.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync("member");
+
             return RedirectToAction(nameof(Login));
         }
 
-        [HttpGet("doi-mat-khau")]
+        [HttpGet("member/doi-mat-khau")]
         public IActionResult ChangePassword()
         {
             return View();
         }
 
-        [HttpPost("doi-mat-khau")]
+        [HttpPost("member/doi-mat-khau")]
         public IActionResult ChangePassword(ChangePasswordViewModel model)
         {
             if (!ModelState.IsValid)
@@ -269,6 +274,8 @@ namespace Evarosa.Controllers
 
                 var claimsIdentity = new ClaimsIdentity(claims, "member");
                 await HttpContext.SignInAsync("member", new ClaimsPrincipal(claimsIdentity));
+
+                cart.MigrateCart(member.Email);
 
                 if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                 {
@@ -432,6 +439,161 @@ namespace Evarosa.Controllers
             var jwtToken = (JwtSecurityToken)validatedToken;
 
             return new ClaimsPrincipal(new ClaimsIdentity(jwtToken.Claims));
+        }
+
+        [HttpPost("member/upload-avatar")]
+        public async Task<IActionResult> UploadAvatar()
+        {
+            var avatar = Request.Form.Files["avatar"];
+
+            if (avatar != null && avatar.Length > 0)
+            {
+                var member = GetMember();
+
+                if (member == null) return NotFound();
+
+                var file = await _fileService.UploadFileAsync("members", avatar);
+                member.Image = file.FileName;
+
+                _unitOfWork.Member.Update(member);
+                await _unitOfWork.CommitAsync();
+            }
+
+            return Json(new { success = true });
+        }
+
+        [Route("member/dia-chi")]
+        public async Task<IActionResult> ListAddress(int? page)
+        {
+            var list = await _unitOfWork.MemberAddress.GetPagedListAsync(
+                    include: m => m
+                        .Include(l => l.City)
+                        .Include(l => l.District)
+                        .Include(l => l.Ward),
+                    pageIndex: page ?? 1,
+                    pageSize: 10
+                );
+
+            var model = new MemberAddressViewModel
+            {
+                ListMemberAddress = list
+            };
+
+            return View(model);
+        }
+
+        public async Task<IActionResult> AddAddress()
+        {
+            ViewBag.Cities = new SelectList(await _unitOfWork.City.GetAllAsync(), "Id", "Name");
+
+            return PartialView();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddAddress(MemberAddress model)
+        {  
+            try
+            {
+                model.MemberId = GetMember().Id;
+                AddOrUpdateAddress(model);
+
+                TempData["Message"] = "success|Thêm mới thông tin địa chỉ thành công.";
+                return RedirectToAction(nameof(ListAddress));
+            }
+            catch (Exception ex)
+            {
+                TempData["Message"] = "danger|Quá trình không xảy ra lỗi.";
+                return RedirectToAction(nameof(ListAddress));
+            }
+        }
+
+        public async Task<IActionResult> UpdateAddress(int Id)
+        {
+            var address = await _unitOfWork.MemberAddress.FindAsync(Id);
+
+            if (address == null) return NotFound();
+
+            ViewBag.Cities = new SelectList(await _unitOfWork.City.GetAllAsync(), "Id", "Name");
+            ViewBag.Districts = new SelectList(await _unitOfWork.District.GetAllAsync(predicate: d => d.CityId == address.CityId), "Id", "Name");
+            ViewBag.Wards = new SelectList(await _unitOfWork.Ward.GetAllAsync(predicate: w => w.DistrictID == address.DistrictId), "ID", "Name");
+
+            return PartialView(address);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateAddress(MemberAddress model)
+        {
+            try
+            {
+                AddOrUpdateAddress(model);
+
+                TempData["Message"] = "success|Cập nhật thông tin địa chỉ thành công.";
+                return RedirectToAction(nameof(ListAddress));
+            }
+            catch (Exception ex)
+            {
+                TempData["Message"] = "danger|Quá trình không xảy ra lỗi.";
+                return RedirectToAction(nameof(ListAddress));
+            }
+        }
+
+        public async Task<IActionResult> DeleteAddress(int Id)
+        {
+            var address = await _unitOfWork.MemberAddress.FindAsync(Id);
+
+            if (address == null) return NotFound();
+
+            _unitOfWork.MemberAddress.Delete(address);
+            await _unitOfWork.CommitAsync();
+
+            TempData["Message"] = "success|Xóa thông tin địa chỉ thành công.";
+            return RedirectToAction(nameof(ListAddress));
+        }
+
+        public void AddOrUpdateAddress(MemberAddress address)
+        {
+            if (address.IsDefault)
+            {
+                var otherAddresses = _unitOfWork.MemberAddress
+                    .GetAll(predicate: a => a.MemberId == address.MemberId && a.Id != address.Id, disableTracking: false);
+
+                foreach (var otherAddress in otherAddresses)
+                {
+                    otherAddress.IsDefault = false;
+                }
+
+                _unitOfWork.MemberAddress.Update(otherAddresses);
+            }
+
+            if (address.Id == 0)
+            {
+                _unitOfWork.MemberAddress.Insert(address);
+            }
+            else
+            {
+                _unitOfWork.MemberAddress.Update(address);
+            }
+
+            _unitOfWork.Commit();
+        }
+
+        public async Task<IActionResult> ListOrder(int? page)
+        {
+            var list = await _unitOfWork.Order.GetPagedListAsync(
+                    predicate: o => o.MemberId == GetMember().Id,
+                    include: m => m
+                        .Include(l => l.City)
+                        .Include(l => l.District)
+                        .Include(l => l.Ward),
+                    pageIndex: page ?? 1,
+                    pageSize: 10
+                );
+
+            var model = new MemberOrderViewModel
+            {
+                ListOrder = list
+            };
+            return View(model);
         }
     }
 }

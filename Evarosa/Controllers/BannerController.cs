@@ -12,7 +12,7 @@ using X.PagedList;
 
 namespace NamTinNgoc.Controllers
 {
-    [Authorize(AuthenticationSchemes = "vcms")]
+    [Authorize(AuthenticationSchemes = "vcms", Roles = "Admin,Editor")]
     public class BannerController(UnitOfWork unitOfWork, IFileService fileService) : Controller
     {
         #region Banner
@@ -110,7 +110,7 @@ namespace NamTinNgoc.Controllers
             return RedirectToAction("ListBanner", new { result = "update" });
         }
 
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "Admin")]
         public async Task<bool> DeleteBanner(int bannerId = 0)
         {
             var banner = await unitOfWork.Banner.FindAsync(bannerId);

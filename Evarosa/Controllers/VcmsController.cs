@@ -90,15 +90,23 @@ namespace Evarosa.Controllers
         #endregion
 
         #region Admin
+
         public IActionResult Index()
         {
             var model = new InfoAdminViewModel
             {
                 Admins = _unitOfWork.Admin.Count(),
                 Articles = _unitOfWork.Article.Count(),
+                Banners = _unitOfWork.Banner.Count(),
+                Members = _unitOfWork.Member.Count(),
+                Orders = _unitOfWork.Order.Count(),
+                Contacts = _unitOfWork.Contact.Count(),
+                Products = _unitOfWork.Product.Count(),
             };
             return View(model);
         }
+
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateAdmin(string result = "")
         {
             ViewBag.Result = result;
@@ -111,7 +119,7 @@ namespace Evarosa.Controllers
             return View(model);
         }
 
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateAdmin(AdminViewModel model)
         {
             var admin = await _unitOfWork.Admin.GetAll(predicate: m => m.Username == model.Admin.Username).FirstOrDefaultAsync();
@@ -131,6 +139,7 @@ namespace Evarosa.Controllers
             return RedirectToAction("CreateAdmin", new { result = "success" });
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditAdmin(int adminId = 0)
         {
             var admin = await _unitOfWork.Admin.FindAsync(adminId);
@@ -151,7 +160,7 @@ namespace Evarosa.Controllers
             return View(model);
         }
 
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditAdmin(AdminViewModel model)
         {
             var admin = await _unitOfWork.Admin.FindAsync(model.Admin.Id);
@@ -184,7 +193,8 @@ namespace Evarosa.Controllers
             _unitOfWork.Commit();
             return RedirectToAction("CreateAdmin", new { result = "update" });
         }
-        [HttpPost]
+
+        [HttpPost, Authorize(Roles = "Admin")]
         public async Task<bool> DeleteAdmin(string username)
         {
             var admin = await _unitOfWork.Admin.GetAll(predicate: a => a.Username == username).FirstOrDefaultAsync();
@@ -229,6 +239,7 @@ namespace Evarosa.Controllers
         #endregion
 
         #region ConfigSite
+        [Authorize(Roles = "Admin")]
         public IActionResult ConfigSite(string result = "")
         {
             ViewBag.Result = result;
@@ -236,7 +247,7 @@ namespace Evarosa.Controllers
             return View(config);
         }
 
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "Admin")]
         public async Task<IActionResult> ConfigSite(ConfigSite model)
         {
             var config = await _unitOfWork.ConfigSite.GetAll(disableTracking: false).FirstOrDefaultAsync();

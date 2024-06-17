@@ -93,9 +93,12 @@
                 <a class="btn btn-warning" asp-action="UpdateArticleCategory" asp-route-id="@item.Id">
                     Sửa
                 </a>
-                <a class="btn btn-danger" href="javascript:;" onclick="deleteFunc(@item.Id)">
-                    Xóa
-                </a>
+                @if (User.IsInRole("Admin"))
+                {
+                    <a class="btn btn-danger" href="javascript:;" onclick="deleteFunc(@item.Id)">
+                        Xóa
+                    </a>
+                }
             </td>
         </tr>
         if (item.CategoryChildren?.Count > 0)

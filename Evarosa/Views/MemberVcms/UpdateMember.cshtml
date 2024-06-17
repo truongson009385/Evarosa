@@ -1,0 +1,106 @@
+﻿@model MemberVcmsViewModel
+
+@{
+    ViewBag.Title = "Cập nhật thành viên";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    .form_name {
+        width: 200px;
+    }
+</style>
+
+<form asp-action="UpdateMember" method="post" enctype="multipart/form-data">
+    <div class="box_header">
+        <h2>@ViewBag.Title</h2>
+        <div class="list-group list-group-horizontal">
+            <a class="btn quick-link mr-2" asp-action="ListMember"><i class="fa-solid fa-list mr-2"></i>Danh sách thành viên</a>
+        </div>
+    </div>
+
+    <div class="box_content">
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.Member.Id)
+
+        <table class="form_table">
+            <tr>
+                <td class="form_name">
+                    <label asp-for="Member.FullName"></label>
+                </td>
+                <td class="form_text">
+                    <input asp-for="Member.FullName" />
+                    <span asp-validation-for="Member.FullName" class="text-danger"></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="form_name">
+                    <label asp-for="Member.Email"></label>
+                </td>
+                <td class="form_text">
+                    <input asp-for="Member.Email" />
+                    <span asp-validation-for="Member.Email" class="text-danger"></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="form_name">
+                    <label asp-for="Member.PhoneNumber"></label>
+                </td>
+                <td class="form_text">
+                    <input asp-for="Member.PhoneNumber" />
+                    <span asp-validation-for="Member.PhoneNumber" class="text-danger"></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="form_name">
+                    <label asp-for="Member.BirthDate"></label>
+                </td>
+                <td class="form_text">
+                    <input asp-for="Member.BirthDate" />
+                    <span asp-validation-for="Member.BirthDate" class="text-danger"></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="form_name">
+                    <label asp-for="Member.Address"></label>
+                </td>
+                <td class="form_text">
+                    <input asp-for="Member.Address" />
+                    <span asp-validation-for="Member.Address" class="text-danger"></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="form_name">
+                    <label asp-for="Password"></label>
+                </td>
+                <td class="form_text">
+                    <input asp-for="Password" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="form_name">
+                    <label asp-for="Member.Active"></label>
+                </td>
+                <td class="form_text">
+                    <input asp-for="Member.Active" />
+                    <span asp-validation-for="Member.Active" class="text-danger"></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="form_name"></td>
+                <td class="form_text">
+                    <button type="submit" class="btn quick-link">
+                        <i class="fa-solid fa-paper-plane mr-2"></i>Cập nhật
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

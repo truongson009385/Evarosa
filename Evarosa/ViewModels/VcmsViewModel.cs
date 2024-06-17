@@ -23,6 +23,9 @@ namespace Evarosa.ViewModels
         public int Articles { get; set; } = 0;
         public int Contacts { get; set; } = 0;
         public int Banners { get; set; } = 0;
+        public int Members { get; set; } = 0;
+        public int Orders { get; set; } = 0;
+        public int Products { get; set;} = 0;
     }
 
     public class ChangePasswordModel

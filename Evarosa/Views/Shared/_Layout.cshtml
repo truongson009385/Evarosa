@@ -19,8 +19,7 @@
 
     @if (AppService.Config.GoogleAnalytics != null)
     {
-        @Html.Raw(AppService.Config.GoogleAnalytics)
-        ;
+        @Html.Raw(AppService.Config.GoogleAnalytics);
     }
 
     <link rel="icon" type="image/x-icon" href="@Url.Content($"/contents/system/{AppService.Config.Favicon}")">
@@ -42,6 +41,9 @@
 
     @await Component.InvokeAsync("Footer")
 
+    <partial name="_phoneringring" />
+    <div class="go-top"></div>
+
     <script src="~/lib/jquery/jquery.min.js"></script>
     <script src="~/lib/jqueryui/jquery-ui.min.js"></script>
     <script src="~/js/BundlesJs.min.js"></script>
@@ -54,8 +56,7 @@
 
     @if (AppService.Config.LiveChat != null)
     {
-        @Html.Raw(AppService.Config.LiveChat)
-        ;
+        @Html.Raw(AppService.Config.LiveChat);
     }
 </body>
 </html>

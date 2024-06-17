@@ -12,7 +12,7 @@ using X.PagedList;
 
 namespace Evarosa.Controllers
 {
-    [Authorize(AuthenticationSchemes = "vcms")]
+    [Authorize(AuthenticationSchemes = "vcms", Roles = "Admin,Editor,CopyWriter")]
     public class ArticleController(UnitOfWork unitOfWork, IFileService fileService) : Controller
     {
         #region ArticleCategory
@@ -99,7 +99,7 @@ namespace Evarosa.Controllers
             return RedirectToAction("ListArticleCategory");
         }
 
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteArticleCategory(int id)
         {
             var category = await unitOfWork.ArticleCategory.FindAsync(id);
@@ -256,16 +256,13 @@ namespace Evarosa.Controllers
             return RedirectToAction("ListArticle");
         }
 
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> DeleteArticle(int id)
         {
             var article = await unitOfWork.Article.FindAsync(id);
 
             if (article == null) return Json(new { success = false });
-
-            var user = await unitOfWork.Admin.GetAll(
-                   predicate: m => m.Username == User.Identity.Name
-               ).FirstOrDefaultAsync();
 
             unitOfWork.Article.Delete(article);
             await unitOfWork.CommitAsync();

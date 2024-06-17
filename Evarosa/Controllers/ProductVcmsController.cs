@@ -11,7 +11,7 @@ using X.PagedList;
 
 namespace Evarosa.Controllers
 {
-    [Authorize(AuthenticationSchemes = "vcms"), Authorize(Roles = "Admin,Editor,Product")]
+    [Authorize(AuthenticationSchemes = "vcms", Roles = "Admin,Editor")]
     public class ProductVcmsController(UnitOfWork unitOfWork, IFileService fileService) : Controller
     {
 
@@ -131,7 +131,7 @@ namespace Evarosa.Controllers
             return Json(new { success = true });
         }
 
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteProductCategory(int id)
         {
             var category = await unitOfWork.ProductCategory.FindAsync(id);
@@ -325,7 +325,7 @@ namespace Evarosa.Controllers
             return RedirectToAction("ListProduct");
         }
 
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
             var item = await unitOfWork.Product.FindAsync(id);
