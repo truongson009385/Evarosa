@@ -1,13 +1,9 @@
-﻿using Imageflow.Server;
-using Microsoft.Extensions.FileProviders;
+﻿using Evarosa.Data;
+using Evarosa.Services;
+using Evarosa.Services.Impl;
+using Imageflow.Server;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Evarosa.Data;
-using Evarosa.Services.Impl;
-using Evarosa.Services;
-using Microsoft.AspNetCore.Rewrite;
-using Evarosa.Services.Impl;
-using Evarosa.Services;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -68,7 +64,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 
     app.UseRewriter();
-    app.UseRewriter(new RewriteOptions().AddRedirectToNonWwwPermanent().AddRedirectToHttpsPermanent());
+    //app.UseRewriter(new RewriteOptions().AddRedirectToNonWwwPermanent().AddRedirectToHttpsPermanent());
 }
 
 app.UseImageflow(new ImageflowMiddlewareOptions()
