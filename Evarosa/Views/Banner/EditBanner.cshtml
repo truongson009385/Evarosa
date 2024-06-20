@@ -52,7 +52,7 @@
                     <td class="form_text"><img class="img-border" src="@PathSystem.Combine("/contents/banners", Model.Banner.Image)" /></td>
                 </tr>
             }
-            <tr>
+            <tr class="d-none">
                 <td class="form_name">@Html.LabelFor(model => model.Banner.Content)</td>
                 <td class="form_text">@Html.EditorFor(model => model.Banner.Content)</td>
             </tr>

@@ -35,6 +35,13 @@
             <partial name="ListProductView" model="Model" />
         </div>
     </div>
+    <div class="row mt-5">
+        <div class="col-lg-9 offset-lg-3">
+            <article>
+                @Html.Raw(Model.ProductCategory.Content)
+            </article>
+        </div>
+    </div>
 </div>
 
 @section Scripts {

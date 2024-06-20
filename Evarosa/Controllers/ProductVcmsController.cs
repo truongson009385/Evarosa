@@ -211,10 +211,6 @@ namespace Evarosa.Controllers
         [HttpPost]
         public async Task<IActionResult> Product(ProductViewModel model, int[] items, string[] values)
         {
-            var user = await unitOfWork.Admin.GetAll(
-                    predicate: m => m.Username == User.Identity.Name
-                ).FirstOrDefaultAsync();
-
             // Price Conversion
             if (model.Price != null)
             {
@@ -340,6 +336,125 @@ namespace Evarosa.Controllers
             await unitOfWork.CommitAsync();
             return Json(new { success = true });
         }
+
+        public IActionResult ListSku(string[] attrs, int[] ids)
+        {
+            List<string> items = GenerateCombinations(attrs, 0, new string[attrs.Length]);
+
+            var skuP = new SkuProductViewModel
+            {
+                Ids = ids,
+                Attrs = items,
+                FirstItem = attrs[0],
+            };
+
+            var model = new ProductViewModel { SkuProduct = skuP };
+            return PartialView(model);
+        }
+        #endregion
+
+        #region Option
+        public IActionResult ListOption(int? page, OptionGroup? group, string result = "")
+        {
+            ViewBag.Banner = result;
+            var pageNumber = page ?? 1;
+            var options = unitOfWork.Option.GetAll(
+                    orderBy: m => m.OrderByDescending(a => a.Sort)
+                );
+
+            if (group.HasValue)
+            {
+                options = options.Where(a => a.Group == group.Value);
+            }
+
+            var model = new OptionViewModel
+            {
+                Group = group,
+                ListOption = options.OrderBy(m => m.Sort).ToPagedList(pageNumber, 10),
+            };
+            return View(model);
+        }
+
+        public IActionResult Option()
+        {
+            var model = new OptionViewModel
+            {
+                Option = new Option()
+                {
+                    Sort = 1,
+                }
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Option(OptionViewModel model)
+        {
+            await unitOfWork.Option.InsertAsync(model.Option);
+            await unitOfWork.CommitAsync();
+            return RedirectToAction(nameof(ListOption), new { result = "success" });
+        }
+
+        public async Task<IActionResult> UpdateOption(int id)
+        {
+            var option = await unitOfWork.Option.FindAsync(id);
+            if (option == null)
+            {
+                return RedirectToAction(nameof(ListOption));
+            }
+            var model = new OptionViewModel
+            {
+                Option = option,
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateOption(OptionViewModel model)
+        {
+            var option = await unitOfWork.Option.FindAsync(model.Option.Id);
+
+            if (option == null) return RedirectToAction(nameof(ListOption));
+
+            option.Group = model.Option.Group;
+            option.Name = model.Option.Name;
+            option.Sort = model.Option.Sort;
+
+            unitOfWork.Option.Update(option);
+            await unitOfWork.CommitAsync();
+            return RedirectToAction(nameof(ListOption), new { result = "update" });
+        }
+
+        [HttpPost, Authorize(Roles = "Admin")]
+        public async Task<bool> DeleteOption(int id)
+        {
+            var option = await unitOfWork.Option.FindAsync(id);
+
+            if (option == null)
+            {
+                return false;
+            }
+
+            unitOfWork.Option.Delete(option);
+            await unitOfWork.CommitAsync();
+            return true;
+        }
+
+        public async Task<bool> UpdateOptionQuick(int id, int sort = 1)
+        {
+            var option = await unitOfWork.Option.FindAsync(id);
+
+            if (option == null)
+            {
+                return false;
+            }
+
+            option.Sort = sort;
+
+            unitOfWork.Option.Update(option);
+            unitOfWork.Commit();
+            return true;
+        }
         #endregion
 
         #region Func
@@ -385,7 +500,27 @@ namespace Evarosa.Controllers
             return resultitems;
         }
 
+        private List<string> GenerateCombinations(string[] inputArray, int currentIndex, string[] currentCombination)
+        {
+            List<string> resultList = new List<string>();
 
+            if (currentIndex == inputArray.Length)
+            {
+                resultList.Add(string.Join("/", currentCombination));
+            }
+            else
+            {
+                string[] parts = inputArray[currentIndex].Split(',');
+
+                foreach (string part in parts)
+                {
+                    currentCombination[currentIndex] = part;
+                    resultList.AddRange(GenerateCombinations(inputArray, currentIndex + 1, currentCombination));
+                }
+            }
+
+            return resultList;
+        }
         #endregion
 
         protected override void Dispose(bool disposing)

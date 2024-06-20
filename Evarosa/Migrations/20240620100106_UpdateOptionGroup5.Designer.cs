@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Evarosa.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240620100106_UpdateOptionGroup5")]
+    partial class UpdateOptionGroup5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -600,19 +603,19 @@ namespace Evarosa.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Group")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("OptionGroupId")
+                        .HasColumnType("int");
 
                     b.Property<int>("Sort")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Options");
+                    b.ToTable("Option");
                 });
 
             modelBuilder.Entity("Evarosa.Models.OptionSku", b =>
@@ -631,7 +634,7 @@ namespace Evarosa.Migrations
 
                     b.HasIndex("OptionId");
 
-                    b.ToTable("OptionSkus");
+                    b.ToTable("OptionSku");
                 });
 
             modelBuilder.Entity("Evarosa.Models.Order", b =>

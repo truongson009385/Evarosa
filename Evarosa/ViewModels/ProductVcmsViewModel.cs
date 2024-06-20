@@ -1,4 +1,5 @@
 ﻿using Evarosa.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 using X.PagedList;
 
@@ -21,6 +22,8 @@ namespace Evarosa.ViewModels
         public int? InStock { get; set; }
         public string? MaSP { get; set; }
         public DateTime? Timer { get; set; }
+        public SkuProductViewModel SkuProduct { get; set; }
+
 
     }
 
@@ -30,5 +33,24 @@ namespace Evarosa.ViewModels
         public string? Url { get; set; }
         public ProductCategory ProductCategory { get; set; }
         public IPagedList<ProductCategory> ListProductCategory { get; set; }
+    }
+
+    public class OptionViewModel
+    {
+        public Option Option { get; set; }
+        public IPagedList<Option> ListOption { get; set; }
+        public OptionGroup? Group { get; set; }
+        public SelectList SelectListGroup { get; set; }
+    }
+
+    public class SkuProductViewModel
+    {
+        public List<string> Attrs { get; set; }
+        public int[] Ids { get; set; }
+        public int[] Stocks { get; set; }
+        public decimal[] Amounts { get; set; }
+        public string FirstItem { get; set; }
+        public int Indexs { get; set; }
+
     }
 }

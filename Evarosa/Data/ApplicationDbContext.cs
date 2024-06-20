@@ -28,6 +28,10 @@ public class ApplicationDbContext : DbContext
     public DbSet<District> Districts { get; set; }
     public DbSet<Ward> Wards { get; set; }
     public DbSet<MemberAddress> MemberAddresses { get; set; }
+    public DbSet<Sku> Sku { get; set; }
+    public DbSet<Option> Options { get; set; }
+    public DbSet<OptionSku> OptionSkus { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -83,5 +87,8 @@ public class ApplicationDbContext : DbContext
         {
             entity.HasIndex(p => p.Url).IsUnique();
         });
+
+        modelBuilder.Entity<OptionSku>()
+            .HasKey(o => new { o.SkuId, o.OptionId });
     }
 }

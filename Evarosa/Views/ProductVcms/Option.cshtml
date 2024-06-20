@@ -1,0 +1,53 @@
+﻿@model OptionViewModel
+@{
+    ViewBag.Title = "Thêm lựa chọn";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<style>
+    .form_name {
+        width: 150px;
+    }
+</style>
+<div class="box_header">
+    <h2>@ViewBag.Title</h2>
+    <div class="list-group list-group-horizontal">
+        <a class="btn quick-link mr-2" asp-action="ListOption"><i class="fa-solid fa-list mr-2"></i>Danh sách lựa chọn</a>
+    </div>
+</div>
+<div class="box_content px-300">
+    @using (Html.BeginForm("Option", "ProductVcms", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.ValidationSummary(true)
+        <table class="form_table">
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.Option.Group)</td>
+                <td class="form_text">
+                    <select asp-for="Option.Group" asp-items="Html.GetEnumSelectList<OptionGroup>()">
+                        <option value="" selected="selected">Chọn kiểu</option>
+                    </select>
+                    <span asp-validation-for="Option.Group" class="text-danger"></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.Option.Name)</td>
+                <td class="form_text">@Html.EditorFor(model => model.Option.Name)</td>
+            </tr>
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.Option.Sort)</td>
+                <td class="form_text">@Html.EditorFor(model => model.Option.Sort)</td>
+            </tr>
+            <tr>
+                <td class="form_name"></td>
+                <td class="form_text">
+                    <input type="submit" class="btn quick-link" value="Thêm mới" />
+                </td>
+            </tr>
+        </table>
+    }
+</div>
+
+@section scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

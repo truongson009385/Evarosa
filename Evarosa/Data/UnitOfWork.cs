@@ -23,6 +23,10 @@ namespace Evarosa.Data
         public Repository<District> District { get; set; }
         public Repository<Ward> Ward { get; set; }
         public Repository<MemberAddress> MemberAddress { get; set; }
+        public Repository<Sku> Sku { get; set; }
+        public Repository<Option> Option { get; set; }
+        public Repository<OptionSku> OptionSku { get; set; }
+
 
         public UnitOfWork(ApplicationDbContext db)
         {
@@ -44,7 +48,9 @@ namespace Evarosa.Data
             District = new Repository<District>(_db);
             Ward = new Repository<Ward>(_db);
             MemberAddress = new Repository<MemberAddress>(_db);
-
+            Sku = new Repository<Sku>(_db);
+            Option = new Repository<Option>(_db);
+            OptionSku = new Repository<OptionSku>(_db);
         }
 
         public void Commit()

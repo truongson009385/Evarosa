@@ -1,0 +1,32 @@
+﻿@model ProductViewModel
+
+@{
+    var collapses = Model.SkuProduct.FirstItem.Split(",");
+    int i = 0;
+}
+
+@foreach (var lap in collapses)
+{
+    <div>
+        <button type="button" data-toggle="collapse" data-target="#attr@(i)">
+            @lap
+        </button>
+
+        <div id="attr@(i)" class="collapse">
+            @foreach (var item in Model.SkuProduct.Attrs.Where(m => m.Split("/").First() == lap))
+            {
+                <div class="media">
+                    <div class="media-body">
+                        <h5 class="mt-0">@item</h5>
+                        <div class="input-group">
+                            <input class="form_control" asp-for="SkuProduct.Stocks" placeholder="Tồn kho" />
+                            <input class="form_control" asp-for="SkuProduct.Amounts" placeholder="Giá" />
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    i++;
+}
+
