@@ -3,30 +3,50 @@
 @{
     var collapses = Model.SkuProduct.FirstItem.Split(",");
     int i = 0;
+    int indexs = 0;
 }
 
-@foreach (var lap in collapses)
-{
-    <div>
-        <button type="button" data-toggle="collapse" data-target="#attr@(i)">
-            @lap
-        </button>
-
-        <div id="attr@(i)" class="collapse">
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col" class="text-center"></th>
+            <th scope="col" class="text-center">SKU</th>
+            <th scope="col" class="text-center">Tồn kho</th>
+            <th scope="col" class="text-center">Giá</th>
+            <th scope="col" class="text-center">Giá bán</th>
+        </tr>
+    </thead>
+    @foreach (var lap in collapses)
+    {
+        <tbody>
             @foreach (var item in Model.SkuProduct.Attrs.Where(m => m.Split("/").First() == lap))
             {
-                <div class="media">
-                    <div class="media-body">
-                        <h5 class="mt-0">@item</h5>
-                        <div class="input-group">
-                            <input class="form_control" asp-for="SkuProduct.Stocks" placeholder="Tồn kho" />
-                            <input class="form_control" asp-for="SkuProduct.Amounts" placeholder="Giá" />
-                        </div>
-                    </div>
-                </div>
-            }
-        </div>
-    </div>
-    i++;
-}
+                <tr>
+                    <th scope="row">
+                        <p class="my-2">@lap</p>
+                    </th>
+                    <td>
+                        <input class="form-control my-2" asp-for="SkuProduct.Skus" value="@(Model.SkuProduct.Skus.ElementAtOrDefault(indexs))" required placeholder="SKU" />
+                        <input type="hidden" asp-for="SkuProduct.Options" value="@string.Join("/", Model.SkuProduct.OptionIds)" />
+                        <input type="hidden" asp-for="SkuProduct.Values" value="@item" />
+                        <input type="hidden" asp-for="SkuProduct.Ids" value="@(Model.SkuProduct.Ids.ElementAtOrDefault(indexs))" />
+                    </td>
+                    <td><input class="form-control my-2" type="number" value="0" required asp-for="SkuProduct.Stocks" value="@(Model.SkuProduct.Stocks.ElementAtOrDefault(indexs))" placeholder="Tồn kho" /></td>
+                    <td><input class="form-control input-number my-2" asp-for="SkuProduct.Prices" value="@(Model.SkuProduct.Prices.ElementAtOrDefault(indexs))" placeholder="Giá" /></td>
+                    <td><input class="form-control input-number my-2" asp-for="SkuProduct.PriceSales" value="@(Model.SkuProduct.PriceSales.ElementAtOrDefault(indexs))" placeholder="Giá bán" /></td>
+                </tr>
 
+                indexs++;
+            }
+        </tbody>
+    }
+</table>
+
+<input type="hidden" asp-for="SkuProduct.Indexs" value="@indexs" />
+
+<script>
+    $(".input-number").maskMoney({
+        precision: 0,
+        thousands: ','
+    });
+</script>

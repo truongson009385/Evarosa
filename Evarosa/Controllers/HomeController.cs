@@ -5,6 +5,7 @@ using Evarosa.Services.Impl;
 using Evarosa.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using X.PagedList;
@@ -121,6 +122,24 @@ namespace Evarosa.Controllers
 
             if (product == null) return NotFound();
 
+            var skuQr = unitOfWork.Sku
+                .GetAll(
+                    predicate: o => o.ProductId == product.Id
+                );
+
+            var optionGroups = await skuQr.SelectMany(o => o.OptionSkus)
+                .GroupBy(optionSku => optionSku.Option.Name)
+                .Select(group => new OptionGroup
+                {
+                    Name = group.Key,
+                    Options = group.Select(optionSku => new OptionGroup.Option
+                    {
+                        Id = optionSku.OptionId,
+                        Value = optionSku.Value
+                    }).Distinct().ToList()
+                })
+                .ToListAsync();
+
             var relatedProducts = await unitOfWork.Product
                 .GetAllAsync(
                     predicate: m => m.ProductCategoryId == product.ProductCategoryId && m.Active && m.Id != product.Id,
@@ -140,8 +159,40 @@ namespace Evarosa.Controllers
             {
                 Product = product,
                 Products = relatedProducts,
+                OptionGroups = optionGroups,
+                Price = GetPrice(skuQr),
             };
             return View(model);
+        }
+
+        public decimal? GetPrice(IQueryable<Sku> skuQr, int? skuId = null)
+        {
+            if (skuId.HasValue)
+            {
+                skuQr = skuQr.Where(s => s.Id == skuId.Value);
+            }
+
+            return skuQr.Select(s => s.Price)
+                .FirstOrDefault();
+        }
+
+        public IActionResult GetSku(int productId, int optionId, string value)
+        {
+
+            var sku = unitOfWork.Sku
+                .GetAll(
+                    predicate: m => m.ProductId == productId && m.OptionSkus.Any(o => o.Value == value && o.OptionId == optionId)
+                )
+                .FirstOrDefault();
+
+            if (sku == null) return NotFound();
+
+            return Json(new
+            {
+                sku = sku.SKU ?? "Chưa cập nhật",
+                price = sku.Price > 0 ? sku.Price.ToString("N0") + " đ" : "Liên hệ",
+            });
+
         }
 
         [Route("products")]

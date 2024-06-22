@@ -2681,6 +2681,40 @@ footer {
     }
 }
 
+.plan {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: start;
+    gap: 10px;
+
+    input {
+        display: none;
+    }
+
+    label {
+        position: relative;
+        color: $black;
+        background-color: $white;
+        font-size: 14px;
+        text-align: center;
+        display: inline-block;
+        width: max-content;
+        height: 35px;
+        padding: 0 10px;
+        line-height: 35px;
+        cursor: pointer;
+        border: 2px solid transparent;
+        border-radius: 5px;
+        box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+    }
+
+    input:checked + label {
+        color: $primary;
+        border: 2px solid $primary;
+        background-color: $white;
+    }
+}
+
 .nav-mobi {
     position: sticky;
     z-index: 999;

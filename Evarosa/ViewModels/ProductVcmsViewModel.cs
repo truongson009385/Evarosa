@@ -9,14 +9,14 @@ namespace Evarosa.ViewModels
     {
         public IEnumerable<int> CategoryIds { get; set; }
         public int? InfoId { get; set; }
-        public Product Product { get; set; }
         public string? Url { get; set; }
         [Display(Name = "Giá niêm yết"), UIHint("MoneyBox"), DisplayFormat(DataFormatString = "{0:N0} VNĐ")]
         public string? Price { get; set; }
         [Display(Name = "Giá khuyến mãi"), UIHint("MoneyBox"), DisplayFormat(DataFormatString = "{0:N0} VNĐ")]
         public string? PriceSale { get; set; }
+        public Product Product { get; set; }
         public IPagedList<Product> ListProduct { get; set; }
-        
+        public IEnumerable<Option> Options { get; set; }
         public string Term { get; set; }
         public int? CategoryId { get; set; }
         public int? InStock { get; set; }
@@ -39,18 +39,21 @@ namespace Evarosa.ViewModels
     {
         public Option Option { get; set; }
         public IPagedList<Option> ListOption { get; set; }
-        public OptionGroup? Group { get; set; }
         public SelectList SelectListGroup { get; set; }
     }
 
     public class SkuProductViewModel
     {
         public List<string> Attrs { get; set; }
+        public int[] OptionIds { get; set; }
+        public string[] Options { get; set; }
         public int[] Ids { get; set; }
+        public string[] Values { get; set; }
+        public string[] Skus { get; set; }
         public int[] Stocks { get; set; }
-        public decimal[] Amounts { get; set; }
+        public string[] Prices { get; set; }
+        public string[] PriceSales { get; set; }
         public string FirstItem { get; set; }
         public int Indexs { get; set; }
-
     }
 }

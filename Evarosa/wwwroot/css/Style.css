@@ -2416,6 +2416,37 @@ footer {
     -webkit-transform: rotate(0) scale(1) skew(1deg);
   }
 }
+.plan {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: start;
+  gap: 10px;
+}
+.plan input {
+  display: none;
+}
+.plan label {
+  position: relative;
+  color: #011027;
+  background-color: #fff;
+  font-size: 14px;
+  text-align: center;
+  display: inline-block;
+  width: max-content;
+  height: 35px;
+  padding: 0 10px;
+  line-height: 35px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+.plan input:checked + label {
+  color: #506DB3;
+  border: 2px solid #506DB3;
+  background-color: #fff;
+}
+
 .nav-mobi {
   position: sticky;
   z-index: 999;

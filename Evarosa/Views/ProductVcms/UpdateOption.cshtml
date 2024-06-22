@@ -25,15 +25,6 @@
         @Html.HiddenFor(model => model.Option.Id)
         <table class="form_table">
             <tr>
-                <td class="form_name">@Html.LabelFor(model => model.Option.Group)</td>
-                <td class="form_text">
-                    <select asp-for="Option.Group" asp-items="Html.GetEnumSelectList<OptionGroup>()">
-                        <option value="">Chọn kiểu</option>
-                    </select>
-                    <span asp-validation-for="Option.Group" class="text-danger"></span>
-                </td>
-            </tr>
-            <tr>
                 <td class="form_name">@Html.LabelFor(model => model.Option.Name)</td>
                 <td class="form_text">@Html.EditorFor(model => model.Option.Name)</td>
             </tr>

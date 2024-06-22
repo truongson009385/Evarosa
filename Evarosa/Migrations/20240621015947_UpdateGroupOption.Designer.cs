@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Evarosa.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240621015947_UpdateGroupOption")]
+    partial class UpdateGroupOption
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -882,10 +885,7 @@ namespace Evarosa.Migrations
                     b.Property<int>("InStock")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("PriceSale")
+                    b.Property<decimal?>("Price")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("ProductId")
@@ -1014,7 +1014,7 @@ namespace Evarosa.Migrations
             modelBuilder.Entity("Evarosa.Models.OptionSku", b =>
                 {
                     b.HasOne("Evarosa.Models.Option", "Option")
-                        .WithMany("OptionSkus")
+                        .WithMany()
                         .HasForeignKey("OptionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1113,7 +1113,7 @@ namespace Evarosa.Migrations
             modelBuilder.Entity("Evarosa.Models.Sku", b =>
                 {
                     b.HasOne("Evarosa.Models.Product", "Product")
-                        .WithMany("Skus")
+                        .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1151,19 +1151,9 @@ namespace Evarosa.Migrations
                     b.Navigation("Orders");
                 });
 
-            modelBuilder.Entity("Evarosa.Models.Option", b =>
-                {
-                    b.Navigation("OptionSkus");
-                });
-
             modelBuilder.Entity("Evarosa.Models.Order", b =>
                 {
                     b.Navigation("OrderDetails");
-                });
-
-            modelBuilder.Entity("Evarosa.Models.Product", b =>
-                {
-                    b.Navigation("Skus");
                 });
 
             modelBuilder.Entity("Evarosa.Models.ProductCategory", b =>

@@ -29,5 +29,18 @@ namespace Evarosa.Utils
                 return "";
             }
         }
+
+        public static int GetValue(this Enum enumValue)
+        {
+            try
+            {
+                return Convert.ToInt32(enumValue);
+            }
+            catch (Exception ex)
+            {
+                // Handle exception if needed
+                return -1; // Or some default error value
+            }
+        }
     }
 }

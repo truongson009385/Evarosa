@@ -41,6 +41,10 @@
     {
       "library": "aos@2.3.4",
       "destination": "wwwroot/lib/aos"
+    },
+    {
+      "library": "tagify@4.21.2",
+      "destination": "wwwroot/lib/tagify"
     }
   ]
 }

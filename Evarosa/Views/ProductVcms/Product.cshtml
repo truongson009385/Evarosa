@@ -109,20 +109,17 @@
                     <tr>
                         <td class="form_name"></td>
                         <td class="form_text pt-3">
-                            @foreach (var item in Html.GetEnumSelectList<OptionGroup>())
+                            @foreach (var item in Model.Options)
                             {
                                 <div class="form-group">
-                                    <label>@item.Text</label>
+                                    <label>@item.Name</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <div class="input-group-text">
-                                                <input name="attribute" value="@item.Value" type="checkbox" class="mb-0">
+                                                <input name="attribute" value="@item.Id" type="checkbox" class="mb-0">
                                             </div>
                                         </div>
-                                        <select class="form-control">
-
-                                        </select>
-                                        <input name="value" data-attr="@item.Value" class="form-control">
+                                        <input name="value" data-attr="@item.Id">
                                     </div>
                                 </div>
                             }
@@ -167,6 +164,8 @@
             input: "#Images",
         });
 
+        $('[name=value]').tagify();
+
         $('input[name="attribute"]').on('change', function () {
             if ($('input[name="attribute"]:checked').length > 1) {
                 $(this).prop('checked', false);
@@ -177,16 +176,14 @@
         $('.create-attr').click(function () {
             let arr = [];
             let ids = [];
-            let i = 0;
 
             $('input[name="attribute"]:checked').each(function () {
                 let id = $(this).val();
                 let parsedData = JSON.parse($(`input[data-attr="${id}"]`).val());
 
                 let value = parsedData.map(function (tag) {
-                    var result = tag.value + ":" + i;
+                    var result = tag.value;
 
-                    i++;
                     return result;
                 }).join(',');
 
@@ -199,6 +196,7 @@
                     attrs: arr,
                     ids: ids,
                 }, function (data) {
+                    $(".attrs-wrapper").empty();
                     $(".attrs-wrapper").html(data);
                 });
             }

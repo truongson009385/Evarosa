@@ -12,13 +12,11 @@
     </div>
 </div>
 <div class="box_content">
-    <p class="w-25 d-flex align-items-center"><span class="d-block pb-2 w-50">Nhóm lựa chọn</span> @Html.DropDownListFor(model => model.Group, Html.GetEnumSelectList<OptionGroup>(), "Tất cả nhóm", new { @class = "form_control w300", onchange = "window.location.href='/ProductVcms/ListOption?group='+this.value" })</p>
     <table class="list_table tablecenter table-striped">
         <tr>
             <th style="width: 50px">STT</th>
             <th>@Html.DisplayFor(m => m.Option.Sort)</th>
             <th>@Html.DisplayFor(m => m.Option.Name)</th>
-            <th>@Html.DisplayFor(m => m.Option.Group)</th>
             <th style="width: 80px"></th>
         </tr>
         @{
@@ -36,9 +34,6 @@
                 <td>
                     @item.Name
                 </td>
-                <td>
-                    @item.Group.GetDisplayName()
-                </td>
                 <td style="width: 160px;">
                     <a href="javascript:;" onclick="updateBanner('@item.Id')">Cập nhật - </a>
                     @Html.ActionLink("Sửa", "UpdateOption", new { id = item.Id })
@@ -53,7 +48,7 @@
         {
             <tr>
                 <td colspan="8">
-                    @Html.PagedListPager(Model.ListOption, page => Url.Action("ListOption", new { page, type = Model.Group }))
+                    @Html.PagedListPager(Model.ListOption, page => Url.Action("ListOption", new { page }))
                 </td>
             </tr>
         }
@@ -65,7 +60,7 @@
     <script type="text/javascript">
         function deleteBanner(id) {
             if (confirm("Bạn có chắc chắn xóa lựa chọn này không?")) {
-                $.post("/ProductVcms/DeleteOption", { bannerId: id }, function (data) {
+                $.post("/ProductVcms/DeleteOption", { id: id }, function (data) {
                     if (data) {
                         $.toast({
                             text: 'Xóa lựa chọn thành công',

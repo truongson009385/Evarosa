@@ -31,6 +31,9 @@
             }
         }
     };
+
+    int i = 0;
+    int j = 0;
 }
 
 @await Html.PartialAsync("_breadcrumb", breadcrumb)
@@ -62,9 +65,9 @@
             <h1 class="product-name">@Model.Product.Name</h1>
             <p class="product-price mb-4">
                 <span class="price">
-                    @if (Model.Product is { FinalPrice: > 0 })
+                    @if (Model.Price > 0)
                     {
-                        @Html.DisplayFor(m => m.Product.FinalPrice)
+                        @Html.DisplayFor(m => m.Price)
                     }
                     else
                     {
@@ -79,16 +82,35 @@
             </p>
 
             <p class="product-text">
-                <span>Mã: </span><strong>@(!string.IsNullOrEmpty(Model.Product.MaSP) ? Model.Product.MaSP : "Chưa cập nhật")</strong>
+                <span>Mã: </span><strong class="product-sku">@(!string.IsNullOrEmpty(Model.Product.MaSP) ? Model.Product.MaSP : "Chưa cập nhật")</strong>
             </p>
 
-            <form class="mb-4" id="addToCart">
+            @foreach (var item in Model.OptionGroups)
+            {
+                <p class="product-text">
+                    <span>@item.Name</span>
+                </p>
+                <div class="plan">
+                    @foreach (var option in item.Options)
+                    {
+                        <input data-productId="@Model.Product.Id" data-optionId="@option.Id" data-value="@option.Value" class="product-option" type="radio" name="product-option@(i)" id="option-@(i)-@(j)" value="@option" checked="@(i == 0 ? "checked" : "")">
+                        <label for="option-@(i)-@(j)">@option.Value</label>
+
+                        j++;
+                    }
+                </div>
+
+                i++;
+            }
+
+            <form class="my-4" id="addToCart">
                 <input name="id" type="hidden" value="@Model.Product.Id" />
 
                 <div class="product-number mb-4">
                     <label>Số lượng:</label>
                     <input class="input-number" type="number" name="qty" value="1" min="1" max="999" />
                 </div>
+
                 <div class="product-buttons">
                     <button type="submit" class="btn btn-primary">
                         Thêm vào giỏ hàng

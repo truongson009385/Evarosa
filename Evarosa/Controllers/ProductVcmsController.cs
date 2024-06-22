@@ -8,6 +8,9 @@ using Evarosa.Services;
 using Evarosa.Utils;
 using Evarosa.ViewModels;
 using X.PagedList;
+using System.Text.RegularExpressions;
+using NuGet.Packaging.Signing;
+using NuGet.Packaging;
 
 namespace Evarosa.Controllers
 {
@@ -197,6 +200,7 @@ namespace Evarosa.Controllers
 
             var products = unitOfWork.Product.GetAll();
             var sttMax = products.Any() ? products.Max(m => m.Sort) : 1;
+            var options = unitOfWork.Option.GetAll();
 
             var model = new ProductViewModel
             {
@@ -204,12 +208,13 @@ namespace Evarosa.Controllers
                 {
                     Sort = sttMax + 1,
                 },
+                Options = options
             };
             return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Product(ProductViewModel model, int[] items, string[] values)
+        public async Task<IActionResult> Product(ProductViewModel model)
         {
             // Price Conversion
             if (model.Price != null)
@@ -233,6 +238,38 @@ namespace Evarosa.Controllers
             unitOfWork.Product.Insert(model.Product);
             await unitOfWork.CommitAsync();
 
+            for (int i = 0; i < model.SkuProduct.Indexs; i++)
+            {
+                var sku = new Sku
+                {
+                    ProductId = model.Product.Id,
+                    SKU = model.SkuProduct.Skus[i],
+                    InStock = model.SkuProduct.Stocks[i],
+                    Price = model.SkuProduct.Prices[i] != null ? Convert.ToDecimal(model.SkuProduct.Prices[i].Replace(",", "")) : 0,
+                    PriceSale = model.SkuProduct.PriceSales[i] != null ? Convert.ToDecimal(model.SkuProduct.PriceSales[i].Replace(",", "")) : 0,
+                };
+
+                var options = model.SkuProduct.Options[i].Split("/");
+                var values = model.SkuProduct.Values[i].Split("/");
+
+                unitOfWork.Sku.Insert(sku);
+                await unitOfWork.CommitAsync();
+
+                for (int j = 0; j < options.Length; j++)
+                {
+                    var optionSku = new OptionSku
+                    {
+                        SkuId = sku.Id,
+                        OptionId = Convert.ToInt32(options[j]),
+                        Value = values[j],
+                    };
+
+                    unitOfWork.OptionSku.Insert(optionSku);
+                }
+            }
+            
+            await unitOfWork.CommitAsync();
+
             TempData["Message"] = "success|Thêm mới thành công sản phẩm";
             return RedirectToAction("ListProduct");
         }
@@ -248,6 +285,33 @@ namespace Evarosa.Controllers
             if (product == null) return NotFound();
 
             ViewData["categories"] = new SelectList(await GetItemsSelectCategory(), "Id", "Title");
+            var options = unitOfWork.Option.GetAll();
+
+            var skuQr = unitOfWork.Sku.GetAll(predicate: o => o.ProductId == product.Id);
+
+            var ids = unitOfWork.OptionSku.GetAll(
+                    predicate: m => skuQr.Any(o => o.Id == m.SkuId)
+                ).Select(m => m.OptionId).Distinct().ToArray();
+
+            var values = await skuQr.SelectMany(o => o.OptionSkus)
+                .Select(optionSku => optionSku.Value)
+                .Distinct()
+                .ToListAsync();
+
+            var attrs = new List<string> { string.Join(",", values) };
+            var items = GenerateCombinations(attrs.ToArray(), 0, new string[attrs.Count]);
+
+            var skuP = new SkuProductViewModel
+            {
+                OptionIds = ids,
+                Attrs = items,
+                FirstItem = attrs.FirstOrDefault(),
+                Ids = skuQr.Select(m => m.Id).ToArray(),
+                Skus = skuQr.Select(m => m.SKU ?? "").ToArray(),
+                Stocks = skuQr.Select(m => m.InStock).ToArray(),
+                Prices = skuQr.Select(m => m.Price.ToString("N0")).ToArray(),
+                PriceSales = skuQr.Select(m => m.PriceSale.ToString("N0")).ToArray(),
+            };
 
             var model = new ProductViewModel
             {
@@ -255,7 +319,10 @@ namespace Evarosa.Controllers
                 Price = product.Price.ToString("N0"),
                 PriceSale = product.PriceSale.ToString("N0"),
                 Url = product.Url,
+                SkuProduct = skuP,
+                Options = options,
             };
+
             return View(model);
         }
 
@@ -269,10 +336,6 @@ namespace Evarosa.Controllers
                 ).FirstOrDefaultAsync();
 
             if (product == null) return NotFound();
-
-            var user = await unitOfWork.Admin.GetAll(
-                    predicate: m => m.Username == User.Identity.Name
-                ).FirstOrDefaultAsync();
 
             // Price Conversion
             if (model.Price != null)
@@ -315,6 +378,49 @@ namespace Evarosa.Controllers
             product.ProductCategoryId = model.Product.ProductCategoryId;
 
             unitOfWork.Product.Update(product);
+
+            for (int i = 0; i < model.SkuProduct.Indexs; i++)
+            {
+                var sku = new Sku
+                {
+                    Id = model.SkuProduct.Ids[i],
+                    ProductId = model.Product.Id,
+                    SKU = model.SkuProduct.Skus[i],
+                    InStock = model.SkuProduct.Stocks[i],
+                    Price = model.SkuProduct.Prices[i] != null ? Convert.ToDecimal(model.SkuProduct.Prices[i].Replace(",", "")) : 0,
+                    PriceSale = model.SkuProduct.PriceSales[i] != null ? Convert.ToDecimal(model.SkuProduct.PriceSales[i].Replace(",", "")) : 0,
+                };
+
+                var options = model.SkuProduct.Options[i].Split("/");
+                var valuesi = model.SkuProduct.Values[i].Split("/");
+
+                unitOfWork.Sku.Update(sku);
+                await unitOfWork.CommitAsync();
+
+                for (int j = 0; j < options.Length; j++)
+                {
+                    var optionSku = unitOfWork.OptionSku.GetAll(
+                            predicate: m => m.OptionId == Convert.ToInt32(options[j]) && m.SkuId == sku.Id,
+                            disableTracking: false
+                        ).FirstOrDefault();
+                    
+                    if (optionSku != null)
+                    {
+                        optionSku.Value = valuesi[j];
+                    }
+                    else
+                    {
+                        optionSku = new OptionSku
+                        {
+                            OptionId = Convert.ToInt32(options[j]),
+                            SkuId = sku.Id,
+                            Value = valuesi[j],
+                        };
+                    }
+
+                    unitOfWork.OptionSku.Update(optionSku);
+                }
+            }
             await unitOfWork.CommitAsync();
 
             TempData["Message"] = "success|Cập nhật thành công sản phẩm";
@@ -343,7 +449,7 @@ namespace Evarosa.Controllers
 
             var skuP = new SkuProductViewModel
             {
-                Ids = ids,
+                OptionIds = ids,
                 Attrs = items,
                 FirstItem = attrs[0],
             };
@@ -354,7 +460,7 @@ namespace Evarosa.Controllers
         #endregion
 
         #region Option
-        public IActionResult ListOption(int? page, OptionGroup? group, string result = "")
+        public IActionResult ListOption(int? page, string result = "")
         {
             ViewBag.Banner = result;
             var pageNumber = page ?? 1;
@@ -362,14 +468,8 @@ namespace Evarosa.Controllers
                     orderBy: m => m.OrderByDescending(a => a.Sort)
                 );
 
-            if (group.HasValue)
-            {
-                options = options.Where(a => a.Group == group.Value);
-            }
-
             var model = new OptionViewModel
             {
-                Group = group,
                 ListOption = options.OrderBy(m => m.Sort).ToPagedList(pageNumber, 10),
             };
             return View(model);
@@ -416,7 +516,6 @@ namespace Evarosa.Controllers
 
             if (option == null) return RedirectToAction(nameof(ListOption));
 
-            option.Group = model.Option.Group;
             option.Name = model.Option.Name;
             option.Sort = model.Option.Sort;
 

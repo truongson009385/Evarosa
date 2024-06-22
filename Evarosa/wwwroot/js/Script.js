@@ -206,7 +206,18 @@
                 }
             });
         }
-    });
+     });
+
+    $(".product-option").change(function () {
+        $.get("/Home/GetSku", {
+            productId: $(this).data("productid"),
+            optionId: $(this).data("optionid"),
+            value: $(this).data("value")
+        }, function (data) {
+            $(".product-sku").text(data.sku);
+            $(".product-price .price").text(data.price);
+        });
+    })
 })
 
 

@@ -116,6 +116,7 @@ namespace Evarosa.Models
 
         [Display(Name = "Danh mục sản phẩm")]
         public virtual ProductCategory ProductCategory { get; set; }
+        public virtual ICollection<Sku> Skus { get; set; }
     }
 
     public class ProductCategory
