@@ -274,7 +274,6 @@ namespace Evarosa.Controllers
             return RedirectToAction("ListProduct");
         }
 
-
         public async Task<IActionResult> UpdateProduct(int id)
         {
             var product = await unitOfWork.Product.GetAll(
@@ -285,13 +284,22 @@ namespace Evarosa.Controllers
             if (product == null) return NotFound();
 
             ViewData["categories"] = new SelectList(await GetItemsSelectCategory(), "Id", "Title");
-            var options = unitOfWork.Option.GetAll();
 
+            var options = unitOfWork.Option.GetAll();
             var skuQr = unitOfWork.Sku.GetAll(predicate: o => o.ProductId == product.Id);
 
-            var ids = unitOfWork.OptionSku.GetAll(
+            var optionProductVcms = await skuQr.SelectMany(o => o.OptionSkus)
+                .GroupBy(optionSku => optionSku.Option.Id)
+                .Select(group => new OptionProductVcms
+                {
+                    Id = group.Key,
+                    Options = string.Join(",", group.Select(optionSku => optionSku.Value).Distinct().ToList())
+                })
+                .FirstOrDefaultAsync();
+
+            var ids = await unitOfWork.OptionSku.GetAll(
                     predicate: m => skuQr.Any(o => o.Id == m.SkuId)
-                ).Select(m => m.OptionId).Distinct().ToArray();
+                ).Select(m => m.OptionId).Distinct().ToArrayAsync();
 
             var values = await skuQr.SelectMany(o => o.OptionSkus)
                 .Select(optionSku => optionSku.Value)
@@ -306,11 +314,11 @@ namespace Evarosa.Controllers
                 OptionIds = ids,
                 Attrs = items,
                 FirstItem = attrs.FirstOrDefault(),
-                Ids = skuQr.Select(m => m.Id).ToArray(),
-                Skus = skuQr.Select(m => m.SKU ?? "").ToArray(),
-                Stocks = skuQr.Select(m => m.InStock).ToArray(),
-                Prices = skuQr.Select(m => m.Price.ToString("N0")).ToArray(),
-                PriceSales = skuQr.Select(m => m.PriceSale.ToString("N0")).ToArray(),
+                Ids = await skuQr.Select(m => m.Id).ToArrayAsync(),
+                Skus = await skuQr.Select(m => m.SKU ?? "").ToArrayAsync(),
+                Stocks = await skuQr.Select(m => m.InStock).ToArrayAsync(),
+                Prices = await skuQr.Select(m => m.Price.ToString("N0")).ToArrayAsync(),
+                PriceSales = await skuQr.Select(m => m.PriceSale.ToString("N0")).ToArrayAsync(),
             };
 
             var model = new ProductViewModel
@@ -321,13 +329,15 @@ namespace Evarosa.Controllers
                 Url = product.Url,
                 SkuProduct = skuP,
                 Options = options,
+                OptionProductVcms = optionProductVcms,
             };
 
             return View(model);
         }
 
+
         [HttpPost]
-        public async Task<IActionResult> UpdateProduct(ProductViewModel model, int[] items, string[] values)
+        public async Task<IActionResult> UpdateProduct(ProductViewModel model)
         {
             var product = await unitOfWork.Product.GetAll(
                     predicate: m => m.Id == model.Product.Id,
@@ -338,23 +348,8 @@ namespace Evarosa.Controllers
             if (product == null) return NotFound();
 
             // Price Conversion
-            if (model.Price != null)
-            {
-                product.Price = Convert.ToDecimal(model.Price.Replace(",", ""));
-            }
-            else
-            {
-                product.Price = decimal.Zero;
-            }
-
-            if (model.PriceSale != null)
-            {
-                product.PriceSale = Convert.ToDecimal(model.PriceSale.Replace(",", ""));
-            }
-            else
-            {
-                product.PriceSale = decimal.Zero;
-            }
+            product.Price = model.Price != null ? Convert.ToDecimal(model.Price.Replace(",", "")) : decimal.Zero;
+            product.PriceSale = model.PriceSale != null ? Convert.ToDecimal(model.PriceSale.Replace(",", "")) : decimal.Zero;
 
             product.Url = HtmlHelpers.ConvertToUnSign(model.Url ?? model.Product.Name);
 
@@ -379,31 +374,43 @@ namespace Evarosa.Controllers
 
             unitOfWork.Product.Update(product);
 
+            var notDelete = new List<int>();
+
             for (int i = 0; i < model.SkuProduct.Indexs; i++)
             {
+                var id = model.SkuProduct.Ids.ElementAtOrDefault(i);
+
                 var sku = new Sku
                 {
-                    Id = model.SkuProduct.Ids[i],
                     ProductId = model.Product.Id,
-                    SKU = model.SkuProduct.Skus[i],
-                    InStock = model.SkuProduct.Stocks[i],
-                    Price = model.SkuProduct.Prices[i] != null ? Convert.ToDecimal(model.SkuProduct.Prices[i].Replace(",", "")) : 0,
-                    PriceSale = model.SkuProduct.PriceSales[i] != null ? Convert.ToDecimal(model.SkuProduct.PriceSales[i].Replace(",", "")) : 0,
+                    SKU = model.SkuProduct.Skus.ElementAtOrDefault(i),
+                    InStock = model.SkuProduct.Stocks.ElementAtOrDefault(i),
+                    Price = model.SkuProduct.Prices.ElementAtOrDefault(i) != null ? Convert.ToDecimal(model.SkuProduct.Prices.ElementAtOrDefault(i)?.Replace(",", "")) : 0,
+                    PriceSale = model.SkuProduct.PriceSales.ElementAtOrDefault(i) != null ? Convert.ToDecimal(model.SkuProduct.PriceSales.ElementAtOrDefault(i)?.Replace(",", "")) : 0,
                 };
+
+                if(id == 0)
+                {
+                    unitOfWork.Sku.Insert(sku);
+                } else
+                {
+                    sku.Id = id;
+                    unitOfWork.Sku.Update(sku);
+                }
+                await unitOfWork.CommitAsync();
+
+                notDelete.Add(sku.Id);
 
                 var options = model.SkuProduct.Options[i].Split("/");
                 var valuesi = model.SkuProduct.Values[i].Split("/");
 
-                unitOfWork.Sku.Update(sku);
-                await unitOfWork.CommitAsync();
-
                 for (int j = 0; j < options.Length; j++)
                 {
-                    var optionSku = unitOfWork.OptionSku.GetAll(
+                    var optionSku = await unitOfWork.OptionSku.GetAll(
                             predicate: m => m.OptionId == Convert.ToInt32(options[j]) && m.SkuId == sku.Id,
                             disableTracking: false
-                        ).FirstOrDefault();
-                    
+                        ).FirstOrDefaultAsync();
+
                     if (optionSku != null)
                     {
                         optionSku.Value = valuesi[j];
@@ -421,6 +428,13 @@ namespace Evarosa.Controllers
                     unitOfWork.OptionSku.Update(optionSku);
                 }
             }
+
+            var skusToDelete = product.Skus.Where(sku => !notDelete.Contains(sku.Id)).ToList();
+            foreach (var sku in skusToDelete)
+            {
+                unitOfWork.Sku.Delete(sku);
+            }
+
             await unitOfWork.CommitAsync();
 
             TempData["Message"] = "success|Cập nhật thành công sản phẩm";
