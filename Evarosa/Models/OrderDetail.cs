@@ -11,6 +11,8 @@ namespace Evarosa.Models
 
 		public int ProductId { get; set; }
 
+        public int? SkuId { get; set; }
+
         public int Quantity { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:N0} đ")]
@@ -27,5 +29,6 @@ namespace Evarosa.Models
 
         public virtual Order Order { get; set; }
         public virtual Product Product { get; set; }
+        public virtual Sku Sku { get; set; }
     }
 }
