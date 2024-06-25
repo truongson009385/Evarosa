@@ -48,8 +48,9 @@ namespace Evarosa.Controllers
             try
             {
                 var product = await _unitOfWork.Product.FindAsync(id);
+                var sku = await _unitOfWork.Sku.FindAsync(skuId);
 
-                cart.AddToCart(product, skuId, quantity);
+                cart.AddToCart(product, sku, quantity);
 
                 return Json(new
                 {

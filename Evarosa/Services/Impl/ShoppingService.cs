@@ -57,13 +57,15 @@ namespace Evarosa.Services.Impl
                     ProductId = product.Id,
                     CartId = ShoppingCartId,
                     Quantity = quantity,
-                    Price = product.FinalPrice,
                 };
 
-                //if (sku != null)
-                //{
-                //    cartItem.Price = sku;
-                //}
+                if (sku != null)
+                {
+                    cartItem.Price = sku.FinalPrice;
+                } else
+                {
+                    cartItem.Price = product.FinalPrice;
+                }
 
                 _unitOfWork.CartItem.Insert(cartItem);
             }

@@ -137,6 +137,7 @@
 
         $.post("/ShoppingCart/AddToCart", {
             id: form.find('input[name="id"]').val(),
+            skuId: form.find('input[name="sku"]').val(),
             quantity: form.find('input[name="qty"]').val(),
         }, function (data) {
             if (data.status) {
