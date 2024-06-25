@@ -43,13 +43,13 @@ namespace Evarosa.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddToCart(int id, int quantity)
+        public async Task<IActionResult> AddToCart(int id, int quantity, int skuId)
         {
             try
             {
                 var product = await _unitOfWork.Product.FindAsync(id);
 
-                cart.AddToCart(product, quantity);
+                cart.AddToCart(product, skuId, quantity);
 
                 return Json(new
                 {

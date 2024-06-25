@@ -26,14 +26,14 @@
                         <p class="my-2">@lap</p>
                     </th>
                     <td>
-                        <input class="form-control my-2" asp-for="SkuProduct.Skus" value="@(Model.SkuProduct.Skus.ElementAtOrDefault(indexs))" required placeholder="SKU" />
+                        <input class="form-control my-2" asp-for="SkuProduct.Skus" required placeholder="SKU" />
                         <input type="hidden" asp-for="SkuProduct.Options" value="@string.Join("/", Model.SkuProduct.OptionIds)" />
                         <input type="hidden" asp-for="SkuProduct.Values" value="@item" />
-                        <input type="hidden" asp-for="SkuProduct.Ids" value="@(Model.SkuProduct.Ids.ElementAtOrDefault(indexs))" />
+                        <input type="hidden" asp-for="SkuProduct.Ids" value="0" />
                     </td>
-                    <td><input class="form-control my-2" type="number" value="0" required asp-for="SkuProduct.Stocks" value="@(Model.SkuProduct.Stocks.ElementAtOrDefault(indexs))" placeholder="Tồn kho" /></td>
-                    <td><input class="form-control input-number my-2" asp-for="SkuProduct.Prices" value="@(Model.SkuProduct.Prices.ElementAtOrDefault(indexs))" placeholder="Giá" /></td>
-                    <td><input class="form-control input-number my-2" asp-for="SkuProduct.PriceSales" value="@(Model.SkuProduct.PriceSales.ElementAtOrDefault(indexs))" placeholder="Giá bán" /></td>
+                    <td><input class="form-control my-2" type="number" value="0" required asp-for="SkuProduct.Stocks" placeholder="Tồn kho" /></td>
+                    <td><input class="form-control input-number my-2" asp-for="SkuProduct.Prices" placeholder="Giá" /></td>
+                    <td><input class="form-control input-number my-2" asp-for="SkuProduct.PriceSales" placeholder="Giá bán" /></td>
                 </tr>
 
                 indexs++;

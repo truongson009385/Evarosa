@@ -9,8 +9,9 @@ namespace Evarosa.Models
 
         public string CartId { get; set; }
 
-		[Required]
         public int ProductId { get; set; }
+
+        public int? SkuId { get; set; }
 
         [Display(Name = "Số lượng")]
         [Required(ErrorMessage = "Vui lòng nhập số lượng")]
@@ -34,6 +35,7 @@ namespace Evarosa.Models
         public DateTime DateCreated { get; set; } = DateTime.Now;
 
         public virtual Product Product { get; set; }
+        public virtual Sku Sku { get; set; }
     }
 
 }

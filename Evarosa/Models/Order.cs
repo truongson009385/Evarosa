@@ -24,9 +24,6 @@ namespace Evarosa.Models
         [ForeignKey("Customer")]
         public int CustomerId { get; set; }
 
-        [ForeignKey("Receiver")]
-        public int ReceiverId { get; set; }
-
         [Display(Name = "Ngày tạo"), DisplayFormat(DataFormatString = "{0:HH:mm - dd/MM/yyyy}")]
         public DateTime CreateDate { get; set; }
 

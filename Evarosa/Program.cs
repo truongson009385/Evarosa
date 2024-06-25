@@ -2,6 +2,7 @@
 using Evarosa.Services;
 using Evarosa.Services.Impl;
 using Imageflow.Server;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 
@@ -92,5 +93,6 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+app.UseDeveloperExceptionPage();
 
 app.Run();

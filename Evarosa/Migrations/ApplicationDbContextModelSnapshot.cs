@@ -231,9 +231,14 @@ namespace Evarosa.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
+                    b.Property<int?>("SkuId")
+                        .HasColumnType("int");
+
                     b.HasKey("RecordId");
 
                     b.HasIndex("ProductId");
+
+                    b.HasIndex("SkuId");
 
                     b.ToTable("ShoppingCartItems");
                 });
@@ -670,9 +675,6 @@ namespace Evarosa.Migrations
                     b.Property<decimal>("Prepayment")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("ReceiverId")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("ShipFee")
                         .HasColumnType("decimal(18,2)");
 
@@ -723,6 +725,9 @@ namespace Evarosa.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
+                    b.Property<int?>("SkuId")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("UnitPrice")
                         .HasColumnType("decimal(18,2)");
 
@@ -731,6 +736,8 @@ namespace Evarosa.Migrations
                     b.HasIndex("OrderId");
 
                     b.HasIndex("ProductId");
+
+                    b.HasIndex("SkuId");
 
                     b.ToTable("OrderDetails");
                 });
@@ -962,7 +969,13 @@ namespace Evarosa.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Evarosa.Models.Sku", "Sku")
+                        .WithMany()
+                        .HasForeignKey("SkuId");
+
                     b.Navigation("Product");
+
+                    b.Navigation("Sku");
                 });
 
             modelBuilder.Entity("Evarosa.Models.District", b =>
@@ -1085,9 +1098,15 @@ namespace Evarosa.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Evarosa.Models.Sku", "Sku")
+                        .WithMany()
+                        .HasForeignKey("SkuId");
+
                     b.Navigation("Order");
 
                     b.Navigation("Product");
+
+                    b.Navigation("Sku");
                 });
 
             modelBuilder.Entity("Evarosa.Models.Product", b =>

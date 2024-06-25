@@ -32,12 +32,21 @@ namespace Evarosa.Services.Impl
             return GetCart(controller.HttpContext, unitOfWork);
         }
 
-        public void AddToCart(Product product, int quantity = 1)
+        public void AddToCart(Product product, Sku? sku, int quantity = 1)
         {
             // Get the matching cart and album instances
-            var cartItem = _unitOfWork.CartItem.GetAll(
-                predicate: c => c.CartId == ShoppingCartId
-                && c.ProductId == product.Id, disableTracking: false).FirstOrDefault();
+            var cartQr = _unitOfWork.CartItem.GetAll(
+                    predicate: c => c.CartId == ShoppingCartId
+                        && c.ProductId == product.Id,
+                    disableTracking: false
+                );
+
+            if (sku != null)
+            {
+                cartQr = cartQr.Where(c => c.SkuId == sku.Id);
+            }
+
+            var cartItem = cartQr.FirstOrDefault();
 
             if (cartItem == null)
             {
@@ -50,6 +59,12 @@ namespace Evarosa.Services.Impl
                     Quantity = quantity,
                     Price = product.FinalPrice,
                 };
+
+                //if (sku != null)
+                //{
+                //    cartItem.Price = sku;
+                //}
+
                 _unitOfWork.CartItem.Insert(cartItem);
             }
             else
