@@ -33,7 +33,11 @@
                     </a>
                 </td>
                 <td class="left">
-                        @detail.Product.Name
+                    @(detail.Product.Name)
+                    @if (detail.Sku != null)
+                    {
+                        <small><i>(@detail.Sku.SKU)</i></small>
+                    }
                 </td>
                 <td class="left">
                     @detail.Quantity

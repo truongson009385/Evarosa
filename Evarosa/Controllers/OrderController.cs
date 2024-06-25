@@ -74,16 +74,15 @@ namespace Evarosa.Controllers
             int pageSize = 5
         )
         {
-
-
             var pageNumber = page ?? 1;
             var orders = _unitOfWork.Order
                 .GetAll(
                     include: l => l.Include(m => m.District)
                     .Include(m => m.City)
                     .Include(m => m.Ward)
-                    .Include(m => m.OrderDetails)
                     .Include(m => m.Customer)
+                    .Include(m => m.OrderDetails),
+                    orderBy: m => m.OrderByDescending(o => o.CreateDate)
                 );
 
             if (!string.IsNullOrEmpty(madonhang))
@@ -146,6 +145,8 @@ namespace Evarosa.Controllers
                     .Include(m => m.Ward)
                     .Include(m => m.OrderDetails)
                     .ThenInclude(m => m.Product)
+                    .Include(m => m.OrderDetails)
+                    .ThenInclude(m => m.Sku)
                 ).FirstOrDefault();
 
             if (order == null) return NotFound();

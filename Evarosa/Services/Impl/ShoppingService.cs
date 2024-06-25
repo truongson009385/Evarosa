@@ -62,6 +62,7 @@ namespace Evarosa.Services.Impl
                 if (sku != null)
                 {
                     cartItem.Price = sku.FinalPrice;
+                    cartItem.SkuId = sku.Id;
                 } else
                 {
                     cartItem.Price = product.FinalPrice;
@@ -140,6 +141,7 @@ namespace Evarosa.Services.Impl
             return _unitOfWork.CartItem.GetAll(
                     predicate: cart => cart.CartId == ShoppingCartId,
                     include: l => l.Include(m => m.Product)
+                        .Include(m => m.Sku)
                  ).ToList();
         }
 
@@ -174,6 +176,7 @@ namespace Evarosa.Services.Impl
                 var orderDetail = new OrderDetail
                 {
                     ProductId = item.ProductId,
+                    SkuId = item.SkuId,
                     OrderId = order.Id,
                     UnitPrice = item.Price,
                     Quantity = item.Quantity,

@@ -100,7 +100,7 @@
                             <div class="plan">
                                 @foreach (var option in item.Options)
                                 {
-                                    <input data-sku="@option.SkuId" class="product-option" type="radio" name="sku" id="option-@(i)-@(j)" value="@option.SkuId" checked="@(option.SkuId == Model.SkuId ? "checked" : null)">
+                                    <input data-sku="@option.SkuId" class="product-option" type="radio" name="skuId" id="option-@(i)-@(j)" value="@option.SkuId" checked="@(option.SkuId == Model.SkuId ? "checked" : null)">
                                     <label for="option-@(i)-@(j)">@option.Value</label>
 
                                     j++;
@@ -114,7 +114,7 @@
 
                 <div class="product-number mt-4 mb-4">
                     <label>Số lượng:</label>
-                    <input class="input-number" type="number" name="qty" value="1" min="1" max="999" />
+                    <input class="input-number" type="number" name="quantity" value="1" min="1" max="999" />
                 </div>
 
                 <div class="product-buttons">

@@ -139,7 +139,14 @@
                             {
                                 <tr data-id="@item.RecordId">
                                     <td class="name">
-                                        @item.Product.Name<strong class="ml-2">x @item.Quantity</strong>
+                                        <span>
+                                            @(item.Product.Name)
+                                            @if (item.Sku != null)
+                                            {
+                                                @: <small><i>(@(item.Sku.SKU))</i></small>
+                                            }
+                                        </span>
+                                        <strong class="ml-2">x @item.Quantity</strong>
                                     </td>
                                     <td class="text">
                                         @Html.DisplayFor(m => item.Total)

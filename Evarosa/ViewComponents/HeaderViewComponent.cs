@@ -19,13 +19,13 @@ namespace Evarosa.ViewComponents
             var qrCategoryArticle = unitOfWork.ArticleCategory
                 .GetAll(
                     predicate: m => m.Active && m.ShowHeader,
-                    orderBy: m => m.OrderBy(l => l.Sort)
+                    orderBy: m => m.OrderByDescending(l => l.Sort)
                 );
 
             var qrCategoryProduct = unitOfWork.ProductCategory
                 .GetAll(
                     predicate: m => m.Active && m.ShowHeader,
-                    orderBy: m => m.OrderBy(l => l.Sort)
+                    orderBy: m => m.OrderByDescending(l => l.Sort)
                 );
 
             model.ArticleCategories = qrCategoryArticle

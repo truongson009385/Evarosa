@@ -2761,9 +2761,18 @@ footer {
   .cart.table .price.item-total {
     width: 100%;
   }
+  .banner .slick-dots {
+    bottom: -35px;
+  }
+  .section-title {
+    font-size: 24px;
+  }
 }
 @media (max-width: 540px) {
   .product-buttons {
     flex-direction: column;
+  }
+  .section-title {
+    font-size: 20px;
   }
 }

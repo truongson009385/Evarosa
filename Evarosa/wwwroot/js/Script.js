@@ -135,11 +135,7 @@
 
         var form = $(this);
 
-        $.post("/ShoppingCart/AddToCart", {
-            id: form.find('input[name="id"]').val(),
-            skuId: form.find('input[name="sku"]').val(),
-            quantity: form.find('input[name="qty"]').val(),
-        }, function (data) {
+        $.post("/ShoppingCart/AddToCart", form.serialize(), function (data) {
             if (data.status) {
                 Swal.fire({
                     title: "Thành công!",
@@ -224,11 +220,7 @@
 function BuyNow() {
     var form = $("#addToCart");
 
-    $.post("/ShoppingCart/AddToCart", {
-        id: form.find('input[name="id"]').val(),
-        skuId: form.find('input[name="sku"]').val(),
-        quantity: form.find('input[name="qty"]').val(),
-    }, function (data) {
+    $.post("/ShoppingCart/AddToCart", form.serialize(), function (data) {
         if (data.status) {
             Swal.fire({
                 title: "Thành công!",

@@ -60,6 +60,10 @@
                                             <a class="name" asp-controller="Home" asp-action="ProductDetails" asp-route-url="@item.Product.Url">
                                                 @item.Product.Name
                                             </a>
+                                            @if (item.Sku != null)
+                                            {
+                                                <small class="d-block">SKU: <strong>@item.Sku.SKU</strong></small>
+                                            }
                                             <a href="javascript:;" class="remove" onclick="removeFromCart('@item.RecordId')">Xóa</a>
                                         </div>
                                     </div>

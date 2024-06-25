@@ -3068,10 +3068,24 @@ footer {
         }
     }
 
+
+    .banner {
+        .slick-dots {
+            bottom: -35px;
+        }
+    }
+
+    .section-title {
+        font-size: 24px;
+    }
 }
 
 @include maxWidth(540px) {
     .product-buttons {
         flex-direction: column;
+    }
+
+    .section-title {
+        font-size: 20px;
     }
 }
