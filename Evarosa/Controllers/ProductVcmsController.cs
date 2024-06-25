@@ -374,35 +374,32 @@ namespace Evarosa.Controllers
 
             unitOfWork.Product.Update(product);
 
-            var notDelete = new List<int>();
+            var skuList = new List<Sku>();
 
             for (int i = 0; i < model.SkuProduct.Indexs; i++)
             {
-                var id = model.SkuProduct.Ids.ElementAtOrDefault(i);
-
                 var sku = new Sku
                 {
+                    Id = model.SkuProduct.Ids.ElementAtOrDefault(i),
                     ProductId = model.Product.Id,
                     SKU = model.SkuProduct.Skus.ElementAtOrDefault(i),
                     InStock = model.SkuProduct.Stocks.ElementAtOrDefault(i),
-                    Price = model.SkuProduct.Prices.ElementAtOrDefault(i) != null ? Convert.ToDecimal(model.SkuProduct.Prices.ElementAtOrDefault(i)?.Replace(",", "")) : 0,
-                    PriceSale = model.SkuProduct.PriceSales.ElementAtOrDefault(i) != null ? Convert.ToDecimal(model.SkuProduct.PriceSales.ElementAtOrDefault(i)?.Replace(",", "")) : 0,
+                    Price = model.SkuProduct.Prices?.ElementAtOrDefault(i) != null ? Convert.ToDecimal(model.SkuProduct.Prices.ElementAtOrDefault(i)?.Replace(",", "")) : 0,
+                    PriceSale = model.SkuProduct.PriceSales?.ElementAtOrDefault(i) != null ? Convert.ToDecimal(model.SkuProduct.PriceSales.ElementAtOrDefault(i)?.Replace(",", "")) : 0,
                 };
 
-                if(id == 0)
-                {
-                    unitOfWork.Sku.Insert(sku);
-                } else
-                {
-                    sku.Id = id;
-                    unitOfWork.Sku.Update(sku);
-                }
-                await unitOfWork.CommitAsync();
+                skuList.Add(sku);
+            }
 
-                notDelete.Add(sku.Id);
+            unitOfWork.Sku.Update(skuList);
+            await unitOfWork.CommitAsync();
 
-                var options = model.SkuProduct.Options[i].Split("/");
-                var valuesi = model.SkuProduct.Values[i].Split("/");
+            int index = 0;
+
+            foreach (var sku in skuList)
+            {
+                var options = model.SkuProduct.Options[index].Split("/");
+                var valuesj = model.SkuProduct.Values[index].Split("/");
 
                 for (int j = 0; j < options.Length; j++)
                 {
@@ -413,7 +410,8 @@ namespace Evarosa.Controllers
 
                     if (optionSku != null)
                     {
-                        optionSku.Value = valuesi[j];
+                        optionSku.Value = valuesj[j];
+                        unitOfWork.OptionSku.Update(optionSku);
                     }
                     else
                     {
@@ -421,20 +419,20 @@ namespace Evarosa.Controllers
                         {
                             OptionId = Convert.ToInt32(options[j]),
                             SkuId = sku.Id,
-                            Value = valuesi[j],
+                            Value = valuesj[j],
                         };
+                        unitOfWork.OptionSku.Insert(optionSku);
                     }
 
-                    unitOfWork.OptionSku.Update(optionSku);
+                    await unitOfWork.CommitAsync();
                 }
+
+                index++;
             }
 
-            var skusToDelete = product.Skus.Where(sku => !notDelete.Contains(sku.Id)).ToList();
-            foreach (var sku in skusToDelete)
-            {
-                unitOfWork.Sku.Delete(sku);
-            }
+            var skusToDelete = await unitOfWork.Sku.GetAllAsync(predicate: sku => !skuList.Select(a => a.Id).Contains(sku.Id) && sku.ProductId == product.Id);
 
+            unitOfWork.Sku.Delete(skusToDelete);
             await unitOfWork.CommitAsync();
 
             TempData["Message"] = "success|Cập nhật thành công sản phẩm";

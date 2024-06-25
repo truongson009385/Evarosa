@@ -23,6 +23,7 @@ namespace Evarosa.ViewModels
 
         public class Option
         {
+            public int SkuId { get; set; }
             public int Id { get; set; }
             public string Value { get; set; }
         }
@@ -54,9 +55,40 @@ namespace Evarosa.ViewModels
         public string MinMax { get; set; }
         public string Sort { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:N0} đ")]
-        public decimal? Price { get; set; }
+        #region SKU
+        public string? MaSP { get; set; }
 
+        public int? SkuId { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0} đ")]
+        public decimal Price { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0} đ")]
+        public decimal PriceSale { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0} đ")]
+        public decimal FinalPrice
+        {
+            get
+            {
+                return PriceSale != decimal.Zero ? PriceSale : Price;
+            }
+        }
+
+        public decimal Percent
+        {
+            get
+            {
+                if (Price == 0 || PriceSale == 0)
+                {
+                    return decimal.Zero;
+                }
+
+                decimal percent = (Price - PriceSale) / Price * 100;
+                return Math.Round(percent, 0);
+            }
+        }
+        #endregion
 
         public IPagedList<Product> ListProduct { get; set; }
         public Product Product { get; set; } = new Product();

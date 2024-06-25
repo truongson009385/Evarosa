@@ -43,7 +43,7 @@ namespace Evarosa.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddToCart(int id, int quantity)
+        public async Task<IActionResult> AddToCart(int id, int quantity, int skuId)
         {
             try
             {

@@ -135,6 +135,7 @@ namespace Evarosa.Controllers
                     Options = group.Select(optionSku => new OptionGroup.Option
                     {
                         Id = optionSku.OptionId,
+                        SkuId = optionSku.SkuId,
                         Value = optionSku.Value
                     }).Distinct().ToList()
                 })
@@ -155,42 +156,66 @@ namespace Evarosa.Controllers
                     orderBy: m => m.OrderByDescending(o => o.Sort)
                 );
 
+            var sku = await GetSkuProduct(product.Id);
+
             var model = new PageProductViewModel
             {
                 Product = product,
                 Products = relatedProducts,
                 OptionGroups = optionGroups,
-                Price = GetPrice(skuQr),
             };
+
+            if (sku != null)
+            {
+                model.MaSP = sku.SKU;
+                model.Price = sku.Price;
+                model.PriceSale = sku.PriceSale;
+                model.SkuId = sku.Id;
+            } else
+            {
+                model.MaSP = product.MaSP;
+                model.Price = product.Price;
+                model.PriceSale = product.PriceSale;
+            }
+
             return View(model);
         }
 
-        public decimal? GetPrice(IQueryable<Sku> skuQr, int? skuId = null)
+        public async Task<Sku?> GetSkuProduct(int id, int? skuId = null)
         {
+            var skuQr = unitOfWork.Sku.GetAll(
+                    predicate: a => a.ProductId == id,
+                    include: m => m.Include(o => o.OptionSkus),
+                    orderBy: m => m.OrderBy(o => o.SKU)
+                );
+
             if (skuId.HasValue)
             {
-                skuQr = skuQr.Where(s => s.Id == skuId.Value);
+                skuQr = skuQr.Where(a => a.Id == skuId.Value);
             }
 
-            return skuQr.Select(s => s.Price)
-                .FirstOrDefault();
+            var sku = await skuQr.FirstOrDefaultAsync();
+
+            return sku;
         }
 
-        public IActionResult GetSku(int productId, int optionId, string value)
+        public async Task<IActionResult> GetSku(int skuId)
         {
-
-            var sku = unitOfWork.Sku
+            var sku = await unitOfWork.Sku
                 .GetAll(
-                    predicate: m => m.ProductId == productId && m.OptionSkus.Any(o => o.Value == value && o.OptionId == optionId)
+                    predicate: m => m.Id == skuId
                 )
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             if (sku == null) return NotFound();
+
+            var finalPrice = sku.PriceSale != decimal.Zero ? sku.PriceSale : sku.Price;
 
             return Json(new
             {
                 sku = sku.SKU ?? "Chưa cập nhật",
-                price = sku.Price > 0 ? sku.Price.ToString("N0") + " đ" : "Liên hệ",
+                price = finalPrice > 0 ? finalPrice.ToString("N0") + " đ" : "Liên hệ",
+                priceOld = sku.Price > 0 ? sku.Price.ToString("N0") + " đ" : null,
             });
 
         }

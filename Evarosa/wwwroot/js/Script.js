@@ -210,12 +210,11 @@
 
     $(".product-option").change(function () {
         $.get("/Home/GetSku", {
-            productId: $(this).data("productid"),
-            optionId: $(this).data("optionid"),
-            value: $(this).data("value")
+            skuId: $(this).val(),
         }, function (data) {
             $(".product-sku").text(data.sku);
             $(".product-price .price").text(data.price);
+            $(".product-price .price-old del").text(data.priceOld);
         });
     })
 })
@@ -226,6 +225,7 @@ function BuyNow() {
 
     $.post("/ShoppingCart/AddToCart", {
         id: form.find('input[name="id"]').val(),
+        skuId: form.find('input[name="sku"]').val(),
         quantity: form.find('input[name="qty"]').val(),
     }, function (data) {
         if (data.status) {

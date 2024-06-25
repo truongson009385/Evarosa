@@ -65,48 +65,54 @@
             <h1 class="product-name">@Model.Product.Name</h1>
             <p class="product-price mb-4">
                 <span class="price">
-                    @if (Model.Price > 0)
+                    @if (Model.FinalPrice > 0)
                     {
-                        @Html.DisplayFor(m => m.Price)
+                        @Html.DisplayFor(m => m.FinalPrice)
                     }
                     else
                     {
                         @:Liên hệ
                     }
                 </span>
-                @if (Model.Product is { Percent: > 0, FinalPrice: > 0 })
+                @if (Model is { Percent: > 0, FinalPrice: > 0 })
                 {
-                    <span class="price-old">Giá cũ: <del>@Html.DisplayFor(m => m.Product.Price)</del></span>
-                    <span class="price-save">Bạn tiết kiệm: <strong>@Html.DisplayFor(m => m.Product.SavePrice) <sup>(@(Model.Product.Percent)%)</sup></strong></span>
+                    <span class="price-old">Giá cũ: <del>@Html.DisplayFor(m => m.Price)</del></span>
                 }
             </p>
 
             <p class="product-text">
-                <span>Mã: </span><strong class="product-sku">@(!string.IsNullOrEmpty(Model.Product.MaSP) ? Model.Product.MaSP : "Chưa cập nhật")</strong>
+                <span>Mã: </span><strong class="product-sku">@(!string.IsNullOrEmpty(Model.MaSP) ? Model.MaSP : "Chưa cập nhật")</strong>
             </p>
 
-            @foreach (var item in Model.OptionGroups)
-            {
-                <p class="product-text">
-                    <span>@item.Name</span>
-                </p>
-                <div class="plan">
-                    @foreach (var option in item.Options)
-                    {
-                        <input data-productId="@Model.Product.Id" data-optionId="@option.Id" data-value="@option.Value" class="product-option" type="radio" name="product-option@(i)" id="option-@(i)-@(j)" value="@option" checked="@(i == 0 ? "checked" : "")">
-                        <label for="option-@(i)-@(j)">@option.Value</label>
-
-                        j++;
-                    }
-                </div>
-
-                i++;
-            }
 
             <form class="my-4" id="addToCart">
                 <input name="id" type="hidden" value="@Model.Product.Id" />
 
-                <div class="product-number mb-4">
+                @if (Model.OptionGroups.Any())
+                {
+                    foreach (var item in Model.OptionGroups)
+                    {
+                        if (item.Options.Any())
+                        {
+                            <p class="product-text">
+                                <span>@(item.Name):</span>
+                            </p>
+                            <div class="plan">
+                                @foreach (var option in item.Options)
+                                {
+                                    <input data-sku="@option.SkuId" class="product-option" type="radio" name="sku" id="option-@(i)-@(j)" value="@option.SkuId" checked="@(option.SkuId == Model.SkuId ? "checked" : null)">
+                                    <label for="option-@(i)-@(j)">@option.Value</label>
+
+                                    j++;
+                                }
+                            </div>
+                        }
+
+                        i++;
+                    }
+                }
+
+                <div class="product-number mt-4 mb-4">
                     <label>Số lượng:</label>
                     <input class="input-number" type="number" name="qty" value="1" min="1" max="999" />
                 </div>
