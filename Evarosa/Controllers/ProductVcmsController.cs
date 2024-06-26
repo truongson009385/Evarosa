@@ -158,7 +158,9 @@ namespace Evarosa.Controllers
                 .GetAll(
                     predicate: m => 
                         m.Name.Contains(term),
-                    include: l => l.Include(m => m.ProductCategory),
+                    include: l => l
+                        .Include(m => m.ProductCategory)
+                        .Include(m => m.Skus),
                     orderBy: m => m.OrderByDescending(l => l.Sort)
                 );
 

@@ -65,8 +65,26 @@
                 @if (Model.ListProduct.Any())
                 {
                     var i = (Model.ListProduct.PageNumber - 1) * Model.ListProduct.PageSize + 1;
-                    @foreach (var item in Model.ListProduct)
+                    
+                    foreach (var item in Model.ListProduct)
                     {
+                        var price = decimal.Zero;
+                        var priceSale = decimal.Zero;
+
+                        if (item.Skus.Any())
+                        {
+                            var skuPrice = item.Skus.Min(a => a.Price);
+                            var skuPriceSale = item.Skus.Min(a => a.PriceSale);
+
+                            price = skuPrice > 0 ? skuPrice : 0;
+                            priceSale = skuPriceSale > 0 ? skuPriceSale : 0;
+                        }
+                        else
+                        {
+                            price = item.Price > 0 ? item.Price : 0;
+                            priceSale = item.PriceSale > 0 ? item.PriceSale : 0;
+                        }
+
                         <tr data-id="@item.Id">
                             <td>
                                 <input type="hidden" name="ProductId" value="@item.Id" />
@@ -96,8 +114,8 @@
                                 </a>
                             </td>                                                                                                                                                                                                                                                                                                                                                                                       
                             <td>
-                                <p>@Html.DisplayNameFor(m => m.Product.Price): @Html.DisplayFor(m => item.Price) </p>
-                                <span class="text-danger">@Html.DisplayNameFor(m => m.Product.PriceSale): @Html.DisplayFor(m => item.PriceSale)</span> <br />
+                                <p>@Html.DisplayNameFor(m => m.Product.Price): @(price.ToString("N0") + " đ") </p>
+                                <span class="text-danger">@Html.DisplayNameFor(m => m.Product.PriceSale): @(priceSale.ToString("N0") + " đ")</span> <br />
                             </td>
                             <td>
                                 @Html.DisplayFor(model => item.Active)<br />
