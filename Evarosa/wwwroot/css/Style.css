@@ -884,6 +884,7 @@ header {
 .partner-slider img {
   display: block;
   padding: 20px;
+  height: 138px;
   aspect-ratio: 1.8;
   object-fit: contain;
   background-color: #fff;
@@ -2780,6 +2781,9 @@ footer {
   .about-title {
     font-size: 26px;
   }
+  .partner-slider img {
+    height: 133px;
+  }
 }
 @media (max-width: 540px) {
   .product-buttons {
@@ -2793,5 +2797,8 @@ footer {
   }
   .about-title {
     font-size: 22px;
+  }
+  .partner-slider img {
+    height: 86px;
   }
 }

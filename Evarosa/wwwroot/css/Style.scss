@@ -991,6 +991,7 @@ header {
     img {
         display: block;
         padding: 20px;
+        height: 138px;
         aspect-ratio: 1.8;
         object-fit: contain;
         background-color: $white;
@@ -3095,6 +3096,10 @@ footer {
     .about-title {
         font-size: 26px;
     }
+
+    .partner-slider img {
+        height: 133px;
+    }
 }
 
 @include maxWidth(540px) {
@@ -3112,5 +3117,9 @@ footer {
 
     .about-title {
         font-size: 22px;
+    }
+
+    .partner-slider img {
+        height: 86px;
     }
 }
