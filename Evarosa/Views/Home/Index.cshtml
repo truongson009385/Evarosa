@@ -16,7 +16,7 @@
 
 @if (Model.Banner.Any())
 {
-    <div class="banner">
+    <div class="banner mb-0">
         @foreach (var item in Model.Banner)
         {
             <a href="@item.Url" class="banner-item">
@@ -59,7 +59,7 @@
 
 @if (Model.ProductOutstanding.Any())
 {
-    <div class="outstanding container py-5">
+    <div class="outstanding container pb-5">
         <h2 class="section-title">Sản phẩm nổi bật</h2>
         <p class="section-text line-bottom mb-4">Các sản phẩm nổi bật theo từng loại sản phẩm</p>
 
@@ -99,7 +99,7 @@
 {
     if (item.Products.Any())
     {
-        <div class="container py-5">
+        <div class="container pb-5">
             <h2 class="section-title line-bottom mb-4">@item.Title</h2>
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 mx-n2 mb-n3">
                 @foreach (var product in item.Products)

@@ -9,6 +9,8 @@ using Evarosa.ViewModels;
 using System.Diagnostics;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Evarosa.Utils;
+using System.IO;
 
 namespace Evarosa.Controllers
 {
@@ -17,12 +19,19 @@ namespace Evarosa.Controllers
         private readonly UnitOfWork _unitOfWork;
         private readonly IMailService _mailService;
         private readonly IAppService _appService;
+        private readonly IWebHostEnvironment _env;
 
-        public ShoppingCartController(UnitOfWork unitOfWork, IMailService mailService, IAppService appService)
+        public ShoppingCartController(
+            UnitOfWork unitOfWork, 
+            IMailService mailService,
+            IAppService appService,
+            IWebHostEnvironment env
+        )
         {
             _unitOfWork = unitOfWork;
             _mailService = mailService;
             _appService = appService;
+            _env = env;
         }
 
         public ShoppingService cart
@@ -202,26 +211,107 @@ namespace Evarosa.Controllers
 
                 cart.CreateOrder(model.Order);
 
-                var subject = "Chúng tôi đã nhận được đơn hàng: " + model.Order.OrderCode;
-                var body = $"<p>Người mua hàng: {model.Order.Customer.FullName},</p>" +
-                            $"<p>Email: {model.Order.Customer.Email},</p>" +
-                            $"<p>Điện thoại: {model.Order.Customer.PhoneNumber},</p>" +
-                            $"<p>Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.</p>";
+                var order = await _unitOfWork.Order.GetAll(
+                        predicate: m => m.OrderCode == model.Order.OrderCode,
+                        include: l => l.Include(m => m.OrderDetails)
+                            .ThenInclude(m => m.Product)
+                            .Include(m => m.Customer)
+                            .Include(m => m.District)
+                            .Include(m => m.City)
+                            .Include(m => m.Ward)
+                    ).FirstOrDefaultAsync();
 
-                var mailData = new MailData
+                if (order == null) return NotFound();
+
+                #region Customer
+                string pathInvoiceEmail = Path.Combine(_env.ContentRootPath, "EmailTemplates\\InvoiceEmail.html");
+                using (StreamReader reader = new StreamReader(pathInvoiceEmail))
                 {
-                    EmailToId = model.Order.Customer.Email,
-                    EmailSubject = subject,
-                    EmailBody = body
-                };
+                    string subject = "Chúng tôi đã nhận được đơn hàng: " + order.OrderCode;
+                    string body = string.Empty;
 
-                await _mailService.SendEmailAsync(mailData);
+                    body = reader.ReadToEnd();
+
+                    string logoUrl = $"{Request.Scheme}://{Request.Host}/contents/system/{_appService.Config.Image}";
+
+                    body = body.Replace("{OrderCode}", order.OrderCode);
+                    body = body.Replace("{PaymentType}", order.PaymentType.GetDisplayName());
+                    body = body.Replace("{CreateDate}", order.CreateDate.ToString("HH:mm - dd/MM/yyyy"));
+                    body = body.Replace("{Total}", order.Total?.ToString("N0") + " VNĐ");
+                    body = body.Replace("{TotalFee}", order.TotalFee?.ToString("N0") + " VNĐ");
+                    body = body.Replace("{ShipFee}", order.ShipFee.ToString("N0") + " VNĐ");
+                    body = body.Replace("{FullName}", order.Customer.FullName);
+                    body = body.Replace("{Email}", order.Customer.Email);
+                    body = body.Replace("{PhoneNumber}", order.Customer.PhoneNumber);
+                    body = body.Replace("{Note}", order.Customer.Note);
+                    body = body.Replace("{Address}", $"{order.Address}, {order.Ward.Name}, {order.District.Name}, {order.City.Name}");
+
+                    body = body.Replace("{Hotline}", _appService.Config.Hotline);
+                    body = body.Replace("{SystemEmail}", _appService.Config.Email);
+
+                    string itemsHtml = "";
+
+                    foreach (var item in order.OrderDetails)
+                    {
+                        string itemSku = item.Sku == null ? "" : $" <i>SKU: {item.Sku.SKU}</i>";
+                        string itemHtml = $@"
+                        <p style=""font-size:14px; margin:0; padding:10px; border:solid 1px #ddd; font-weight:bold;"">
+                            <span style=""display:block; font-size:13px; font-weight:normal;"">{item.Product.Name} {itemSku}</span>
+                            {item.Amount.ToString("N0")} VNĐ
+                            <b style=""font-size:12px; font-weight:300;"">/ x{item.Quantity}/ {item.UnitPrice.ToString("N0")} VNĐ</b>
+                        </p>";
+
+                        itemsHtml += itemHtml;
+                    }
+
+                    body = body.Replace("{Items}", itemsHtml);
+
+                    var mailData = new MailData
+                    {
+                        EmailToId = model.Order.Customer.Email,
+                        EmailSubject = subject,
+                        EmailBody = body
+                    };
+
+                    await _mailService.SendEmailAsync(mailData);
+                }
+                #endregion
+
+                #region Admin
+                if (!string.IsNullOrEmpty(_appService.Config.Email))
+                {
+                    string pathAlertOrder = Path.Combine(_env.ContentRootPath, "EmailTemplates\\AlertOrder.html");
+                    using (StreamReader reader = new StreamReader(pathAlertOrder))
+                    {
+                        string subject = "Bạn có đơn hàng mới từ: " + Request.Host + " | " + order.OrderCode;
+                        string body = string.Empty;
+
+                        body = reader.ReadToEnd();
+
+                        string? urlOrderVcms = Url.Action("ListOrder", "Order", new { madonhang = order.OrderCode }, protocol: Request.Scheme);
+
+                        body = body.Replace("{OrderCode}", order.OrderCode);
+                        body = body.Replace("{CreateDate}", order.CreateDate.ToString("HH:mm - dd/MM/yyyy"));
+                        body = body.Replace("{Company}", _appService.Config.Title);
+                        body = body.Replace("{Url}", urlOrderVcms);
+
+                        var mailData = new MailData
+                        {
+                            EmailToId = _appService.Config.Email,
+                            EmailSubject = subject,
+                            EmailBody = body
+                        };
+
+                        await _mailService.SendEmailAsync(mailData);
+                    }
+                }
+                #endregion
 
                 return RedirectToAction("CheckoutComplete", new { MaDonHang = model.Order.OrderCode });
             }
-            catch
+            catch (Exception ex)
             {
-                return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+                return View("~/Views/Shared/Error.cshtml", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier, Message = ex.Message });
             }
         }
 

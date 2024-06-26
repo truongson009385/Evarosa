@@ -193,8 +193,16 @@
                 <div class="wrapper">
                     @foreach (var item in Model.Products)
                     {
-                        var skuPrice = item.Skus.Max(a => a.FinalPrice);
-                        var finalPrice = skuPrice > 0 ? skuPrice : Model.FinalPrice;
+                        decimal finalPrice = 0;
+
+                        if (item.Skus.Any())
+                        {
+                            var skuPrice = item.Skus.Min(a => a.FinalPrice);
+                            finalPrice = skuPrice > 0 ? skuPrice : 0;
+                        } else
+                        {
+                            finalPrice = item.FinalPrice;
+                        }
 
                         <a asp-controller="Home" asp-action="ProductDetails" asp-route-url="@item.Url" class="item media">
                             @if (!string.IsNullOrEmpty(item.Avatar))

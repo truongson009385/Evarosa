@@ -118,7 +118,8 @@ namespace Evarosa.Controllers
             var product = await unitOfWork.Product
                 .GetAll(
                     predicate: m => m.Url == url,
-                    include: m => m.Include(l => l.ProductCategory),
+                    include: m => m.Include(l => l.ProductCategory)
+                        .Include(l => l.Skus),
                     disableTracking: false
                 ).FirstOrDefaultAsync();
 
@@ -146,6 +147,7 @@ namespace Evarosa.Controllers
             var relatedProducts = await unitOfWork.Product
                 .GetAllAsync(
                     predicate: m => m.ProductCategoryId == product.ProductCategoryId && m.Active && m.Id != product.Id,
+                    include: m => m.Include(l => l.Skus),
                     selector: m => new Product
                     {
                         Name = m.Name,
@@ -153,6 +155,7 @@ namespace Evarosa.Controllers
                         Images = m.Images,
                         Price = m.Price,
                         PriceSale = m.PriceSale,
+                        Skus = m.Skus
                     },
                     take: 10,
                     orderBy: m => m.OrderByDescending(o => o.Sort)
@@ -295,7 +298,10 @@ namespace Evarosa.Controllers
             var productsQuery = unitOfWork.Product
                 .GetAll(
                     predicate: m => m.Name.Contains(term) && m.Active,
-                    include: m => m.Include(l => l.ProductCategory).ThenInclude(l => l.ParentCategory)
+                    include: m => m
+                    .Include(l => l.ProductCategory)
+                    .ThenInclude(l => l.ParentCategory)
+                    .Include(l => l.Skus)
                 );
 
             if (!string.IsNullOrEmpty(url))
