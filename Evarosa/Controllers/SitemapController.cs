@@ -31,6 +31,23 @@ namespace Evarosa.Controllers
         }
         #endregion
 
+        #region Sitemap - ProductCategory
+        [Route("sitemap/product-categories.xml")]
+        public ContentResult ProductCategorySitemap()
+        {
+            XNamespace ns = "http://www.sitemaps.org/schemas/sitemap/0.9";
+            var items = context.ProductCategories.Where(a => a.Active).OrderBy(a => a.Id).Select(a => new { a.Url }).ToList();
+            var itemSitemap = (from item in items
+                select new XElement(ns + "url", new XElement(ns + "loc", Url.Action("ListProduct", "Home", new
+                {
+                    url = item.Url
+                }, protocol: Request.Scheme)), new XElement(ns + "lastmod", DateTime.Now.ToString("yyyy-MM-dd")), new XElement(ns + "changefreq", "daily"), new XElement(ns + "priority", "0.8"))).ToList();
+            var sitemap = new XDocument(new XDeclaration("1.0", "utf-8", "yes"), new XElement(ns + "urlset", itemSitemap));
+            return Content(sitemap.ToString(), "text/xml");
+            //sitemap.Save(Server.MapPath("/Sitemap/ArticleCategorySitemap.xml"));
+        }
+        #endregion
+
         #region Sitemap - Article
         [OutputCache(Duration = 84600)]
         [Route("sitemap/articles.xml")]
