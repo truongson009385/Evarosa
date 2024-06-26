@@ -34,13 +34,15 @@ namespace Evarosa.Controllers
             var qrProduct = unitOfWork.Product
                 .GetAll(
                     predicate: m => m.Active && m.ShowHome,
-                    orderBy: m => m.OrderByDescending(o => o.Sort)
+                    orderBy: m => m.OrderByDescending(o => o.Sort),
+                    include: m => m.Include(l => l.Skus)
             );
 
             var qrProductOutstanding = unitOfWork.Product
                 .GetAll(
                     predicate: m => m.Active && m.ShowOutstanding,
-                    orderBy: m => m.OrderByDescending(o => o.Sort)
+                    orderBy: m => m.OrderByDescending(o => o.Sort),
+                    include: m => m.Include(l => l.Skus)
             );
 
 

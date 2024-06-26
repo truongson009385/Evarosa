@@ -472,6 +472,7 @@ header {
   margin-bottom: 10px;
 }
 .product-item .name h3 {
+  height: 36px;
   color: #27272A;
   font-size: 14px;
   font-weight: 600;

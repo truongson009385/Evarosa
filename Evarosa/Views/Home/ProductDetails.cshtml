@@ -193,6 +193,9 @@
                 <div class="wrapper">
                     @foreach (var item in Model.Products)
                     {
+                        var skuPrice = item.Skus.Max(a => a.FinalPrice);
+                        var finalPrice = skuPrice > 0 ? skuPrice : Model.FinalPrice;
+
                         <a asp-controller="Home" asp-action="ProductDetails" asp-route-url="@item.Url" class="item media">
                             @if (!string.IsNullOrEmpty(item.Avatar))
                             {
@@ -206,9 +209,9 @@
                                     @item.Name
                                 </h3>
                                 <p>
-                                    @if (item is { FinalPrice: > 0 })
+                                    @if (finalPrice > 0)
                                     {
-                                        @Html.DisplayFor(m => m.Product.FinalPrice)
+                                        @(finalPrice.ToString("N0") + " đ")
                                     }
                                     else
                                     {

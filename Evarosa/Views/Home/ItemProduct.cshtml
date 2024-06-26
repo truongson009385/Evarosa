@@ -1,5 +1,19 @@
 ﻿@model Product
 
+@{
+    var finalPrice = decimal.Zero;
+
+    @if (Model.Skus.Any())
+    {
+        var skuPrice = Model.Skus.Min(a => a.FinalPrice);
+
+        finalPrice = skuPrice > 0 ? skuPrice : 0;
+    } else
+    {
+        finalPrice = Model.FinalPrice;
+    }
+}
+
 <div class="product-item">
     <a class="avatar" asp-controller="Home" asp-action="ProductDetails" asp-route-url="@Model.Url">
         @if (!string.IsNullOrEmpty(Model.Avatar))
@@ -21,9 +35,9 @@
             </div>
             <div class="col-6">
                 <span class="price">
-                    @if (Model.FinalPrice > 0)
+                    @if (finalPrice > 0)
                     {
-                        @Html.DisplayFor(m => m.FinalPrice)
+                        @(finalPrice.ToString("N0") + " đ")
                     } else
                     {
                         @:Liên hệ    
