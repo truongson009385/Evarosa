@@ -157,7 +157,7 @@
     </div>
 }
 
-<div class="container py-5">
+<div class="container pt-5 pb-md-5">
     <div class="row mb-n4">
         <div class="col-lg-6 mb-4">
             <p class="about-text mb-2">Về chúng tôi</p>
@@ -178,15 +178,15 @@
 
 @if (Model.Partner.Any())
 {
-    <div class="container py-5">
-        <h2 class="section-title line-bottom mb-4">Đối tác - Khách hàng</h2>
+    <div class="container pt-5 pb-md-5">
+        <h2 class="section-title line-bottom mb-2 mb-md-4">Đối tác - Khách hàng</h2>
         <div class="partner-slider">
             @foreach (var item in Model.Partner)
             {
-                <a href="@item.Url" class="d-block my-3">
+                <a href="@item.Url" class="d-block my-3" target="_blank">
                     @if (!string.IsNullOrEmpty(item.Image))
                     {
-                        <img src="@PathSystem.Combine("/contents/banners", item.Image)?w=1920" alt="@item.Image" />
+                        <img src="@PathSystem.Combine("/contents/banners", item.Image)?w=200" alt="@item.Image" />
                     }
                     else
                     {

@@ -23,11 +23,6 @@
             {
                 Key = Model.Product.ProductCategory.Title,
                 Value = Model.Product.ProductCategory.Url
-            },
-            new BreadcrumbItem
-            {
-                Key = Model.Product.Name,
-                Value = null
             }
         }
     };
@@ -38,7 +33,7 @@
 
 @await Html.PartialAsync("_breadcrumb", breadcrumb)
 
-<div class="container py-5">
+<div class="container pb-5">
     <div class="row mb-5">
         <div class="col-lg-6 mb-4 mb-lg-0">
             @if (Model.Product.ArrImage.Length > 0)

@@ -65,7 +65,7 @@ namespace Evarosa.Controllers
             model.ProductOutstanding = await unitOfWork.ProductCategory
                 .GetAllAsync(
                     predicate: m => m.Active && m.ShowOutstanding,
-                    orderBy: m => m.OrderBy(o => o.Sort),
+                    orderBy: m => m.OrderByDescending(o => o.Sort),
                     selector: m => new ProductCategory
                     {
                         Id = m.Id,

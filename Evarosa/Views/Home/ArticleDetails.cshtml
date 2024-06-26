@@ -25,11 +25,6 @@
             {
                 Key = category.Title,
                 Value = Url.Action("ListArticle", "Home", new { url = category.Url })
-            },
-            new BreadcrumbItem
-            {
-                Key = ViewBag.Title,
-                Value = null
             }
         }
     };

@@ -2738,6 +2738,9 @@ footer {
   }
 }
 @media (max-width: 768px) {
+  body {
+    font-size: 14px;
+  }
   .news-grid .item-grid {
     flex: 1 1 100%;
     max-width: 100%;
@@ -2768,6 +2771,15 @@ footer {
   .section-title {
     font-size: 24px;
   }
+  .page-title {
+    font-size: 24px;
+  }
+  .partner-slider .slick-dots {
+    bottom: -20px;
+  }
+  .about-title {
+    font-size: 26px;
+  }
 }
 @media (max-width: 540px) {
   .product-buttons {
@@ -2775,5 +2787,11 @@ footer {
   }
   .section-title {
     font-size: 20px;
+  }
+  .page-title {
+    font-size: 20px;
+  }
+  .about-title {
+    font-size: 22px;
   }
 }
