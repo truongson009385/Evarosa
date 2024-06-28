@@ -40,7 +40,7 @@ namespace Evarosa.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> Login(AdminForm model, string returnUrl = null)
+        public async Task<IActionResult> Login(AdminForm model, string? returnUrl = null)
         {
             if (!ModelState.IsValid)
             {

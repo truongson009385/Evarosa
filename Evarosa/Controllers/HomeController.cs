@@ -41,10 +41,9 @@ namespace Evarosa.Controllers
             var qrProductOutstanding = unitOfWork.Product
                 .GetAll(
                     predicate: m => m.Active && m.ShowOutstanding,
-                    orderBy: m => m.OrderByDescending(o => o.Sort),
+                    orderBy: m => m.OrderBy(o => Guid.NewGuid()),
                     include: m => m.Include(l => l.Skus)
             );
-
 
             //Get
             model.Banner = await qrBanner.Where(m => m.GroupId == 1).Take(20).ToListAsync();

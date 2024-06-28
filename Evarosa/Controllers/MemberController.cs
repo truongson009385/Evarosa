@@ -101,7 +101,7 @@ namespace Evarosa.Controllers
             member.BirthDate = model.Member.BirthDate;
 
             _unitOfWork.Member.Update(member);
-            _unitOfWork.Commit();
+            await _unitOfWork.CommitAsync();
 
 
             var claims = User.Claims.ToList();
@@ -201,7 +201,7 @@ namespace Evarosa.Controllers
                 };
 
                 await _unitOfWork.Member.InsertAsync(member);
-                _unitOfWork.Commit();
+                await _unitOfWork.CommitAsync();
 
                 var callbackurl = Url.Action("EmailConfirmation", "Member", new { userId= member.Id, code = member.EmailConfirmation }, protocol: HttpContext.Request.Scheme);
 
@@ -232,7 +232,7 @@ namespace Evarosa.Controllers
 
         [AllowAnonymous]
         [HttpPost("dang-nhap")]
-        public async Task<IActionResult> Login(MemberLogin model, string returnUrl = null)
+        public async Task<IActionResult> Login(MemberLogin model, string? returnUrl = null)
         {
             if (!ModelState.IsValid)
             {
@@ -342,14 +342,14 @@ namespace Evarosa.Controllers
 
         [AllowAnonymous]
         [HttpGet("reset-password/{code}")]
-        public IActionResult ResetPassword(string code = null)
+        public IActionResult ResetPassword(string? code = null)
         {
             return code == null ? NotFound() : View();
         }
 
         [AllowAnonymous]
         [HttpPost("reset-password")]
-        public async Task<IActionResult> ResetPasswordStore(ResetPasswordViewModel model)
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -361,7 +361,7 @@ namespace Evarosa.Controllers
             if (member == null)
             {
                 ModelState.AddModelError("", "Invalid token.");
-                return View();
+                return View(model);
             }
 
             member.Password = HtmlHelpers.ComputeHash(model.Password, _pepper, _iteration);
@@ -371,7 +371,7 @@ namespace Evarosa.Controllers
             await _unitOfWork.CommitAsync();
 
             TempData["Message"] = "success|Đặt lại mật khẩu thành công.";
-            return RedirectToAction(nameof(Login));
+            return RedirectToAction("Login");
         }
 
         [AllowAnonymous]

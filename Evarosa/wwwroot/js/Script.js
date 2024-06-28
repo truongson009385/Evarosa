@@ -214,6 +214,69 @@
             $(".product-price .price-old del").text(data.priceOld);
         });
     });
+
+    // Function to populate districts based on selected city
+    $("#cityDropdown").change(function () {
+        var cityId = $(this).val();
+        if (cityId) {
+            $.ajax({
+                url: "/quan-huyen",
+                type: "GET",
+                data: { cityId: cityId },
+                success: function (response) {
+                    console.log(response);
+                    $("#districtDropdown").empty();
+                    $("#districtDropdown").append($("<option>").text("Chọn Quận/Huyện").attr("value", ""));
+                    $("#wardDropdown").empty();
+                    $("#wardDropdown").append($("<option>").text("Chọn Xã/Phường").attr("value", ""));
+                    $.each(response.districts, function (index, district) {
+                        $("#districtDropdown").append($("<option>").text(district.name).attr("value", district.id));
+                    });
+                }
+            });
+        } else {
+            $("#districtDropdown").empty();
+            $("#districtDropdown").append($("<option>").text("Chọn Quận/Huyện").attr("value", ""));
+            $("#wardDropdown").empty();
+            $("#wardDropdown").append($("<option>").text("Chọn Xã/Phường").attr("value", ""));
+        }
+    });
+
+    // Function to populate wards based on selected district
+    $("#districtDropdown").change(function () {
+        var districtId = $(this).val();
+        if (districtId) {
+            $.ajax({
+                url: "/xa-phuong",
+                type: "GET",
+                data: { districtId: districtId },
+                success: function (response) {
+                    $("#wardDropdown").empty();
+                    $("#wardDropdown").append($("<option>").text("Chọn Xã/Phường").attr("value", ""));
+                    $.each(response.wards, function (index, ward) {
+                        $("#wardDropdown").append($("<option>").text(ward.name).attr("value", ward.id));
+                    });
+                }
+            });
+        } else {
+            $("#wardDropdown").empty();
+            $("#wardDropdown").append($("<option>").text("Chọn Xã/Phường").attr("value", ""));
+        }
+    });
+
+    $("#wardDropdown").change(function () {
+        $.ajax({
+            url: "/shipfee",
+            type: "GET",
+            data: { cityId: $("#cityDropdown").val() },
+            success: function (data) {
+                if (data.status) {
+                    $(".sum-value.shipfee").text(data.fee);
+                    $(".sum-value.total").text(data.total);
+                }
+            }
+        });
+    });
 });
 function BuyNow() {
     var form = $("#addToCart");
@@ -291,70 +354,6 @@ function updateFromCart(input) {
         $(".order .sum-value").text(data.total);
     });
 }
-$(document).ready(function () {
-    // Function to populate districts based on selected city
-    $("#cityDropdown").change(function () {
-        var cityId = $(this).val();
-        if (cityId) {
-            $.ajax({
-                url: "/quan-huyen",
-                type: "GET",
-                data: { cityId: cityId },
-                success: function (response) {
-                    console.log(response);
-                    $("#districtDropdown").empty();
-                    $("#districtDropdown").append($("<option>").text("Chọn Quận/Huyện").attr("value", ""));
-                    $("#wardDropdown").empty();
-                    $("#wardDropdown").append($("<option>").text("Chọn Xã/Phường").attr("value", ""));
-                    $.each(response.districts, function (index, district) {
-                        $("#districtDropdown").append($("<option>").text(district.name).attr("value", district.id));
-                    });
-                }
-            });
-        } else {
-            $("#districtDropdown").empty();
-            $("#districtDropdown").append($("<option>").text("Chọn Quận/Huyện").attr("value", ""));
-            $("#wardDropdown").empty();
-            $("#wardDropdown").append($("<option>").text("Chọn Xã/Phường").attr("value", ""));
-        }
-    });
-
-    // Function to populate wards based on selected district
-    $("#districtDropdown").change(function () {
-        var districtId = $(this).val();
-        if (districtId) {
-            $.ajax({
-                url: "/xa-phuong",
-                type: "GET",
-                data: { districtId: districtId },
-                success: function (response) {
-                    $("#wardDropdown").empty();
-                    $("#wardDropdown").append($("<option>").text("Chọn Xã/Phường").attr("value", ""));
-                    $.each(response.wards, function (index, ward) {
-                        $("#wardDropdown").append($("<option>").text(ward.name).attr("value", ward.id));
-                    });
-                }
-            });
-        } else {
-            $("#wardDropdown").empty();
-            $("#wardDropdown").append($("<option>").text("Chọn Xã/Phường").attr("value", ""));
-        }
-    });
-
-    $("#wardDropdown").change(function () {
-        $.ajax({
-            url: "/shipfee",
-            type: "GET",
-            data: { cityId: $("#cityDropdown").val() },
-            success: function (data) {
-                if (data.status) {
-                    $(".sum-value.shipfee").text(data.fee);
-                    $(".sum-value.total").text(data.total);
-                }
-            }
-        });
-    });
-});
 function ListProductJS() {
     $(".by-sort").change(function () {
         let cate = $(".filter-by-category").val();
