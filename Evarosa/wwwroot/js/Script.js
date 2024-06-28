@@ -213,10 +213,8 @@
             $(".product-price .price").text(data.price);
             $(".product-price .price-old del").text(data.priceOld);
         });
-    })
-})
-
-
+    });
+});
 function BuyNow() {
     var form = $("#addToCart");
 
@@ -246,13 +244,11 @@ function BuyNow() {
         $(".shoppingcart > .count").text(data.count);
     });
 }
-
 function LoadCartMini() {
     $.get("/ShoppingCart/CartMini", function (data) {
         $(".shoppingcart-mini").html(data);
     });
 }
-
 function removeFromCart(recordId) {
     if (confirm("Bạn có chắc muốn xóa sản phẩm này khỏi giỏ hàng!!!")) {
         $.post("/ShoppingCart/RemoveFromCart", {
@@ -273,13 +269,12 @@ function removeFromCart(recordId) {
         });
     }
 }
-
 function updateFromCart(input) {
     $.post("/ShoppingCart/UpdateFromCart", {
         recordId: input.data("recordid"),
         quantity: input.val(),
     }, function (data) {
-        console.log(data)
+        console.log(data);
 
         if (data.status) {
             LoadCartMini();
@@ -296,7 +291,6 @@ function updateFromCart(input) {
         $(".order .sum-value").text(data.total);
     });
 }
-
 $(document).ready(function () {
     // Function to populate districts based on selected city
     $("#cityDropdown").change(function () {
@@ -361,7 +355,6 @@ $(document).ready(function () {
         });
     });
 });
-
 function ListProductJS() {
     $(".by-sort").change(function () {
         let cate = $(".filter-by-category").val();
@@ -377,7 +370,7 @@ function ListProductJS() {
         }).done(function (data) {
             $("#ListProductView").empty();
             $("#ListProductView").html(data);
-            ListProductJS()
+            ListProductJS();
 
             var currentURL = window.location.href;
 
@@ -393,7 +386,6 @@ function ListProductJS() {
         });
     });
 }
-
 function AllProductJS() {
     $(".by-sort").change(function () {
         let sort = $(".by-sort").val();
@@ -407,7 +399,7 @@ function AllProductJS() {
         }).done(function (data) {
             $("#AllProductView").empty();
             $("#AllProductView").html(data);
-            AllProductJS()
+            AllProductJS();
             var currentURL = window.location.href;
 
             var urlObject = new URL(currentURL);
@@ -422,7 +414,6 @@ function AllProductJS() {
         });
     });
 }
-
 function menuOpen() {
     $(".nav-mobi").addClass("active");
 }

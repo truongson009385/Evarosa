@@ -11,21 +11,22 @@
     }
 
     var breadcrumb = new BreadcrumbViewModel
-    {
-        Path = new List<BreadcrumbItem>
-        {
-            new BreadcrumbItem
             {
-                Key = "<i class='fa-solid fa-house mr-2'></i>Trang chủ",
-                Value = Url.Action("Index", "Home")
-            },
-            new BreadcrumbItem
-            {
-                Key = Model.Product.ProductCategory.Title,
-                Value = Model.Product.ProductCategory.Url
-            }
-        }
-    };
+                Path =
+                [
+                    new BreadcrumbItem
+                    {
+                        Key = "<i class='fa-solid fa-house mr-2'></i>Trang chủ",
+                        Value = Url.Action("Index", "Home")
+                    },
+
+                    new BreadcrumbItem
+                    {
+                        Key = Model.Product.ProductCategory.Title,
+                        Value = Model.Product.ProductCategory.Url
+                    }
+                ]
+            };
 
     int i = 0;
     int j = 0;
@@ -42,7 +43,14 @@
                     @foreach (var img in Model.Product.ArrImage)
                     {
                         <div class="slide" data-fancybox="san-pham" data-src="@img">
-                            <img src="@img" alt="">
+                            @if (img.StartsWith("/ckfinder/"))
+                            {
+                                <img src="@img" alt="@Model.Product.Name" />
+                            }
+                            else
+                            {
+                                <img src="@PathSystem.Combine("/contents/products/",img)" alt="@Model.Product.Name" />
+                            }
                         </div>
                     }
                 </div>
@@ -50,7 +58,14 @@
                     @foreach (var img in Model.Product.ArrImage)
                     {
                         <div class="slide">
-                            <img src="@img" alt="">
+                            @if (img.StartsWith("/ckfinder/"))
+                            {
+                                <img src="@img" alt="@Model.Product.Name" />
+                            }
+                            else
+                            {
+                                <img src="@PathSystem.Combine("/contents/products/",img)" alt="@Model.Product.Name" />
+                            }
                         </div>
                     }
                 </div>
@@ -194,7 +209,8 @@
                         {
                             var skuPrice = item.Skus.Min(a => a.FinalPrice);
                             finalPrice = skuPrice > 0 ? skuPrice : 0;
-                        } else
+                        }
+                        else
                         {
                             finalPrice = item.FinalPrice;
                         }
@@ -202,8 +218,16 @@
                         <a asp-controller="Home" asp-action="ProductDetails" asp-route-url="@item.Url" class="item media">
                             @if (!string.IsNullOrEmpty(item.Avatar))
                             {
-                                <img class="mr-2" src="@item.Avatar" alt="@item.Name" />
-                            } else
+                                if (item.Avatar.StartsWith("/ckfinder/"))
+                                {
+                                    <img class="mr-2" src="@item.Avatar" alt="@item.Name" />
+                                }
+                                else
+                                {
+                                    <img class="mr-2" src="@PathSystem.Combine("/contents/products/",item.Avatar)" alt="@item.Name" />
+                                }
+                            }
+                            else
                             {
                                 <img class="mr-2" src="~/images/no-image.jpg" alt="no-image" />
                             }

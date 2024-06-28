@@ -5,7 +5,7 @@
     ViewData["Title"] = "Giới thiệu";
 
     ViewData["Description"] = Model.Article.DescriptionMeta ?? ViewData["Title"];
-    ViewData["Canonical"] = Url.Action("AboutUs", "Home", new { }, protocol: Context.Request.Scheme);
+    ViewData["Canonical"] = Url.Action("About", "Home", new { }, protocol: Context.Request.Scheme);
     if (Model.Article.Image != null)
     {
         ViewData["ImageShare"] = Context.Request.Scheme + "://" + Context.Request.Host + System.IO.Path.Combine("/contents/blog/", Model.Article.Image);
@@ -15,19 +15,20 @@
 
     var breadcrumb = new BreadcrumbViewModel
     {
-        Path = new List<BreadcrumbItem>
-        {
+        Path =
+        [
             new BreadcrumbItem
             {
                 Key = "<i class='fa-solid fa-house mr-2'></i>Trang chủ",
                 Value = Url.Action("Index", "Home")
             },
+
             new BreadcrumbItem
             {
                 Key = ViewBag.Title,
                 Value = null
             }
-        }
+        ]
     };
     var ci = CultureInfo.GetCultureInfo("vi-VN");
 }
