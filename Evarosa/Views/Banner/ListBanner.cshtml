@@ -25,12 +25,12 @@
         {
             <tr data-id="@banner.Id">
                 <td style="width: 100px;">
-                    <input type="number" name="Sort" value="@banner.Sort" class="form_control w100" />
+                    <input type="number" name="Sort" value="@banner.Sort" class="form_control w100"/>
                 </td>
                 <td>
                     @if (banner.Image != null)
                     {
-                        <img class="img-border" src="@Url.Content($"/contents/banners/{banner.Image}")" />
+                        <img class="img-border" src="@banner.Image" style="aspect-ratio: 1; object-fit: cover;" />
                     }
                     else
                     {

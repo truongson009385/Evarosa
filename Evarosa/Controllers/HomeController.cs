@@ -111,7 +111,6 @@ namespace Evarosa.Controllers
             return View(model);
         }
 
-
         [Route("{url}.html", Order = 0)]
         public async Task<IActionResult> ProductDetails(string url)
         {

@@ -7,7 +7,7 @@
 
     if (Model.Product.Avatar != null)
     {
-        ViewData["ImageShare"] = Context.Request.Scheme + "://" + Context.Request.Host + System.IO.Path.Combine("/contents/products/", Model.Product.Avatar);
+        ViewData["ImageShare"] = Model.Product.Avatar;
     }
 
     var breadcrumb = new BreadcrumbViewModel
@@ -41,8 +41,8 @@
                 <div class="product-slider-main">
                     @foreach (var img in Model.Product.ArrImage)
                     {
-                        <div class="slide" data-fancybox="san-pham" data-src="@PathSystem.Combine("/contents/products/", img)">
-                            <img src="@PathSystem.Combine("/contents/products/", img)" alt="">
+                        <div class="slide" data-fancybox="san-pham" data-src="@img">
+                            <img src="@img" alt="">
                         </div>
                     }
                 </div>
@@ -50,7 +50,7 @@
                     @foreach (var img in Model.Product.ArrImage)
                     {
                         <div class="slide">
-                            <img src="@PathSystem.Combine("/contents/products/", img)" alt="">
+                            <img src="@img" alt="">
                         </div>
                     }
                 </div>
@@ -71,7 +71,7 @@
                 </span>
                 @if (Model is { Percent: > 0, FinalPrice: > 0 })
                 {
-                    <span class="price-old">Giá cũ: <del>@Html.DisplayFor(m => m.Price)</del></span>
+                    <span class="price-old">Giá thị trường: <del>@Html.DisplayFor(m => m.Price)</del></span>
                 }
             </p>
 
@@ -202,7 +202,7 @@
                         <a asp-controller="Home" asp-action="ProductDetails" asp-route-url="@item.Url" class="item media">
                             @if (!string.IsNullOrEmpty(item.Avatar))
                             {
-                                <img class="mr-2" src="@PathSystem.Combine("/contents/products", item.Avatar)" alt="@item.Avatar" />
+                                <img class="mr-2" src="@item.Avatar" alt="@item.Name" />
                             } else
                             {
                                 <img class="mr-2" src="~/images/no-image.jpg" alt="no-image" />

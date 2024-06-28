@@ -37,7 +37,7 @@
 {
     <div class="container py-5">
         <h2 class="section-title line-bottom mb-4">DANH MỤC SẢN PHẨM</h2>
-        <div class="row row-cols-2 row-cols-md-3 row-cols-lg-6 mx-n2 mb-n3">
+        <div class="row row-cols-2 row-cols-md-3 row-cols-lg-6 justify-content-center mx-n2 mb-n3">
             @foreach (var item in Model.DisplayCategories)
             {
                 <div class="col px-2 mb-3">
@@ -61,7 +61,6 @@
 {
     <div class="outstanding container pb-5">
         <h2 class="section-title">Sản phẩm nổi bật</h2>
-        <p class="section-text line-bottom mb-4">Các sản phẩm nổi bật theo từng loại sản phẩm</p>
 
         <ul class="outstanding-tabs">
             @foreach (var item in Model.ProductOutstanding)

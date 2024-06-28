@@ -7,7 +7,7 @@
     ViewData["Canonical"] = Url.Action("ArticleDetails", "Home", new { url = Model.Article.Url }, protocol: Context.Request.Scheme);
     if (Model.Article.Image != null)
     {
-        ViewData["ImageShare"] = Context.Request.Scheme + "://" + Context.Request.Host + System.IO.Path.Combine("/contents/blog/", Model.Article.Image);
+        ViewData["ImageShare"] = Model.Article.Image;
     }
 
     var category = Model.Article.ArticleCategory;

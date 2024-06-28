@@ -33,6 +33,7 @@ namespace Evarosa.ViewModels
         public string? Term { get; set; }
         public int? CategoryId { get; set; }
         public DateTime? Timer { get; set; }
+        public string Image { get; set; }
 
     }
 }

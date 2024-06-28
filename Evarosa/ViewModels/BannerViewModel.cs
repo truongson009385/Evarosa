@@ -9,7 +9,7 @@ namespace Evarosa.ViewModels
         public string ItemsFineJSON { get; set; }
         public Banner Banner { get; set; }
         public SelectList SelectGroup { get; set; }
-        public IFormFile? Image { get; set; }
+        public string Image { get; set; }
         public BannerViewModel()
         {
             var listgroup = new Dictionary<int, string>

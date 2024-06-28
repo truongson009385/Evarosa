@@ -6,5 +6,9 @@
   {
     "outputFile": "wwwroot/css/StyleMember.css",
     "inputFile": "wwwroot/css/StyleMember.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/StyleAdmin.css",
+    "inputFile": "wwwroot/css/StyleAdmin.less"
   }
 ]

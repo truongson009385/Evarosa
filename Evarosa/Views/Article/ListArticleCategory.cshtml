@@ -27,7 +27,6 @@
         <tbody>
             <tr>
                 <th scope="col">#</th>
-                <th scope="col" style="width: 120px;">@Html.DisplayNameFor(m => m.ArticleCategory.Image)</th>
                 <th scope="col">@Html.DisplayNameFor(m => m.ArticleCategory.Title)</th>
                 <th scope="col">@Html.DisplayNameFor(m => m.ArticleCategory.Type)</th>
                 <th scope="col">@Html.DisplayNameFor(m => m.ArticleCategory.Active)</th>
@@ -70,16 +69,6 @@
             <td scope="row">
                 <input type="hidden" name="ProductId" value="@item.Id" />
                 @(stt != 0 ? stt : "")
-            </td>
-            <td class="left">
-                @if (item.Image != null)
-                {
-                    <img src="@PathSystem.Combine("/contents/blog-categories/", item.Image)" alt="" style="width: 86px; object-fit: contain;" />
-                }
-                else
-                {
-                    @:NO PHOTO
-                }
             </td>
             <td class="left">
                 @Html.Raw(prefix)

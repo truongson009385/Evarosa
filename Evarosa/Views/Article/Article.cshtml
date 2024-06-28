@@ -41,8 +41,18 @@
                             <label asp-for="Article.Image"></label>
                         </td>
                         <td class="form_text">
-                            <div class="file-image mb-3"></div>
-                            <input type="hidden" asp-for="Article.Image" id="Image" />
+                            <div class="alert alert-info">
+                                <button type="button" class="btn btn-primary" onclick="selectMultipleFileWithCKFinder()">Chọn ảnh từ CKFinder</button>
+                            </div>
+                            <div id="progress" class="progress" style="display:none;">
+                                <div class="progress-bar progress-bar-success"></div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="form_name"></td>
+                        <td class="form_text">
+                            <ul id="ListImages"></ul>
                         </td>
                     </tr>
                     <tr>
@@ -141,11 +151,56 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
     <script>
-        $(".file-image").customUploader({
-            folder: "blog",
-            extens: "jpg, jpeg, png",
-            limit: 1,
-            input: "#Image"
-        });
+        var i = 1;
+        function selectMultipleFileWithCKFinder() {
+            CKFinder.popup({
+                chooseFiles: true,
+                chooseMultiple: true,
+                width: 800,
+                height: 600,
+                onInit: function (finder) {
+                    finder.on('files:choose', function (evt) {
+                        evt.data.files.forEach(function (file) {
+                            /*var file = evt.data.files.first();*/
+                            var fileUrl = file.getUrl();
+
+                            // Validate file type and size (Note: CKFinder does not provide file size, so size validation is skipped)
+                            var uploadErrors = [];
+                            var acceptFileTypes = /\.(gif|jpe?g|png)$/i;
+                            if (!acceptFileTypes.test(fileUrl)) {
+                                uploadErrors.push("Chỉ chấp nhận định dạng jpeg, jpg, png, gif");
+                            }
+
+                            var totalImg = $("#ListImages .thumb-img-box").length;
+                            if (totalImg > 0) {
+                                uploadErrors.push("Chỉ đăng tối đa 1 ảnh");
+                            }
+                            if (uploadErrors.length > 0) {
+                                alert(uploadErrors.join("\n"));
+                                return false;
+                            }
+                            // Append image to list
+                            $('#ListImages').append(
+                                '<li class="thumb-img-box">' +
+                                '<input type="hidden" name="Image" value ="' + fileUrl + '" />' +
+                                '<img src="' + fileUrl + '" alt="Image"/>' +
+                                '<a href="javascript:;" id="' + i + '" onclick="delfile(' + i + ')">' +
+                                '<i class="fa-solid fa-xmark" style="vertical-align:middle"></i>' +
+                                '</a>' +
+                                '</li>'
+                            );
+                            i++;
+                        })
+                    });
+                 
+                }
+            });
+        }
+
+        function delfile(divid) {
+            if (confirm('Bạn có chắc xóa ảnh này?')) {
+                $('#' + divid).parent().fadeOut().remove();
+            }
+        }
     </script>
 }

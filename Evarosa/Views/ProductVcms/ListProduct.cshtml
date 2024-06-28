@@ -97,7 +97,7 @@
                                 <a asp-action="ProductDetails" asp-controller="Home" asp-route-url="@item.Url" target="_blank">
                                     @if (!string.IsNullOrEmpty(item.Avatar))
                                     {
-                                        <img src="@Url.Content($"/contents/products/{item.Avatar}")" style="width: 100%; aspect-ratio: 1; object-fit: contain;">
+                                        <img src="@item.Avatar" style="width: 100%; aspect-ratio: 1; object-fit: contain;">
                                     }
                                     else
                                     {

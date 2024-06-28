@@ -50,16 +50,7 @@ namespace NamTinNgoc.Controllers
         [HttpPost]
         public async Task<IActionResult> Banner(BannerViewModel model)
         {
-            var user = await unitOfWork.Admin.GetAll(
-                    predicate: m => m.Username == User.Identity.Name
-                ).FirstOrDefaultAsync();
-
-            if (model.Image?.Length > 0)
-            {
-                var file = await fileService.UploadFileAsync("banners", model.Image);
-
-                model.Banner.Image = file.FileName;
-            }
+            model.Banner.Image = model.Image;
             await unitOfWork.Banner.InsertAsync(model.Banner);
             await unitOfWork.CommitAsync();
             return RedirectToAction(nameof(ListBanner), new { result = "success" });
@@ -86,17 +77,7 @@ namespace NamTinNgoc.Controllers
 
             if (banner == null) return RedirectToAction("ListBanner");
 
-            var user = await unitOfWork.Admin.GetAll(
-                    predicate: m => m.Username == User.Identity.Name
-                ).FirstOrDefaultAsync();
-
-            if (model.Image?.Length > 0)
-            {
-                var file = await fileService.UploadFileAsync("banners", model.Image);
-
-                banner.Image = file.FileName;
-            }
-
+            banner.Image = model.Image;
             banner.GroupId = model.Banner.GroupId;
             banner.Name = model.Banner.Name;
             banner.Slogan = model.Banner.Slogan;

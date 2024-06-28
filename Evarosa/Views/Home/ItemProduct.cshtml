@@ -18,7 +18,7 @@
     <a class="avatar" asp-controller="Home" asp-action="ProductDetails" asp-route-url="@Model.Url">
         @if (!string.IsNullOrEmpty(Model.Avatar))
         {
-            <img src="@PathSystem.Combine("/contents/products/", Model.Avatar)" alt="@Model.Avatar" />
+            <img src="@Model.Avatar" alt="@Model.Avatar" />
         }
         else
         {
@@ -31,7 +31,7 @@
         </a>
         <div class="row">
             <div class="col-6">
-                <span class="masp">Mã: @(Model.MaSP ?? "Chưa cập nhật")</span>
+                <span class="masp">Mã: @(Model.MaSP ?? "...")</span>
             </div>
             <div class="col-6">
                 <span class="price">

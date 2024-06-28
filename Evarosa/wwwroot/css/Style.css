@@ -459,6 +459,7 @@ header {
 }
 .product-item .avatar {
   display: block;
+  aspect-ratio: 1;
   padding: 0;
   background-color: #E0E9FF;
 }
@@ -1962,6 +1963,10 @@ footer {
   transform: translate(-50%, -50%);
 }
 
+.item-article .avatar {
+  display: block;
+  aspect-ratio: 1.5;
+}
 .item-article img {
   width: 100%;
   aspect-ratio: 1.5;
@@ -2800,5 +2805,8 @@ footer {
   }
   .partner-slider img {
     height: 86px;
+  }
+  .btn {
+    font-size: 14px;
   }
 }

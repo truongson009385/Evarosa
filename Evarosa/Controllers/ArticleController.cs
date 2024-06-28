@@ -177,10 +177,7 @@ namespace Evarosa.Controllers
         [HttpPost]
         public async Task<IActionResult> Article(ArticleViewModel model)
         {
-            var user = await unitOfWork.Admin.GetAll(
-                    predicate: m => m.Username == User.Identity.Name
-                ).FirstOrDefaultAsync();
-
+            model.Article.Image = model.Image;
             model.Article.Url = HtmlHelpers.ConvertToUnSign(model.Url ?? model.Article.Name);
             var count = await unitOfWork.Article.CountAsync(m => m.Url == model.Article.Url);
             
@@ -228,10 +225,6 @@ namespace Evarosa.Controllers
 
             if (article == null) return NotFound();
             
-            var user = await unitOfWork.Admin.GetAll(
-                    predicate: m => m.Username == User.Identity.Name
-                ).FirstOrDefaultAsync();
-
             article.Url = HtmlHelpers.ConvertToUnSign(model.Url ?? model.Article.Name);
             var count = await unitOfWork.Article.GetAll(predicate: m => m.Url == article.Url && m.Id != article.Id).CountAsync();
             if (count > 0)
@@ -239,12 +232,12 @@ namespace Evarosa.Controllers
                 article.Url += "-" + DateTime.Now.Millisecond;
             }
 
+            article.Image = model.Image;
             article.TitleMeta = model.Article.TitleMeta;
             article.DescriptionMeta = model.Article.DescriptionMeta;
             article.ArticleCategoryId = model.Article.ArticleCategoryId;
             article.ShortDescription = model.Article.ShortDescription;
             article.Body = model.Article.Body;
-            article.Image = model.Article.Image;
             article.Name = model.Article.Name;
             article.Active = model.Article.Active;
             article.ShowHome = model.Article.ShowHome;
@@ -252,7 +245,6 @@ namespace Evarosa.Controllers
             article.Sort = model.Article.Sort;
 
             await unitOfWork.CommitAsync();
-
             TempData["message"] = $"success|Cập nhật thành công bài viết {model.Article.Name}.";
             return RedirectToAction("ListArticle");
         }

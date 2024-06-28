@@ -22,6 +22,7 @@ namespace Evarosa.ViewModels
         public int? InStock { get; set; }
         public string? MaSP { get; set; }
         public DateTime? Timer { get; set; }
+        public string[] Images { get; set; }
         public SkuProductViewModel SkuProduct { get; set; }
         public OptionProductVcms? OptionProductVcms { get; set; }
 
@@ -29,6 +30,7 @@ namespace Evarosa.ViewModels
 
     public class ProductCategoryViewModel
     {
+        public string Image { get; set; }
         public string Term { get; set; }
         public string? Url { get; set; }
         public ProductCategory ProductCategory { get; set; }
@@ -54,7 +56,7 @@ namespace Evarosa.ViewModels
         public string[]? Prices { get; set; }
         public string[]? PriceSales { get; set; }
         public string? FirstItem { get; set; }
-        public int Indexs { get; set; }
+        public int Indexs { get; set; } = 0;
     }
 
     public class OptionProductVcms

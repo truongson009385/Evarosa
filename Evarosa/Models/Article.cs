@@ -70,9 +70,6 @@ namespace Evarosa.Models
         [Display(Name = "Nội dung danh mục")]
         public string? Description { set; get; }
 
-        [Display(Name = "Ảnh")]
-        public string? Image { set; get; }
-
         [Display(Name = "Hoạt động")]
         public bool Active { set; get; } = true;
 

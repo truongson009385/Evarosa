@@ -55,8 +55,18 @@
                     <tr>
                         <td class="form_name">@Html.LabelFor(model => model.Product.Images)</td>
                         <td class="form_text">
-                            <div class="file-images mb-3"></div>
-                            <input type="hidden" asp-for="Product.Images" id="Images" />
+                            <div class="alert alert-info">
+                                <button type="button" class="btn btn-primary" onclick="selectMultipleFileWithCKFinder()">Chọn ảnh từ CKFinder</button>
+                            </div>
+                            <div id="progress" class="progress" style="display:none;">
+                                <div class="progress-bar progress-bar-success"></div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="form_name"></td>
+                        <td class="form_text">
+                            <ul id="ListImages"></ul>
                         </td>
                     </tr>
                     <tr>
@@ -157,13 +167,6 @@
             thousands: ','
         });
 
-        $(".file-images").customUploader({
-            folder: "products",
-            extens: "jpg, jpeg, png",
-            limit: 12,
-            input: "#Images",
-        });
-
         $('[name=value]').tagify();
 
         $('input[name="attribute"]').on('change', function () {
@@ -201,6 +204,94 @@
                 });
             }
         });
+
+        $(function () {
+            $("#ListImages").sortable();
+            $("#ListImages").disableSelection();
+        });
+        var i = 1;
+        function selectMultipleFileWithCKFinder() {
+            CKFinder.popup({
+                chooseFiles: true,
+                chooseMultiple: true,
+                width: 800,
+                height: 600,
+                onInit: function (finder) {
+                    finder.on('files:choose', function (evt) {
+                        evt.data.files.forEach(function (file) {
+                            /*var file = evt.data.files.first();*/
+                            var fileUrl = file.getUrl();
+
+                            // Validate file type and size (Note: CKFinder does not provide file size, so size validation is skipped)
+                            var uploadErrors = [];
+                            var acceptFileTypes = /\.(gif|jpe?g|png)$/i;
+                            if (!acceptFileTypes.test(fileUrl)) {
+                                uploadErrors.push("Chỉ chấp nhận định dạng jpeg, jpg, png, gif");
+                            }
+
+                            var totalImg = $("#ListImages .thumb-img-box").length;
+                            if (totalImg >= 10) {
+                                uploadErrors.push("Chỉ đăng tối đa 10 ảnh");
+                            }
+                            if (uploadErrors.length > 0) {
+                                alert(uploadErrors.join("\n"));
+                                return false;
+                            }
+                            // Append image to list
+                            $('#ListImages').append(
+                                '<li class="thumb-img-box">' +
+                                '<input type="hidden" name="Images" value ="' + fileUrl + '" />' +
+                                '<img src="' + fileUrl + '" alt="Image"/>' +
+                                '<a href="javascript:;" id="' + i + '" onclick="delfile(' + i + ')">' +
+                                '<i class="fa-solid fa-xmark" style="vertical-align:middle"></i>' +
+                                '</a>' +
+                                '</li>'
+                            );
+                            i++;
+                        })
+                    });
+
+                    //finder.on('file:choose:resizedImage', function (evt) {
+                    //    evt.data.resizedFiles.forEach(function (file) {
+                    //        var fileUrl = file.getUrl();
+                    //        // Validate file type and size
+                    //        var uploadErrors = [];
+                    //        var acceptFileTypes = /\.(gif|jpe?g|png)$/i;
+                    //        if (!acceptFileTypes.test(fileUrl)) {
+                    //            uploadErrors.push("Chỉ chấp nhận định dạng jpeg, jpg, png, gif");
+                    //        }
+
+                    //        var totalImg = $("#ListImages .thumb-img-box").length;
+                    //        if (totalImg >= 10) {
+                    //            uploadErrors.push("Chỉ đăng tối đa 10 ảnh");
+                    //        }
+                    //        if (uploadErrors.length > 0) {
+                    //            alert(uploadErrors.join("\n"));
+                    //            return false;
+                    //        }
+                    //        $('#ListImages').append(
+                    //            '<li class="thumb-img-box">' +
+                    //            '<input type="hidden" name="Pictures" value ="' + fileUrl + '" />' +
+                    //            '<img src="' + fileUrl + '?w=80&h=80" alt="Image"/>' +
+                    //            '<a href="javascript:;" id="' + i + '" onclick="delfile(' + i + ')">' +
+                    //            '<img src="/content/admin/icon-delete.png" alt="Delete" style="vertical-align:middle" />' +
+                    //            '</a>' +
+                    //            '</li>'
+                    //        );
+                    //        i++;
+
+                    //    })
+                    //});
+                }
+            });
+        }
+
+
+        function delfile(divid) {
+            if (confirm('Bạn có chắc xóa ảnh này?')) {
+                $('#' + divid).parent().fadeOut().remove();
+            }
+        }
     </script>
 }
 

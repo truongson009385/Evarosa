@@ -68,7 +68,7 @@
                         <a asp-action="ArticleDetails" asp-controller="Home" asp-route-url="@item.Url" target="_blank">
                             @if (item.Image != null)
                             {
-                                <img src="@PathSystem.Combine("/contents/blog", item.Image)" style="width: 100px; aspect-ratio: 1; object-fit: contain;" alt="" />
+                                <img src="@item.Image" style="width: 100px; aspect-ratio: 1; object-fit: contain;" alt="" />
                             }
                             else
                             {

@@ -578,6 +578,7 @@ header {
 
     .avatar {
         display: block;
+        aspect-ratio: 1;
         padding: 0;
         background-color: $primaryLight;
 
@@ -2188,6 +2189,11 @@ footer {
 }
 
 .item-article {
+    .avatar {
+        display: block;
+        aspect-ratio: 1.5;
+    }
+
     img {
         width: 100%;
         aspect-ratio: 1.5;
@@ -3121,5 +3127,9 @@ footer {
 
     .partner-slider img {
         height: 86px;
+    }
+
+    .btn {
+        font-size: 14px;
     }
 }

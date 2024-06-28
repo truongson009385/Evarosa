@@ -4,7 +4,7 @@
     <a class="avatar" asp-controller="Home" asp-action="ArticleDetails" asp-route-url="@Model.Url">
         @if (!string.IsNullOrEmpty(Model.Image))
         {
-            <img src="@PathSystem.Combine("/contents/blog", Model.Image)?w=250" alt="@Model.Image" />
+            <img src="@Model.Image" alt="@Model.Name" />
         }
         else
         {

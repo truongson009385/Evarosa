@@ -1623,3 +1623,16 @@ img.qq-thumbnail-selector {
 .callout-info h4 {
   color: #31708f;
 }
+.fileinput-button {
+  background: #079AA6;
+  border-color: #079AA6;
+  font-size: 14rem;
+  transition: 0.3s;
+}
+.fileinput-button:hover {
+  color: #fff;
+  background-color: #004767;
+  box-shadow: 0 12px 24px -10px rgba(21, 59, 93, 0.46);
+  transform: scale(0.95);
+  border-color: #004767;
+}

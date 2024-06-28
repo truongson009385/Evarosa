@@ -49,7 +49,7 @@
                                         <a class="d-block" asp-controller="Home" asp-action="ProductDetails" asp-route-url="@item.Product.Url">
                                             @if (!string.IsNullOrEmpty(item.Product.Avatar))
                                             {
-                                                <img class="mr-2" src="@PathSystem.Combine("/contents/products", item.Product.Avatar)" alt="" />
+                                                <img class="mr-2" src="@item.Product.Avatar" alt="" />
                                             }
                                             else
                                             {

@@ -89,7 +89,7 @@
             <td>
                 @if (!string.IsNullOrEmpty(item.Image))
                 {
-                    <img src="@Url.Content($"/contents/product-categories/{item.Image}")" style="width: 80px; aspect-ratio: 1; object-fit: contain;">
+                    <img class="img-border" src="@item.Image" style="aspect-ratio: 1; object-fit: cover;">
                 }
                 else
                 {

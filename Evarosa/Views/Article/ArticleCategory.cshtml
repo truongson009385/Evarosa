@@ -39,15 +39,6 @@
                     </tr>
                     <tr>
                         <td class="form_name">
-                            <label asp-for="ArticleCategory.Image"></label>
-                        </td>
-                        <td class="form_text">
-                            <div class="file-image mb-3"></div>
-                            <input type="hidden" asp-for="ArticleCategory.Image" id="Image" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="form_name">
                             <label asp-for="ArticleCategory.Description"></label>
                         </td>
                         <td class="form_text">
@@ -136,12 +127,4 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-    <script>
-        $(".file-image").customUploader({
-            folder: "blog-categories",
-            extens: "jpg, jpeg, png",
-            limit: 1,
-            input: "#Image"
-        });
-    </script>
 }

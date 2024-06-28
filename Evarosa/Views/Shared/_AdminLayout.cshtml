@@ -4,7 +4,6 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
     @if (_appService.Config.Favicon != null)
     {
@@ -28,6 +27,8 @@
     <link href="~/css/styleAdmin.min.css" rel="stylesheet" />
 
     @await RenderSectionAsync("Styles", required: false)
+    
+    <script src="~/ckfinder/ckfinder.js"></script>
 </head>
 <body>
     <div id="responsive">

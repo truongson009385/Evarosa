@@ -29,7 +29,7 @@
                 <td>1</td>
                 <td class="left">
                     <a asp-controller="Home" asp-action="ProductDetails" asp-route-url="@detail.Product.Url">
-                        <img class="img-fluid" src="@PathSystem.Combine("/contents/products", detail.Product.Avatar)" style="width: 80px; aspect-ratio: 1; object-fit: cover;" />
+                        <img class="img-fluid" src="@detail.Product.Avatar" style="width: 80px; aspect-ratio: 1; object-fit: cover;" />
                     </a>
                 </td>
                 <td class="left">

@@ -62,6 +62,7 @@ namespace Evarosa.Controllers
         [HttpPost]
         public async Task<IActionResult> ProductCategory(ProductCategoryViewModel model)
         {
+            model.ProductCategory.Image = model.Image;
             model.ProductCategory.Url = HtmlHelpers.ConvertToUnSign(model.Url ?? model.ProductCategory.Title);
             unitOfWork.ProductCategory.Insert(model.ProductCategory);
             await unitOfWork.CommitAsync();
@@ -100,6 +101,7 @@ namespace Evarosa.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateProductCategory(ProductCategoryViewModel model)
         {
+            model.ProductCategory.Image = model.Image;
             model.ProductCategory.Url = HtmlHelpers.ConvertToUnSign(model.Url ?? model.ProductCategory.Title);
 
             unitOfWork.ProductCategory.UpdateAsync(model.ProductCategory);
@@ -230,6 +232,7 @@ namespace Evarosa.Controllers
 
             // URL Generation
             model.Product.Url = HtmlHelpers.ConvertToUnSign(model.Url ?? model.Product.Name);
+            model.Product.Images = string.Join(",", model.Images);
 
             var count = unitOfWork.Product.Count(m => m.Url == model.Product.Url);
             if (count > 0)
@@ -240,38 +243,42 @@ namespace Evarosa.Controllers
             unitOfWork.Product.Insert(model.Product);
             await unitOfWork.CommitAsync();
 
-            for (int i = 0; i < model.SkuProduct.Indexs; i++)
+            if (model.SkuProduct != null && model.SkuProduct.Indexs > 0)
             {
-                var sku = new Sku
+                for (int i = 0; i < model.SkuProduct.Indexs; i++)
                 {
-                    ProductId = model.Product.Id,
-                    SKU = model.SkuProduct.Skus[i],
-                    InStock = model.SkuProduct.Stocks[i],
-                    Price = model.SkuProduct.Prices[i] != null ? Convert.ToDecimal(model.SkuProduct.Prices[i].Replace(",", "")) : 0,
-                    PriceSale = model.SkuProduct.PriceSales[i] != null ? Convert.ToDecimal(model.SkuProduct.PriceSales[i].Replace(",", "")) : 0,
-                };
-
-                var options = model.SkuProduct.Options[i].Split("/");
-                var values = model.SkuProduct.Values[i].Split("/");
-
-                unitOfWork.Sku.Insert(sku);
-                await unitOfWork.CommitAsync();
-
-                for (int j = 0; j < options.Length; j++)
-                {
-                    var optionSku = new OptionSku
+                    var sku = new Sku
                     {
-                        SkuId = sku.Id,
-                        OptionId = Convert.ToInt32(options[j]),
-                        Value = values[j],
+                        ProductId = model.Product.Id,
+                        SKU = model.SkuProduct.Skus[i],
+                        InStock = model.SkuProduct.Stocks[i],
+                        Price = model.SkuProduct.Prices[i] != null ? Convert.ToDecimal(model.SkuProduct.Prices[i].Replace(",", "")) : 0,
+                        PriceSale = model.SkuProduct.PriceSales[i] != null ? Convert.ToDecimal(model.SkuProduct.PriceSales[i].Replace(",", "")) : 0,
                     };
 
-                    unitOfWork.OptionSku.Insert(optionSku);
-                }
-            }
-            
-            await unitOfWork.CommitAsync();
+                    var options = model.SkuProduct.Options[i].Split("/");
+                    var values = model.SkuProduct.Values[i].Split("/");
 
+                    unitOfWork.Sku.Insert(sku);
+                    await unitOfWork.CommitAsync();
+
+                    for (int j = 0; j < options.Length; j++)
+                    {
+                        var optionSku = new OptionSku
+                        {
+                            SkuId = sku.Id,
+                            OptionId = Convert.ToInt32(options[j]),
+                            Value = values[j],
+                        };
+
+                        unitOfWork.OptionSku.Insert(optionSku);
+                    }
+                }
+
+                await unitOfWork.CommitAsync();
+            }
+
+            
             TempData["Message"] = "success|Thêm mới thành công sản phẩm";
             return RedirectToAction("ListProduct");
         }
@@ -361,12 +368,12 @@ namespace Evarosa.Controllers
                 product.Url += $"-{DateTime.Now.Millisecond}";
             }
 
+            product.Images = string.Join(",", model.Images);
             product.Title = model.Product.Title;
             product.Description = model.Product.Description;
             product.Name = model.Product.Name;
             product.MaSP = model.Product.MaSP;
             product.ShortDescription = model.Product.ShortDescription;
-            product.Images = model.Product.Images;
             product.Active = model.Product.Active;
             product.ShowOutstanding = model.Product.ShowOutstanding;
             product.Content = model.Product.Content;
@@ -378,58 +385,61 @@ namespace Evarosa.Controllers
 
             var skuList = new List<Sku>();
 
-            for (int i = 0; i < model.SkuProduct.Indexs; i++)
+            if (model.SkuProduct != null && model.SkuProduct.Indexs > 0)
             {
-                var sku = new Sku
+                for (int i = 0; i < model.SkuProduct.Indexs; i++)
                 {
-                    Id = model.SkuProduct.Ids.ElementAtOrDefault(i),
-                    ProductId = model.Product.Id,
-                    SKU = model.SkuProduct.Skus.ElementAtOrDefault(i),
-                    InStock = model.SkuProduct.Stocks.ElementAtOrDefault(i),
-                    Price = model.SkuProduct.Prices?.ElementAtOrDefault(i) != null ? Convert.ToDecimal(model.SkuProduct.Prices.ElementAtOrDefault(i)?.Replace(",", "")) : 0,
-                    PriceSale = model.SkuProduct.PriceSales?.ElementAtOrDefault(i) != null ? Convert.ToDecimal(model.SkuProduct.PriceSales.ElementAtOrDefault(i)?.Replace(",", "")) : 0,
-                };
-
-                skuList.Add(sku);
-            }
-
-            unitOfWork.Sku.Update(skuList);
-            await unitOfWork.CommitAsync();
-
-            int index = 0;
-
-            foreach (var sku in skuList)
-            {
-                var options = model.SkuProduct.Options[index].Split("/");
-                var valuesj = model.SkuProduct.Values[index].Split("/");
-
-                for (int j = 0; j < options.Length; j++)
-                {
-                    var optionSku = await unitOfWork.OptionSku.GetAll(
-                            predicate: m => m.OptionId == Convert.ToInt32(options[j]) && m.SkuId == sku.Id,
-                            disableTracking: false
-                        ).FirstOrDefaultAsync();
-
-                    if (optionSku != null)
+                    var sku = new Sku
                     {
-                        optionSku.Value = valuesj[j];
-                        unitOfWork.OptionSku.Update(optionSku);
-                    }
-                    else
-                    {
-                        optionSku = new OptionSku
-                        {
-                            OptionId = Convert.ToInt32(options[j]),
-                            SkuId = sku.Id,
-                            Value = valuesj[j],
-                        };
-                        unitOfWork.OptionSku.Insert(optionSku);
-                    }
+                        Id = model.SkuProduct.Ids.ElementAtOrDefault(i),
+                        ProductId = model.Product.Id,
+                        SKU = model.SkuProduct.Skus.ElementAtOrDefault(i),
+                        InStock = model.SkuProduct.Stocks.ElementAtOrDefault(i),
+                        Price = model.SkuProduct.Prices?.ElementAtOrDefault(i) != null ? Convert.ToDecimal(model.SkuProduct.Prices.ElementAtOrDefault(i)?.Replace(",", "")) : 0,
+                        PriceSale = model.SkuProduct.PriceSales?.ElementAtOrDefault(i) != null ? Convert.ToDecimal(model.SkuProduct.PriceSales.ElementAtOrDefault(i)?.Replace(",", "")) : 0,
+                    };
 
-                    await unitOfWork.CommitAsync();
+                    skuList.Add(sku);
                 }
 
-                index++;
+                unitOfWork.Sku.Update(skuList);
+                await unitOfWork.CommitAsync();
+
+                int index = 0;
+
+                foreach (var sku in skuList)
+                {
+                    var options = model.SkuProduct.Options[index].Split("/");
+                    var valuesj = model.SkuProduct.Values[index].Split("/");
+
+                    for (int j = 0; j < options.Length; j++)
+                    {
+                        var optionSku = await unitOfWork.OptionSku.GetAll(
+                                predicate: m => m.OptionId == Convert.ToInt32(options[j]) && m.SkuId == sku.Id,
+                                disableTracking: false
+                            ).FirstOrDefaultAsync();
+
+                        if (optionSku != null)
+                        {
+                            optionSku.Value = valuesj[j];
+                            unitOfWork.OptionSku.Update(optionSku);
+                        }
+                        else
+                        {
+                            optionSku = new OptionSku
+                            {
+                                OptionId = Convert.ToInt32(options[j]),
+                                SkuId = sku.Id,
+                                Value = valuesj[j],
+                            };
+                            unitOfWork.OptionSku.Insert(optionSku);
+                        }
+
+                        await unitOfWork.CommitAsync();
+                    }
+
+                    index++;
+                }
             }
 
             var skusToDelete = await unitOfWork.Sku.GetAllAsync(predicate: sku => !skuList.Select(a => a.Id).Contains(sku.Id) && sku.ProductId == product.Id);
