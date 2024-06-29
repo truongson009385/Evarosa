@@ -13,8 +13,8 @@
     var breadcrumb = new BreadcrumbViewModel
             {
                 Path =
-                [
-                    new BreadcrumbItem
+                        [
+                            new BreadcrumbItem
                     {
                         Key = "<i class='fa-solid fa-house mr-2'></i>Trang chủ",
                         Value = Url.Action("Index", "Home")
@@ -25,11 +25,11 @@
                         Key = Model.Product.ProductCategory.Title,
                         Value = Model.Product.ProductCategory.Url
                     }
-                ]
+                        ]
             };
 
-    int i = 0;
-    int j = 0;
+    var i = 0;
+    var j = 0;
 }
 
 @await Html.PartialAsync("_breadcrumb", breadcrumb)
@@ -72,7 +72,13 @@
             }
         </div>
         <div class="col-lg-6">
-            <h1 class="product-name">@Model.Product.Name</h1>
+            <h1 class="product-name">@Model.Product.Name                 @if (Model.Product.IsOrder)
+                                                                         {
+                                                                             <label class="badge badge-danger">
+                                                                                 Hàng Order
+                                                                             </label>
+                                                                         }
+            </h1>
             <p class="product-price mb-4">
                 <span class="price">
                     @if (Model.FinalPrice > 0)
@@ -89,15 +95,11 @@
                     <span class="price-old">Giá thị trường: <del>@Html.DisplayFor(m => m.Price)</del></span>
                 }
             </p>
-
             <p class="product-text">
                 <span>Mã: </span><strong class="product-sku">@(!string.IsNullOrEmpty(Model.MaSP) ? Model.MaSP : "Chưa cập nhật")</strong>
             </p>
-
-
             <form class="my-4" id="addToCart">
                 <input name="id" type="hidden" value="@Model.Product.Id" />
-
                 @if (Model.OptionGroups.Any())
                 {
                     foreach (var item in Model.OptionGroups)
@@ -126,7 +128,6 @@
                     <label>Số lượng:</label>
                     <input class="input-number" type="number" name="quantity" value="1" min="1" max="999" />
                 </div>
-
                 <div class="product-buttons">
                     <button type="submit" class="btn btn-primary">
                         Thêm vào giỏ hàng

@@ -2426,6 +2426,7 @@ footer {
 .plan {
   display: flex;
   justify-content: start;
+  flex-wrap: wrap;
   gap: 10px;
 }
 .plan input {

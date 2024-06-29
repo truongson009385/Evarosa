@@ -1,5 +1,4 @@
 ﻿using Evarosa.Data;
-using Evarosa.Models;
 using Evarosa.Services.Impl;
 using Evarosa.ViewModels;
 using Microsoft.AspNetCore.Mvc;

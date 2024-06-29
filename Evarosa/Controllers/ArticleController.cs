@@ -7,7 +7,6 @@ using Evarosa.Models;
 using Evarosa.Services;
 using Evarosa.Utils;
 using Evarosa.ViewModels;
-using System.Security.Claims;
 using X.PagedList;
 
 namespace Evarosa.Controllers
@@ -50,8 +49,6 @@ namespace Evarosa.Controllers
         public async Task<IActionResult> ArticleCategory(ArticleCategoryViewModel model)
         {
             model.ArticleCategory.Url = HtmlHelpers.ConvertToUnSign(model.Url ?? model.ArticleCategory.Title);
-
-
             await unitOfWork.ArticleCategory.InsertAsync(model.ArticleCategory);
             await unitOfWork.CommitAsync();
 

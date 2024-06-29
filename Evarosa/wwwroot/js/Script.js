@@ -12,9 +12,10 @@
     });
     $('.banner').slick({
         infinite: true,
+        autoplay: true,
+        autoplaySpeed: 3000,
         slidesToShow: 1,
         slidesToScroll: 1,
-        speed: 800,
         arrows: false,
         dots: true
     });
@@ -23,7 +24,6 @@
         infinite: true,
         slidesToShow: 5,
         slidesToScroll: 5,
-        speed: 800,
         arrows: true,
         dots: true,
         responsive: [
@@ -32,7 +32,7 @@
                 settings: {
                     slidesToShow: 3,
                     slidesToScroll: 3,
-                    arrows: false,
+                    arrows: false
                 }
             },
             {
@@ -40,7 +40,7 @@
                 settings: {
                     slidesToShow: 2,
                     slidesToScroll: 2,
-                    arrows: false,
+                    arrows: false
                 }
             },
             {
@@ -48,7 +48,7 @@
                 settings: {
                     slidesToShow: 1,
                     slidesToScroll: 1,
-                    arrows: false,
+                    arrows: false
                 }
             }
         ]
@@ -58,7 +58,6 @@
         infinite: true,
         slidesToShow: 5,
         slidesToScroll: 5,
-        speed: 800,
         arrows: true,
         dots: true,
         responsive: [
@@ -67,7 +66,7 @@
                 settings: {
                     slidesToShow: 3,
                     slidesToScroll: 3,
-                    arrows: false,
+                    arrows: false
                 }
             },
             {
@@ -75,7 +74,7 @@
                 settings: {
                     slidesToShow: 2,
                     slidesToScroll: 2,
-                    arrows: false,
+                    arrows: false
                 }
             }
         ]

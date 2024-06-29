@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Evarosa.Data;
-using Evarosa.Models;
 using Evarosa.ViewModels;
 
 namespace Evarosa.ViewComponents

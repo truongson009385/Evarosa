@@ -1,11 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Evarosa.Data;
 using Evarosa.Services;
-using Evarosa.Services.Impl;
 using Evarosa.ViewModels;
-using System.Drawing;
 using X.PagedList;
 
 namespace Evarosa.Controllers

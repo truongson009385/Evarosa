@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.FileProviders;
-
-namespace Evarosa.Services
+﻿namespace Evarosa.Services
 {
     public interface IFileService
     {

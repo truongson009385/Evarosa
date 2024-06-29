@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Evarosa.Models;
+﻿using Evarosa.Models;
 
 namespace Evarosa.Data
 {

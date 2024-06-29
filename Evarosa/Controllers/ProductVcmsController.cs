@@ -8,9 +8,6 @@ using Evarosa.Services;
 using Evarosa.Utils;
 using Evarosa.ViewModels;
 using X.PagedList;
-using System.Text.RegularExpressions;
-using NuGet.Packaging.Signing;
-using NuGet.Packaging;
 
 namespace Evarosa.Controllers
 {
@@ -243,7 +240,7 @@ namespace Evarosa.Controllers
             unitOfWork.Product.Insert(model.Product);
             await unitOfWork.CommitAsync();
 
-            if (model.SkuProduct != null && model.SkuProduct.Indexs > 0)
+            if (model.SkuProduct is { Indexs: > 0 })
             {
                 for (int i = 0; i < model.SkuProduct.Indexs; i++)
                 {
@@ -378,6 +375,7 @@ namespace Evarosa.Controllers
             product.ShowOutstanding = model.Product.ShowOutstanding;
             product.Content = model.Product.Content;
             product.InStock = model.Product.InStock;
+            product.IsOrder = model.Product.IsOrder;
             product.Sort = model.Product.Sort;
             product.ProductCategoryId = model.Product.ProductCategoryId;
 
@@ -385,7 +383,7 @@ namespace Evarosa.Controllers
 
             var skuList = new List<Sku>();
 
-            if (model.SkuProduct != null && model.SkuProduct.Indexs > 0)
+            if (model.SkuProduct is { Indexs: > 0 })
             {
                 for (int i = 0; i < model.SkuProduct.Indexs; i++)
                 {

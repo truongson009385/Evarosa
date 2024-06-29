@@ -1,11 +1,8 @@
 ﻿using Evarosa.Data;
 using Evarosa.Models;
 using Evarosa.Services;
-using Evarosa.Services.Impl;
 using Evarosa.ViewModels;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using X.PagedList;

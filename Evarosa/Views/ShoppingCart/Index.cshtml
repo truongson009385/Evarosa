@@ -49,7 +49,14 @@
                                         <a class="d-block" asp-controller="Home" asp-action="ProductDetails" asp-route-url="@item.Product.Url">
                                             @if (!string.IsNullOrEmpty(item.Product.Avatar))
                                             {
-                                                <img class="mr-2" src="@item.Product.Avatar" alt="" />
+                                                if (item.Product.Avatar.StartsWith("/ckfinder/"))
+                                                {
+                                                    <img class="mr-2" src="@item.Product.Avatar" alt="@item.Product.Name" />
+                                                }
+                                                else
+                                                {
+                                                    <img class="mr-2" src="@PathSystem.Combine("/contents/products/",item.Product.Avatar)" alt="@item.Product.Name" />
+                                                }
                                             }
                                             else
                                             {
@@ -63,6 +70,12 @@
                                             @if (item.Sku != null)
                                             {
                                                 <small class="d-block">SKU: <strong>@item.Sku.SKU</strong></small>
+                                            }
+                                            @if (item.Product.IsOrder)
+                                            {
+                                                <label class="badge badge-danger">
+                                                    Hàng Order
+                                                </label>
                                             }
                                             <a href="javascript:;" class="remove" onclick="removeFromCart('@item.RecordId')">Xóa</a>
                                         </div>
