@@ -8,7 +8,7 @@
 
     if (!string.IsNullOrEmpty(AppService.Config.AboutImage))
     {
-        ViewData["ImageShare"] = Context.Request.Scheme + "://" + Context.Request.Host + System.IO.Path.Combine("/contents/system/", AppService.Config.AboutImage);
+        ViewData["ImageShare"] = Context.Request.Scheme + "://" + Context.Request.Host + PathSystem.Combine("/contents/system/", AppService.Config.AboutImage);
     }
 }
 

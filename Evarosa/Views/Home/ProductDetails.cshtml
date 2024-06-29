@@ -2,19 +2,26 @@
 
 @{
     ViewData["Title"] = Model.Product.Title ?? Model.Product.Name;
-    ViewData["Description"] = Model.Product.ShortDescription ?? Model.Product.Description;
+    ViewData["Description"] = Model.Product.Description ?? Model.Product.ShortDescription;
     ViewData["Canonical"] = Url.Action("ProductDetails", "Home", new { url = Model.Product.Url }, protocol: Context.Request.Scheme);
 
     if (Model.Product.Avatar != null)
     {
-        ViewData["ImageShare"] = Model.Product.Avatar;
+        if (Model.Product.Avatar.StartsWith("/ckfinder/"))
+        {
+            ViewData["ImageShare"] = Model.Product.Avatar;
+        }
+        else
+        {
+            ViewData["ImageShare"] = Context.Request.Scheme + "://" + Context.Request.Host + PathSystem.Combine("/contents/products/", Model.Product.Avatar);
+        }
     }
 
     var breadcrumb = new BreadcrumbViewModel
             {
                 Path =
-                        [
-                            new BreadcrumbItem
+                                [
+                                    new BreadcrumbItem
                     {
                         Key = "<i class='fa-solid fa-house mr-2'></i>Trang chủ",
                         Value = Url.Action("Index", "Home")
@@ -25,7 +32,7 @@
                         Key = Model.Product.ProductCategory.Title,
                         Value = Model.Product.ProductCategory.Url
                     }
-                        ]
+                                ]
             };
 
     var i = 0;
@@ -72,12 +79,13 @@
             }
         </div>
         <div class="col-lg-6">
-            <h1 class="product-name">@Model.Product.Name                 @if (Model.Product.IsOrder)
-                                                                         {
-                                                                             <label class="badge badge-danger">
-                                                                                 Hàng Order
-                                                                             </label>
-                                                                         }
+            <h1 class="product-name">
+                @Model.Product.Name                 @if (Model.Product.IsOrder)
+                {
+                    <label class="badge badge-danger">
+                        Hàng Order
+                    </label>
+                }
             </h1>
             <p class="product-price mb-4">
                 <span class="price">

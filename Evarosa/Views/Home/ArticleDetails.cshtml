@@ -6,7 +6,15 @@
     ViewData["Canonical"] = Url.Action("ArticleDetails", "Home", new { url = Model.Article.Url }, protocol: Context.Request.Scheme);
     if (Model.Article.Image != null)
     {
-        ViewData["ImageShare"] = Model.Article.Image;
+        if (Model.Article.Image.StartsWith("/ckfinder/"))
+        {
+            ViewData["ImageShare"] = Model.Article.Image;
+        }
+        else
+        {
+            ViewData["ImageShare"] = Context.Request.Scheme + "://" + Context.Request.Host + PathSystem.Combine("/contents/blog/", Model.Article.Image);
+        }
+
     }
 
     var category = Model.Article.ArticleCategory;
