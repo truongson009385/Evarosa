@@ -7,52 +7,32 @@ namespace Evarosa.Models
     {
         [Key]
         public int Id { get; set; }
-
         [Display(Name = "Mã sản phẩm")]
         public string? MaSP { set; get; }
-
         [Display(Name = "Danh mục sản phẩm")]
         public int ProductCategoryId { get; set; }
-
         [Display(Name = "Tên sản phẩm"), StringLength(200, ErrorMessage = "Tên sản phẩm không được vượt quá 200 ký tự.")]
         public string Name { get; set; }
-
         [Display(Name = "Mô tả ngắn")]
         public string? ShortDescription { set; get; }
-
         [Display(Name = "Thẻ title"), StringLength(200, ErrorMessage = "Tối đa 200 ký tự"), UIHint("TextBox")]
         public string? Title { get; set; }
-
         [Display(Name = "Thẻ description"), StringLength(int.MaxValue, ErrorMessage = "Tối đa 500 ký tự"), UIHint("TextArea")]
         public string? Description { get; set; }
-
         [Display(Name = "Thông tin chi tiết")]
         public string? Content { get; set; }
-
         [Display(Name = "URL"), StringLength(255, ErrorMessage = "URL không được vượt quá 255 ký tự.")]
         public string Url { get; set; }
-
         [Display(Name = "Ảnh sản phẩm")]
         public string? Images { get; set; }
-
         [Display(Name = "Tồn kho")]
         public int InStock { get; set; } = 0;
-
         [Display(Name = "Giá bán"), DisplayFormat(DataFormatString = "{0:N0} đ")]
         public decimal Price { get; set; } = decimal.Zero;
-
         [Display(Name = "Giá khuyến mãi"), DisplayFormat(DataFormatString = "{0:N0} đ")]
         public decimal PriceSale { get; set; } = decimal.Zero;
-
         [DisplayFormat(DataFormatString = "{0:N0} đ")]
-        public decimal FinalPrice
-        {
-            get
-            {
-                return PriceSale != decimal.Zero ? PriceSale : Price;
-            }
-        }
-
+        public decimal FinalPrice => PriceSale != decimal.Zero ? PriceSale : Price;
         [DisplayFormat(DataFormatString = "{0:N0} đ")]
         public decimal SavePrice
         {
@@ -65,7 +45,6 @@ namespace Evarosa.Models
                 return Price - PriceSale;
             }
         }
-
         public decimal Percent
         {
             get
@@ -75,21 +54,18 @@ namespace Evarosa.Models
                     return decimal.Zero;
                 }
 
-                decimal percent = (Price - PriceSale) / Price * 100;
+                var percent = (Price - PriceSale) / Price * 100;
                 return Math.Round(percent, 0);
             }
         }
-
-        [Display(Name = "Hoạt đông")]
+        [Display(Name = "Hoạt động")]
         public bool Active { get; set; } = true;
-
-        [Display(Name = "Hiển thị ở sản phẩm nổi bật")]
+        [Display(Name = "Hiển thị ở Hot Sales")]
         public bool ShowOutstanding { set; get; } = false;
-
         [Display(Name = "Hiện thị trang chủ")]
         public bool ShowHome { set; get; } = false;
-
-
+        [Display(Name = "Hàng Order")]
+        public bool IsOrder { get; set; }
         [Display(Name = "Số thứ tự"), Required(ErrorMessage = "Bạn chưa nhập số thứ tự"), RegularExpression(@"\d+", ErrorMessage = "Chỉ nhập số nguyên dương"), UIHint("NumberBox")]
         public int Sort { get; set; } = 1;
 
@@ -97,22 +73,10 @@ namespace Evarosa.Models
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
         [Display(Name = "Ảnh đại diện")]
-        public string? Avatar
-        {
-            get
-            {
-                return Images?.Split(',')[0];
-            }
-        }
+        public string? Avatar => Images?.Split(',')[0];
 
         [Display(Name = "Danh sách ảnh")]
-        public string[] ArrImage
-        {
-            get
-            {
-                return Images?.Split(',') ?? [];
-            }
-        }
+        public string[] ArrImage => Images?.Split(',') ?? [];
 
         [Display(Name = "Danh mục sản phẩm")]
         public virtual ProductCategory ProductCategory { get; set; }

@@ -1,5 +1,4 @@
 ﻿using Evarosa.Data;
-using Evarosa.Models;
 using Evarosa.Utils;
 using Evarosa.ViewModels;
 using Microsoft.AspNetCore.Authorization;

@@ -10,5 +10,9 @@
   {
     "outputFile": "wwwroot/css/StyleAdmin.css",
     "inputFile": "wwwroot/css/StyleAdmin.less"
+  },
+  {
+    "outputFile": "wwwroot/css/themes/login.css",
+    "inputFile": "wwwroot/css/themes/login.less"
   }
 ]

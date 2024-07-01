@@ -8,7 +8,8 @@
         var skuPrice = Model.Skus.Min(a => a.FinalPrice);
 
         finalPrice = skuPrice > 0 ? skuPrice : 0;
-    } else
+    }
+    else
     {
         finalPrice = Model.FinalPrice;
     }
@@ -18,7 +19,14 @@
     <a class="avatar" asp-controller="Home" asp-action="ProductDetails" asp-route-url="@Model.Url">
         @if (!string.IsNullOrEmpty(Model.Avatar))
         {
-            <img src="@Model.Avatar" alt="@Model.Avatar" />
+            if (Model.Avatar.StartsWith("/ckfinder/"))
+            {
+                <img src="@Model.Avatar" alt="@Model.Name" />
+            }
+            else
+            {
+                <img src="@PathSystem.Combine("/contents/products/",Model.Avatar)" alt="@Model.Name" />
+            }
         }
         else
         {
@@ -38,9 +46,10 @@
                     @if (finalPrice > 0)
                     {
                         @(finalPrice.ToString("N0") + " đ")
-                    } else
+                    }
+                    else
                     {
-                        @:Liên hệ    
+                        @:Liên hệ
                     }
                 </span>
             </div>

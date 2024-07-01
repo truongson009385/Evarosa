@@ -1,11 +1,8 @@
 ﻿using Evarosa.Data;
 using Evarosa.Models;
 using Evarosa.Services;
-using Evarosa.Services.Impl;
 using Evarosa.ViewModels;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using X.PagedList;
@@ -41,10 +38,9 @@ namespace Evarosa.Controllers
             var qrProductOutstanding = unitOfWork.Product
                 .GetAll(
                     predicate: m => m.Active && m.ShowOutstanding,
-                    orderBy: m => m.OrderByDescending(o => o.Sort),
+                    orderBy: m => m.OrderBy(o => Guid.NewGuid()),
                     include: m => m.Include(l => l.Skus)
             );
-
 
             //Get
             model.Banner = await qrBanner.Where(m => m.GroupId == 1).Take(20).ToListAsync();

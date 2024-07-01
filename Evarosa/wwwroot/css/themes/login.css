@@ -25,7 +25,7 @@
   align-items: center;
 }
 .limiter .title {
-  background: url('admin/bg-login.jpg') no-repeat;
+  background: url('../admin/bg-login.jpg') no-repeat;
   width: 100%;
   position: relative;
   z-index: 1;

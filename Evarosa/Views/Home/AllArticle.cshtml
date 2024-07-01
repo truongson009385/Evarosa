@@ -6,19 +6,20 @@
 
     var breadcrumb = new BreadcrumbViewModel
     {
-        Path = new List<BreadcrumbItem>
-        {
+        Path =
+        [
             new BreadcrumbItem
             {
                 Key = "<i class='fa-solid fa-house mr-2'></i>Trang chủ",
                 Value = Url.Action("Index", "Home")
             },
+
             new BreadcrumbItem
             {
                 Key = ViewBag.Title,
                 Value = null
             }
-        }
+        ]
     };
 }
 

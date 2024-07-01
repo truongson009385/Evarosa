@@ -4,10 +4,7 @@ using Evarosa.Services;
 using Evarosa.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.Reflection;
 using X.PagedList;
 
 namespace NamTinNgoc.Controllers

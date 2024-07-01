@@ -72,9 +72,17 @@
                                 @foreach (var img in Model.Product.ArrImage)
                                 {
                                     <li>
-                                        <input type="hidden" name="Images" value="@img" />
-                                        <img src="@img" alt="" />
-                                        <a href="javascript:;" id="@countImg" onclick="delfile( '@countImg')"><i class="fa-solid fa-xmark"></i></a>
+                                        @if (img.StartsWith("/ckfinder/"))
+                                        {
+                                            <input type="hidden" name="Images" value="@img" />
+                                            <img src="@img" alt="item" />
+                                        }
+                                        else
+                                        {
+                                            <input type="hidden" name="Images" value="@PathSystem.Combine("/contents/products/",img)" />
+                                            <img src="@PathSystem.Combine("/contents/products/",img)" alt="item" />
+                                        }
+                                        <a href="javascript:;" id="@countImg" onclick="delfile('@countImg')"><i class="fa-solid fa-xmark"></i></a>
                                     </li>
                                     countImg = countImg + 1;
                                 }
@@ -119,6 +127,12 @@
                         <td class="form_name">@Html.LabelFor(model => model.Product.ShowHome)</td>
                         <td class="form_text">
                             <input asp-for="Product.ShowHome" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(model => model.Product.IsOrder)</td>
+                        <td class="form_text">
+                            <input asp-for="Product.IsOrder" />
                         </td>
                     </tr>
                     <tr>
@@ -267,15 +281,23 @@
                             // Append image to list
                             $('#ListImages').append(
                                 '<li class="thumb-img-box">' +
-                                '<input type="hidden" name="Images" value ="' + fileUrl + '" />' +
-                                '<img src="' + fileUrl + '" alt="Image"/>' +
-                                '<a href="javascript:;" id="' + i + '" onclick="delfile(' + i + ')">' +
+                                '<input type="hidden" name="Images" value ="' +
+                                fileUrl +
+                                '" />' +
+                                '<img src="' +
+                                fileUrl +
+                                '" alt="Image"/>' +
+                                '<a href="javascript:;" id="' +
+                                i +
+                                '" onclick="delfile(' +
+                                i +
+                                ')">' +
                                 '<i class="fa-solid fa-xmark"></i>' +
                                 '</a>' +
                                 '</li>'
                             );
                             i++;
-                        })
+                        });
                     });
 
                     //finder.on('file:choose:resizedImage', function (evt) {

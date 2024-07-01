@@ -43,7 +43,7 @@ namespace Evarosa.ViewModels
         [Required(ErrorMessage = "Số điện thoại là bắt buộc.")]
         [RegularExpression(@"^\(?(09|03|07|08|05)\)?[-. ]?([0-9]{8})$", ErrorMessage = "Số điện thoại không đúng định dạng.")]
         [StringLength(10, ErrorMessage = "Tối đa 10 ký tự")]
-        public string? PhoneNumber { get; set; }
+        public string PhoneNumber { get; set; }
 
         [Display(Name = "Địa chỉ"), UIHint("MemberTextBox")]
         [StringLength(200, ErrorMessage = "Địa chỉ không được dài quá 200 ký tự.")]

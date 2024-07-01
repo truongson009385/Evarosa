@@ -1,5 +1,4 @@
 ﻿@model PageArticleViewModel
-@using System.Globalization
 
 @{
     ViewData["Title"] = Model.Article.TitleMeta ?? Model.Article.Name;
@@ -7,26 +6,35 @@
     ViewData["Canonical"] = Url.Action("ArticleDetails", "Home", new { url = Model.Article.Url }, protocol: Context.Request.Scheme);
     if (Model.Article.Image != null)
     {
-        ViewData["ImageShare"] = Model.Article.Image;
+        if (Model.Article.Image.StartsWith("/ckfinder/"))
+        {
+            ViewData["ImageShare"] = Model.Article.Image;
+        }
+        else
+        {
+            ViewData["ImageShare"] = Context.Request.Scheme + "://" + Context.Request.Host + PathSystem.Combine("/contents/blog/", Model.Article.Image);
+        }
+
     }
 
     var category = Model.Article.ArticleCategory;
 
     var breadcrumb = new BreadcrumbViewModel
     {
-        Path = new List<BreadcrumbItem>
-        {
+        Path =
+        [
             new BreadcrumbItem
             {
                 Key = "<i class='fa-solid fa-house mr-2'></i>Trang chủ",
                 Value = Url.Action("Index", "Home")
             },
+
             new BreadcrumbItem
             {
                 Key = category.Title,
                 Value = Url.Action("ListArticle", "Home", new { url = category.Url })
             }
-        }
+        ]
     };
     var ci = CultureInfo.GetCultureInfo("vi-VN");
 }
@@ -84,7 +92,7 @@
             @foreach (var article in Model.Articles)
             {
                 <div class="col-lg-3 col-md-4 col-sm-6 px-2 mb-3">
-                    <partial name="~/Views/Home/ItemArticle.cshtml" model="article" />
+                    <partial name="ItemArticle.cshtml" model="article" />
                 </div>
             }
         </div>

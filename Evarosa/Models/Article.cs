@@ -25,9 +25,9 @@ namespace Evarosa.Models
         [Display(Name = "Thẻ description"), StringLength(500, ErrorMessage = "Tối đa 500 ký tự"), UIHint("TextArea")]
         public string? DescriptionMeta { get; set; }
 
-        [Display(Name = "Ảnh đại diện")]
+        [Display(Name = "Ảnh đại diện"), StringLength(500)]
         public string? Image { set; get; }
-
+        [StringLength(500)]
         public string Url { set; get; }
 
         [Display(Name = "Nội dung")]
@@ -98,8 +98,6 @@ namespace Evarosa.Models
 
         [Display(Name = "Loại danh mục")]
         public TypeArticle Type { get; set; }
-
-
     }
 
     public enum TypeArticle

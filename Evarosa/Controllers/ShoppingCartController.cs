@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using Evarosa.Data;
 using Evarosa.Models;
 using Evarosa.Services.Impl;
@@ -10,7 +9,6 @@ using System.Diagnostics;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Evarosa.Utils;
-using System.IO;
 
 namespace Evarosa.Controllers
 {
@@ -34,13 +32,8 @@ namespace Evarosa.Controllers
             _env = env;
         }
 
-        public ShoppingService cart
-        {
-            get
-            {
-                return ShoppingService.GetCart(HttpContext, _unitOfWork);
-            }
-        }
+        public ShoppingService cart => ShoppingService.GetCart(HttpContext, _unitOfWork);
+
         public IActionResult CartMini()
         {
             var model = new CartMiniViewModel

@@ -8,7 +8,7 @@
 
     if (!string.IsNullOrEmpty(AppService.Config.AboutImage))
     {
-        ViewData["ImageShare"] = Context.Request.Scheme + "://" + Context.Request.Host + System.IO.Path.Combine("/contents/system/", AppService.Config.AboutImage);
+        ViewData["ImageShare"] = Context.Request.Scheme + "://" + Context.Request.Host + PathSystem.Combine("/contents/system/", AppService.Config.AboutImage);
     }
 }
 
@@ -60,7 +60,7 @@
 @if (Model.ProductOutstanding.Any())
 {
     <div class="outstanding container pb-5">
-        <h2 class="section-title">Sản phẩm nổi bật</h2>
+        <h2 class="section-title">Hot Sales</h2>
 
         <ul class="outstanding-tabs">
             @foreach (var item in Model.ProductOutstanding)

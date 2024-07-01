@@ -11,7 +11,7 @@ namespace Evarosa.Models
         public string Name { get; set; }
         [Display(Name = "Slogan"), StringLength(500, ErrorMessage = "Tối đa 500 ký tự"), UIHint("TextBox")]
         public string? Slogan { get; set; }
-        [Display(Name = "Hình ảnh"), StringLength(500), UIHint("ImageBanner")]
+        [Display(Name = "Hình ảnh"), StringLength(500)]
         public string? Image { get; set; }
         [Display(Name = "Hoạt động")]
         public bool Active { get; set; } = true;
