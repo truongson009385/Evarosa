@@ -456,6 +456,7 @@
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Views\Member\OrderDetails.cshtml" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\StyleAdmin.min.css" />
   </ItemGroup>
 
 </Project>

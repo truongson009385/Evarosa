@@ -223,6 +223,15 @@
             }
         });
 
+        $(".sku-image img").click(function () {
+            selectFileWithCKFinder(this);
+        });
+
+        $(".sku-image button").click(function () {
+            $(this).parent().find("input").val("");
+            $(this).parent().find("img").attr("src", "/images/no-image.jpg");
+        });
+
         $(function () {
             $("#ListImages").sortable();
             $("#ListImages").disableSelection();

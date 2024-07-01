@@ -22,7 +22,7 @@ namespace Evarosa.ViewModels
         public int? InStock { get; set; }
         public string? MaSP { get; set; }
         public DateTime? Timer { get; set; }
-        public string[] Images { get; set; }
+        public string[] Images { get; set; } = new string[] { };
         public SkuProductViewModel SkuProduct { get; set; }
         public OptionProductVcms? OptionProductVcms { get; set; }
 

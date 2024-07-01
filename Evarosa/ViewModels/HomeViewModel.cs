@@ -25,6 +25,7 @@ namespace Evarosa.ViewModels
         {
             public int SkuId { get; set; }
             public int Id { get; set; }
+            public string? Image { get; set; }
             public string Value { get; set; }
         }
     }

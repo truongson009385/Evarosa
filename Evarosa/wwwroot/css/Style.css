@@ -2439,13 +2439,19 @@ footer {
   text-align: center;
   display: inline-block;
   width: max-content;
-  height: 35px;
+  height: 40px;
   padding: 0 10px;
   line-height: 35px;
   cursor: pointer;
   border: 2px solid transparent;
   border-radius: 5px;
   box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+.plan label img {
+  width: 20px;
+  aspect-ratio: 1;
+  object-fit: cover;
+  margin-right: 3px;
 }
 .plan input:checked + label {
   color: #506DB3;

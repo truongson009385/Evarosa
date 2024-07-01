@@ -1639,8 +1639,25 @@ img.qq-thumbnail-selector {
 .sku-image {
   width: 68px;
   aspect-ratio: 1;
-  object-fit: cover;
   background-color: #fff;
   border: 1px solid #cdcdcd;
   padding: 3px;
+  position: relative;
+}
+.sku-image > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.sku-image > button {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  border: 0;
+  outline: 0;
+  width: 21px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  font-size: 10px;
+  border: 1px solid #000000;
 }

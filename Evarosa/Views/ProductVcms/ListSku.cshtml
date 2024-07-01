@@ -27,8 +27,11 @@
                         <p class="my-2">@lap</p>
                     </th>
                     <td style="vertical-align: middle;">
-                        <input type="hidden" class="input-sku-image" asp-for="SkuProduct.Images" value="" />
-                        <img class="sku-image" src="~/images/no-image.jpg"/>
+                        <div class="sku-image">
+                            <input type="hidden" asp-for="SkuProduct.Images" value="" />
+                            <img src="~/images/no-image.jpg" />
+                            <button type="button"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
                     </td>
                     <td style="vertical-align: middle;">
                         <input class="form-control my-2" asp-for="SkuProduct.Skus" required placeholder="SKU" />
@@ -55,8 +58,13 @@
         thousands: ','
     });
 
-    $(".sku-image").click(function () {
+    $(".sku-image img").click(function () {
         selectFileWithCKFinder(this);
+    });
+
+    $(".sku-image button").click(function () {
+        $(this).parent().find("input").val("");
+        $(this).parent().find("img").attr("src", "/images/no-image.jpg");
     });
 
     function selectFileWithCKFinder(ele) {
@@ -70,8 +78,8 @@
                     var fileUrl = file.getUrl();
                     var element = $(ele);
 
-                    element.closest("tr").find(".input-sku-image").val(fileUrl);
                     element.attr("src", fileUrl);
+                    element.closest(".sku-image").find("input").val(file.getUrl());
                 });
 
             }

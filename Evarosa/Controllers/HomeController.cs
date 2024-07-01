@@ -138,6 +138,7 @@ namespace Evarosa.Controllers
                     {
                         Id = optionSku.OptionId,
                         SkuId = optionSku.SkuId,
+                        Image = optionSku.Sku.Image,
                         Value = optionSku.Value
                     }).Distinct().ToList()
                 })

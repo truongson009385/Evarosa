@@ -96,7 +96,12 @@
                                 @foreach (var option in item.Options)
                                 {
                                     <input data-sku="@option.SkuId" class="product-option" type="radio" name="skuId" id="option-@(i)-@(j)" value="@option.SkuId" checked="@(option.SkuId == Model.SkuId ? "checked" : null)">
-                                    <label for="option-@(i)-@(j)">@option.Value</label>
+                                    <label for="option-@(i)-@(j)">
+                                        @if(!string.IsNullOrEmpty(option.Image)) {
+                                            <img src="@(option.Image)" alt="option-@(i)-@(j)" />
+                                        }
+                                        @option.Value
+                                    </label>
 
                                     j++;
                                 }
