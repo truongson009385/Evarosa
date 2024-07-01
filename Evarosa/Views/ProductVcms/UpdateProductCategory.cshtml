@@ -110,6 +110,10 @@
                         <td class="form_name">@Html.LabelFor(model => model.ProductCategory.Active)</td>
                         <td class="form_text">@Html.CheckBoxFor(model => model.ProductCategory.Active)</td>
                     </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(model => model.ProductCategory.Sort)</td>
+                        <td class="form_text">@Html.EditorFor(model => model.ProductCategory.Sort)</td>
+                    </tr>
                 </table>
             </div>
         </div>

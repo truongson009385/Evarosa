@@ -106,6 +106,11 @@ namespace Evarosa.Controllers
             return View(model);
         }
 
+        public IActionResult CkFinder()
+        {
+            return View();
+        }
+
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateAdmin(string result = "")
         {
