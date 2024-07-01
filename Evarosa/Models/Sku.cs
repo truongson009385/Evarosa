@@ -10,6 +10,8 @@ namespace Evarosa.Models
 
         public string? SKU { get; set; }
 
+        public string? Image { get; set; }
+
         public int InStock { get; set; } = 0;
         
         [DisplayFormat(DataFormatString = "{0:N0} đ")]

@@ -250,6 +250,7 @@ namespace Evarosa.Controllers
                     var sku = new Sku
                     {
                         ProductId = model.Product.Id,
+                        Image = model.SkuProduct.Images[i],
                         SKU = model.SkuProduct.Skus[i],
                         InStock = model.SkuProduct.Stocks[i],
                         Price = model.SkuProduct.Prices[i] != null ? Convert.ToDecimal(model.SkuProduct.Prices[i].Replace(",", "")) : 0,
@@ -324,6 +325,7 @@ namespace Evarosa.Controllers
                 Attrs = items,
                 FirstItem = attrs.FirstOrDefault(),
                 Ids = await skuQr.Select(m => m.Id).ToArrayAsync(),
+                Images = await skuQr.Select(m => m.Image ?? "").ToArrayAsync(),
                 Skus = await skuQr.Select(m => m.SKU ?? "").ToArrayAsync(),
                 Stocks = await skuQr.Select(m => m.InStock).ToArrayAsync(),
                 Prices = await skuQr.Select(m => m.Price.ToString("N0")).ToArrayAsync(),
@@ -393,6 +395,7 @@ namespace Evarosa.Controllers
                     {
                         Id = model.SkuProduct.Ids.ElementAtOrDefault(i),
                         ProductId = model.Product.Id,
+                        Image = model.SkuProduct.Images?.ElementAtOrDefault(i),
                         SKU = model.SkuProduct.Skus.ElementAtOrDefault(i),
                         InStock = model.SkuProduct.Stocks.ElementAtOrDefault(i),
                         Price = model.SkuProduct.Prices?.ElementAtOrDefault(i) != null ? Convert.ToDecimal(model.SkuProduct.Prices.ElementAtOrDefault(i)?.Replace(",", "")) : 0,
@@ -457,10 +460,6 @@ namespace Evarosa.Controllers
             var item = await unitOfWork.Product.FindAsync(id);
 
             if (item == null) return Json(new { success = false });
-
-            var user = await unitOfWork.Admin.GetAll(
-                   predicate: m => m.Username == User.Identity.Name
-               ).FirstOrDefaultAsync();
 
             unitOfWork.Product.Delete(item);
             await unitOfWork.CommitAsync();

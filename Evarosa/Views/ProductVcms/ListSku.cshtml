@@ -10,6 +10,7 @@
     <thead>
         <tr>
             <th scope="col" class="text-center"></th>
+            <th scope="col" class="text-center">Ảnh</th>
             <th scope="col" class="text-center">SKU</th>
             <th scope="col" class="text-center">Tồn kho</th>
             <th scope="col" class="text-center">Giá</th>
@@ -22,18 +23,22 @@
             @foreach (var item in Model.SkuProduct.Attrs.Where(m => m.Split("/").First() == lap))
             {
                 <tr>
-                    <th scope="row">
+                    <th scope="row" style="vertical-align: middle;">
                         <p class="my-2">@lap</p>
                     </th>
-                    <td>
+                    <td style="vertical-align: middle;">
+                        <input type="hidden" class="input-sku-image" asp-for="SkuProduct.Images" value="" />
+                        <img class="sku-image" src="~/images/no-image.jpg"/>
+                    </td>
+                    <td style="vertical-align: middle;">
                         <input class="form-control my-2" asp-for="SkuProduct.Skus" required placeholder="SKU" />
                         <input type="hidden" asp-for="SkuProduct.Options" value="@string.Join("/", Model.SkuProduct.OptionIds)" />
                         <input type="hidden" asp-for="SkuProduct.Values" value="@item" />
                         <input type="hidden" asp-for="SkuProduct.Ids" value="0" />
                     </td>
-                    <td><input class="form-control my-2" type="number" value="0" required asp-for="SkuProduct.Stocks" placeholder="Tồn kho" /></td>
-                    <td><input class="form-control input-number my-2" asp-for="SkuProduct.Prices" placeholder="Giá" /></td>
-                    <td><input class="form-control input-number my-2" asp-for="SkuProduct.PriceSales" placeholder="Giá bán" /></td>
+                    <td style="vertical-align: middle;"><input class="form-control my-2" type="number" value="0" required asp-for="SkuProduct.Stocks" placeholder="Tồn kho" /></td>
+                    <td style="vertical-align: middle;"><input class="form-control input-number my-2" asp-for="SkuProduct.Prices" placeholder="Giá" /></td>
+                    <td style="vertical-align: middle;"><input class="form-control input-number my-2" asp-for="SkuProduct.PriceSales" placeholder="Giá bán" /></td>
                 </tr>
 
                 indexs++;
@@ -49,4 +54,27 @@
         precision: 0,
         thousands: ','
     });
+
+    $(".sku-image").click(function () {
+        selectFileWithCKFinder(this);
+    });
+
+    function selectFileWithCKFinder(ele) {
+        CKFinder.popup({
+            chooseFiles: true,
+            width: 800,
+            height: 600,
+            onInit: function (finder) {
+                finder.on('files:choose', function (evt) {
+                    var file = evt.data.files.first();
+                    var fileUrl = file.getUrl();
+                    var element = $(ele);
+
+                    element.closest("tr").find(".input-sku-image").val(fileUrl);
+                    element.attr("src", fileUrl);
+                });
+
+            }
+        });
+    }
 </script>

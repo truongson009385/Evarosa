@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Evarosa.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240701043641_UpdateSku2")]
+    partial class UpdateSku2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -46,7 +49,7 @@ namespace Evarosa.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Admins", (string)null);
+                    b.ToTable("Admins");
                 });
 
             modelBuilder.Entity("Evarosa.Models.Article", b =>
@@ -111,7 +114,7 @@ namespace Evarosa.Migrations
                     b.HasIndex("Url")
                         .IsUnique();
 
-                    b.ToTable("Articles", (string)null);
+                    b.ToTable("Articles");
                 });
 
             modelBuilder.Entity("Evarosa.Models.ArticleCategory", b =>
@@ -126,9 +129,6 @@ namespace Evarosa.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("ParentCategoryId")
@@ -165,7 +165,7 @@ namespace Evarosa.Migrations
                     b.HasIndex("Url")
                         .IsUnique();
 
-                    b.ToTable("ArticleCategories", (string)null);
+                    b.ToTable("ArticleCategories");
                 });
 
             modelBuilder.Entity("Evarosa.Models.Banner", b =>
@@ -207,7 +207,7 @@ namespace Evarosa.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Banners", (string)null);
+                    b.ToTable("Banners");
                 });
 
             modelBuilder.Entity("Evarosa.Models.CartItem", b =>
@@ -240,7 +240,7 @@ namespace Evarosa.Migrations
 
                     b.HasIndex("SkuId");
 
-                    b.ToTable("ShoppingCartItems", (string)null);
+                    b.ToTable("ShoppingCartItems");
                 });
 
             modelBuilder.Entity("Evarosa.Models.City", b =>
@@ -271,7 +271,7 @@ namespace Evarosa.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Cities", (string)null);
+                    b.ToTable("Cities");
                 });
 
             modelBuilder.Entity("Evarosa.Models.ConfigSite", b =>
@@ -384,7 +384,7 @@ namespace Evarosa.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ConfigSite", (string)null);
+                    b.ToTable("ConfigSite");
                 });
 
             modelBuilder.Entity("Evarosa.Models.Contact", b =>
@@ -424,7 +424,7 @@ namespace Evarosa.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Contacts", (string)null);
+                    b.ToTable("Contacts");
                 });
 
             modelBuilder.Entity("Evarosa.Models.Customer", b =>
@@ -456,7 +456,7 @@ namespace Evarosa.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Customer", (string)null);
+                    b.ToTable("Customer");
                 });
 
             modelBuilder.Entity("Evarosa.Models.District", b =>
@@ -489,7 +489,7 @@ namespace Evarosa.Migrations
 
                     b.HasIndex("CityId");
 
-                    b.ToTable("Districts", (string)null);
+                    b.ToTable("Districts");
                 });
 
             modelBuilder.Entity("Evarosa.Models.Member", b =>
@@ -543,7 +543,7 @@ namespace Evarosa.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.ToTable("Members", (string)null);
+                    b.ToTable("Members");
                 });
 
             modelBuilder.Entity("Evarosa.Models.MemberAddress", b =>
@@ -594,7 +594,7 @@ namespace Evarosa.Migrations
 
                     b.HasIndex("WardId");
 
-                    b.ToTable("MemberAddresses", (string)null);
+                    b.ToTable("MemberAddresses");
                 });
 
             modelBuilder.Entity("Evarosa.Models.Option", b =>
@@ -614,7 +614,7 @@ namespace Evarosa.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Options", (string)null);
+                    b.ToTable("Options");
                 });
 
             modelBuilder.Entity("Evarosa.Models.OptionSku", b =>
@@ -633,7 +633,7 @@ namespace Evarosa.Migrations
 
                     b.HasIndex("OptionId");
 
-                    b.ToTable("OptionSkus", (string)null);
+                    b.ToTable("OptionSkus");
                 });
 
             modelBuilder.Entity("Evarosa.Models.Order", b =>
@@ -705,7 +705,7 @@ namespace Evarosa.Migrations
 
                     b.HasIndex("WardId");
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("Evarosa.Models.OrderDetail", b =>
@@ -739,7 +739,7 @@ namespace Evarosa.Migrations
 
                     b.HasIndex("SkuId");
 
-                    b.ToTable("OrderDetails", (string)null);
+                    b.ToTable("OrderDetails");
                 });
 
             modelBuilder.Entity("Evarosa.Models.Product", b =>
@@ -814,7 +814,7 @@ namespace Evarosa.Migrations
                     b.HasIndex("Url")
                         .IsUnique();
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("Evarosa.Models.ProductCategory", b =>
@@ -875,7 +875,7 @@ namespace Evarosa.Migrations
                     b.HasIndex("Url")
                         .IsUnique();
 
-                    b.ToTable("ProductCategories", (string)null);
+                    b.ToTable("ProductCategories");
                 });
 
             modelBuilder.Entity("Evarosa.Models.Sku", b =>
@@ -885,6 +885,9 @@ namespace Evarosa.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("InStock")
                         .HasColumnType("int");
@@ -905,7 +908,7 @@ namespace Evarosa.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("Sku", (string)null);
+                    b.ToTable("Sku");
                 });
 
             modelBuilder.Entity("Evarosa.Models.Ward", b =>
@@ -938,7 +941,7 @@ namespace Evarosa.Migrations
 
                     b.HasIndex("DistrictID");
 
-                    b.ToTable("Wards", (string)null);
+                    b.ToTable("Wards");
                 });
 
             modelBuilder.Entity("Evarosa.Models.Article", b =>

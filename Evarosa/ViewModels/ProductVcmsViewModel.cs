@@ -53,6 +53,7 @@ namespace Evarosa.ViewModels
         public string[] Values { get; set; }
         public string[] Skus { get; set; }
         public int[] Stocks { get; set; }
+        public string[]? Images { get; set; }
         public string[]? Prices { get; set; }
         public string[]? PriceSales { get; set; }
         public string? FirstItem { get; set; }
