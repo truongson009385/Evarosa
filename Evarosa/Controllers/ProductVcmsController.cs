@@ -377,6 +377,7 @@ namespace Evarosa.Controllers
             product.ShowOutstanding = model.Product.ShowOutstanding;
             product.Content = model.Product.Content;
             product.InStock = model.Product.InStock;
+            product.ShowHome = model.Product.ShowHome;
             product.IsOrder = model.Product.IsOrder;
             product.Sort = model.Product.Sort;
             product.ProductCategoryId = model.Product.ProductCategoryId;
