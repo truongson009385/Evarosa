@@ -96,8 +96,14 @@
     });
 
     if ($(".product-slider-main").length) {
-        var $slider = $(".product-slider-main").on("init", function (slick) {
+        var slider = $(".product-slider-main").on("init", function (slick) {
             $(".product-slider-main").fadeIn(1000);
+
+            $(".slide-option:not(.slick-cloned)").each(function () {
+                var index = $(this).data("slick-index");
+
+                $(".plan > input.product-option-" + $(this).data("sku")).data('slick-index', index);
+            })
         }).slick({
             slidesToShow: 1,
             slidesToScroll: 1,
@@ -128,6 +134,12 @@
             $(".product-slider-thmb .slick-slide").eq(mySlideNumber).addClass("slick-active");
         });
     }
+
+    $('input[name="skuId"]').change(function () {
+        var index = $('input[name="skuId"]:checked').data("slick-index")
+
+        $('.product-slider-main').slick('slickGoTo', index);
+    });
 
     $("#addToCart").submit(function (event) {
         event.preventDefault();

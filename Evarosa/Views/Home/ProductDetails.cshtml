@@ -18,24 +18,23 @@
     }
 
     var breadcrumb = new BreadcrumbViewModel
+    {
+        Path = [
+            new BreadcrumbItem
             {
-                Path =
-                                [
-                                    new BreadcrumbItem
-                    {
-                        Key = "<i class='fa-solid fa-house mr-2'></i>Trang chủ",
-                        Value = Url.Action("Index", "Home")
-                    },
-
-                    new BreadcrumbItem
-                    {
-                        Key = Model.Product.ProductCategory.Title,
-                        Value = Model.Product.ProductCategory.Url
-                    }
-                                ]
-            };
+                Key = "<i class='fa-solid fa-house mr-2'></i>Trang chủ",
+                Value = Url.Action("Index", "Home")
+            },
+            new BreadcrumbItem
+            {
+                Key = Model.Product.ProductCategory.Title,
+                Value = Model.Product.ProductCategory.Url
+            }
+        ]
+    };
 
     var i = 0;
+    var i2 = 0;
     var j = 0;
 }
 
@@ -56,9 +55,20 @@
                             }
                             else
                             {
-                                <img src="@PathSystem.Combine("/contents/products/",img)" alt="@Model.Product.Name" />
+                                <img src="@PathSystem.Combine("/contents/products/", img)" alt="@Model.Product.Name" />
                             }
                         </div>
+                    }
+                    @foreach (var item in Model.OptionGroups)
+                    {
+                        @foreach (var option in item.Options)
+                        {
+                            @if (!string.IsNullOrEmpty(option.Image)) {
+                                <div class="slide slide-option" data-fancybox="san-pham" data-src="@option.Image" data-sku="@option.SkuId">
+                                   <img src="@(option.Image)" alt="..." />
+                                </div>
+                            }
+                        }
                     }
                 </div>
                 <div class="product-slider-thmb">
@@ -75,12 +85,26 @@
                             }
                         </div>
                     }
+
+                    @foreach (var item in Model.OptionGroups)
+                    {
+                        @foreach (var option in item.Options)
+                        {
+                            @if (!string.IsNullOrEmpty(option.Image))
+                            {
+                                <div class="slide">
+                                    <img src="@(option.Image)" alt="..." />
+                                </div>
+                            }
+                        }
+                    }
                 </div>
             }
         </div>
         <div class="col-lg-6">
             <h1 class="product-name">
-                @Model.Product.Name                 @if (Model.Product.IsOrder)
+                @Model.Product.Name                 
+                @if (Model.Product.IsOrder)
                 {
                     <label class="badge badge-danger">
                         Hàng Order
@@ -120,7 +144,7 @@
                             <div class="plan">
                                 @foreach (var option in item.Options)
                                 {
-                                    <input data-sku="@option.SkuId" class="product-option" type="radio" name="skuId" id="option-@(i)-@(j)" value="@option.SkuId" checked="@(option.SkuId == Model.SkuId ? "checked" : null)">
+                                    <input data-sku="@option.SkuId" class="product-option product-option-@(option.SkuId)" type="radio" name="skuId" id="option-@(i)-@(j)" value="@option.SkuId" checked="@(option.SkuId == Model.SkuId ? "checked" : null)">
                                     <label for="option-@(i)-@(j)">
                                         @if(!string.IsNullOrEmpty(option.Image)) {
                                             <img src="@(option.Image)" alt="option-@(i)-@(j)" />
