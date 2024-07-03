@@ -879,12 +879,8 @@ header {
   background-color: transparent;
   border-radius: 50%;
 }
-.partner-slider .slick-dots {
-  bottom: -50px;
-}
 .partner-slider img {
-  display: block;
-  padding: 20px;
+  padding: 1rem;
   width: 100%;
   aspect-ratio: 1.75;
   object-fit: contain;
@@ -2788,14 +2784,8 @@ footer {
   .page-title {
     font-size: 24px;
   }
-  .partner-slider .slick-dots {
-    bottom: -20px;
-  }
   .about-title {
     font-size: 26px;
-  }
-  .partner-slider img {
-    height: 133px;
   }
 }
 @media (max-width: 540px) {
@@ -2810,9 +2800,6 @@ footer {
   }
   .about-title {
     font-size: 22px;
-  }
-  .partner-slider img {
-    height: 86px;
   }
   .btn {
     font-size: 14px;

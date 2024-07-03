@@ -985,13 +985,8 @@ header {
         border-radius: 50%;
     }
 
-    .slick-dots {
-        bottom: -50px;
-    }
-
     img {
-        display: block;
-        padding: 20px;
+        padding: 1rem;
         width: 100%;
         aspect-ratio: 1.75;
         object-fit: contain;
@@ -3104,16 +3099,8 @@ footer {
         font-size: 24px;
     }
 
-    .partner-slider .slick-dots {
-        bottom: -20px;
-    }
-
     .about-title {
         font-size: 26px;
-    }
-
-    .partner-slider img {
-        height: 133px;
     }
 }
 
@@ -3132,10 +3119,6 @@ footer {
 
     .about-title {
         font-size: 22px;
-    }
-
-    .partner-slider img {
-        height: 86px;
     }
 
     .btn {

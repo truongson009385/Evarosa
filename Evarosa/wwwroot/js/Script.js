@@ -1,14 +1,14 @@
 ﻿$(document).ready(function () {
     //Scroll event
     $(window).scroll(function () {
-        var scrolled = $(window).scrollTop();
+        const scrolled = $(window).scrollTop();
         if (scrolled > 200) $('.go-top').fadeIn('slow');
         if (scrolled < 200) $('.go-top').fadeOut('slow');
     });
 
     //Click event
-    $('.go-top').click(function () {
-        $("html, body").animate({ scrollTop: "0" }, 500);
+    $(".go-top").click(function () {
+        $("html, body").animate({ scrollTop: "0" }, 200);
     });
     $('.banner').slick({
         infinite: true,
@@ -89,21 +89,18 @@
     $("#AlertBox").removeClass('hide');
     $("#AlertBox").delay(10000).slideUp(800);
 
-
     $(".input-number").niceNumber({
         autoSize: true,
         autoSizeBuffer: 1
     });
 
     if ($(".product-slider-main").length) {
-        var slider = $(".product-slider-main").on("init", function (slick) {
+        const slider = $(".product-slider-main").on("init", function (slick) {
             $(".product-slider-main").fadeIn(1000);
-
             $(".slide-option:not(.slick-cloned)").each(function () {
-                var index = $(this).data("slick-index");
-
+                const index = $(this).data("slick-index");
                 $(".plan > input.product-option-" + $(this).data("sku")).data('slick-index', index);
-            })
+            });
         }).slick({
             infinite: true,
             slidesToShow: 1,
@@ -115,7 +112,7 @@
             asNavFor: ".product-slider-thmb"
         });
 
-        var thumbnailsSlider = $(".product-slider-thmb").on("init", function (slick) {
+        const thumbnailsSlider = $(".product-slider-thmb").on("init", function (slick) {
             $(".product-slider-thmb").fadeIn(1000);
         }).slick({
             infinite: true,
@@ -131,22 +128,25 @@
         $(".product-slider-thmb .slick-slide").eq(0).addClass("slick-active");
 
         $(".product-slider-main").on("beforeChange", function (event, slick, currentSlide, nextSlide) {
-            var mySlideNumber = nextSlide;
+            const mySlideNumber = nextSlide;
             $(".product-slider-thmb .slick-slide").removeClass("slick-active");
             $(".product-slider-thmb .slick-slide").eq(mySlideNumber).addClass("slick-active");
         });
     }
 
     $('input[name="skuId"]').change(function () {
-        var index = $('input[name="skuId"]:checked').data("slick-index")
-
-        $('.product-slider-main').slick('slickGoTo', index);
+        var hasImg = $(this).data("img");
+        if (hasImg === "True") {
+            const index = $('input[name="skuId"]:checked').data("slick-index");
+            $('.product-slider-main').slick('slickGoTo', index);
+        }
+        return false;
     });
 
     $("#addToCart").submit(function (event) {
         event.preventDefault();
 
-        var form = $(this);
+        const form = $(this);
 
         $.post("/ShoppingCart/AddToCart", form.serialize(), function (data) {
             if (data.status) {
@@ -220,7 +220,7 @@
 
     $(".product-option").change(function () {
         $.get("/Home/GetSku", {
-            skuId: $(this).val(),
+            skuId: $(this).val()
         }, function (data) {
             $(".product-sku").text(data.sku);
             $(".product-price .price").text(data.price);
@@ -230,7 +230,7 @@
 
     // Function to populate districts based on selected city
     $("#cityDropdown").change(function () {
-        var cityId = $(this).val();
+        const cityId = $(this).val();
         if (cityId) {
             $.ajax({
                 url: "/quan-huyen",
@@ -257,7 +257,7 @@
 
     // Function to populate wards based on selected district
     $("#districtDropdown").change(function () {
-        var districtId = $(this).val();
+        const districtId = $(this).val();
         if (districtId) {
             $.ajax({
                 url: "/xa-phuong",
@@ -292,7 +292,7 @@
     });
 });
 function BuyNow() {
-    var form = $("#addToCart");
+    const form = $("#addToCart");
 
     $.post("/ShoppingCart/AddToCart", form.serialize(), function (data) {
         if (data.status) {
@@ -320,6 +320,7 @@ function BuyNow() {
         $(".shoppingcart > .count").text(data.count);
     });
 }
+
 function LoadCartMini() {
     $.get("/ShoppingCart/CartMini", function (data) {
         $(".shoppingcart-mini").html(data);
@@ -369,8 +370,8 @@ function updateFromCart(input) {
 }
 function ListProductJS() {
     $(".by-sort").change(function () {
-        let cate = $(".filter-by-category").val();
-        let sort = $(".by-sort").val();
+        const cate = $(".filter-by-category").val();
+        const sort = $(".by-sort").val();
 
         $.ajax({
             url: "/Home/ListProductView",
@@ -384,15 +385,15 @@ function ListProductJS() {
             $("#ListProductView").html(data);
             ListProductJS();
 
-            var currentURL = window.location.href;
+            const currentURL = window.location.href;
 
-            var urlObject = new URL(currentURL);
+            const urlObject = new URL(currentURL);
 
-            var searchParams = urlObject.searchParams;
+            const searchParams = urlObject.searchParams;
 
             searchParams.set("typeSort", sort);
 
-            var newURL = urlObject.href;
+            const newURL = urlObject.href;
 
             window.history.pushState({ path: newURL }, "", newURL);
         });
@@ -400,7 +401,7 @@ function ListProductJS() {
 }
 function AllProductJS() {
     $(".by-sort").change(function () {
-        let sort = $(".by-sort").val();
+        const sort = $(".by-sort").val();
 
         $.ajax({
             url: "/Home/AllProductView",
@@ -412,15 +413,15 @@ function AllProductJS() {
             $("#AllProductView").empty();
             $("#AllProductView").html(data);
             AllProductJS();
-            var currentURL = window.location.href;
+            const currentURL = window.location.href;
 
-            var urlObject = new URL(currentURL);
+            const urlObject = new URL(currentURL);
 
-            var searchParams = urlObject.searchParams;
+            const searchParams = urlObject.searchParams;
 
             searchParams.set("typeSort", sort);
 
-            var newURL = urlObject.href;
+            const newURL = urlObject.href;
 
             window.history.pushState({ path: newURL }, "", newURL);
         });

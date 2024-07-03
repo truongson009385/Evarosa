@@ -18,9 +18,9 @@
     }
 
     var breadcrumb = new BreadcrumbViewModel
-    {
-        Path = [
-            new BreadcrumbItem
+            {
+                Path = [
+                            new BreadcrumbItem
             {
                 Key = "<i class='fa-solid fa-house mr-2'></i>Trang chủ",
                 Value = Url.Action("Index", "Home")
@@ -30,8 +30,8 @@
                 Key = Model.Product.ProductCategory.Title,
                 Value = Model.Product.ProductCategory.Url
             }
-        ]
-    };
+                        ]
+            };
 
     var i = 0;
     var j = 0;
@@ -58,13 +58,14 @@
                             }
                         </div>
                     }
-                    @foreach (var item in Model.OptionGroups)
+                    @if (Model.OptionGroups.Any())
                     {
-                        @foreach (var option in item.Options)
+                        foreach (var item in Model.OptionGroups)
                         {
-                            @if (!string.IsNullOrEmpty(option.Image)) {
+                            @foreach (var option in item.Options.Where(a => !string.IsNullOrEmpty(a.Image)))
+                            {
                                 <div class="slide slide-option" data-fancybox="san-pham" data-src="@option.Image" data-sku="@option.SkuId">
-                                   <img src="@(option.Image)" alt="..." />
+                                    <img src="@option.Image" alt="@option.Value" />
                                 </div>
                             }
                         }
@@ -84,15 +85,14 @@
                             }
                         </div>
                     }
-
-                    @foreach (var item in Model.OptionGroups)
+                    @if (Model.OptionGroups.Any())
                     {
-                        @foreach (var option in item.Options)
+                        foreach (var item in Model.OptionGroups)
                         {
-                            @if (!string.IsNullOrEmpty(option.Image))
+                            @foreach (var option in item.Options.Where(a => !string.IsNullOrEmpty(a.Image)))
                             {
                                 <div class="slide">
-                                    <img src="@(option.Image)" alt="..." />
+                                    <img src="@option.Image" alt="@option.Value" />
                                 </div>
                             }
                         }
@@ -102,7 +102,7 @@
         </div>
         <div class="col-lg-6">
             <h1 class="product-name">
-                @Model.Product.Name                 
+                @Model.Product.Name
                 @if (Model.Product.IsOrder)
                 {
                     <label class="badge badge-danger">
@@ -138,19 +138,19 @@
                         if (item.Options.Any())
                         {
                             <p class="product-text">
-                                <span>@(item.Name):</span>
+                                <span>@item.Name:</span>
                             </p>
                             <div class="plan">
                                 @foreach (var option in item.Options)
                                 {
-                                    <input data-sku="@option.SkuId" class="product-option product-option-@(option.SkuId)" type="radio" name="skuId" id="option-@(i)-@(j)" value="@option.SkuId" checked="@(option.SkuId == Model.SkuId ? "checked" : null)">
-                                    <label for="option-@(i)-@(j)">
-                                        @if(!string.IsNullOrEmpty(option.Image)) {
-                                            <img src="@(option.Image)" alt="option-@(i)-@(j)" />
+                                    <input data-sku="@option.SkuId" data-img="@(!string.IsNullOrEmpty(option.Image))" class="product-option product-option-@option.SkuId" type="radio" name="skuId" id="option-@i-@j" value="@option.SkuId" checked="@(option.SkuId == Model.SkuId ? "checked" : null)">
+                                    <label for="option-@i-@j">
+                                        @if (!string.IsNullOrEmpty(option.Image))
+                                        {
+                                            <img src="@option.Image" alt="option-@i-@j" />
                                         }
                                         @option.Value
                                     </label>
-
                                     j++;
                                 }
                             </div>
