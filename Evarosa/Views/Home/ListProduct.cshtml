@@ -26,7 +26,7 @@
 
 <partial name="_breadcrumb" model="breadcrumb" />
 
-<div class="container pb-5">
+<div class="container pb-4 pb-md-5">
     <div class="row">
         <div class="col-lg-3 order-1 order-lg-0">
             <input class="filter-by-category" type="hidden" name="category" value="@Model.ProductCategory.Url" />
@@ -36,7 +36,7 @@
             <partial name="ListProductView" model="Model" />
         </div>
     </div>
-    <div class="row mt-5">
+    <div class="row mt-4 mt-md-5">
         <div class="col-lg-9 offset-lg-3">
             <article>
                 @Html.Raw(Model.ProductCategory.Content)

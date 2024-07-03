@@ -105,23 +105,25 @@
                 $(".plan > input.product-option-" + $(this).data("sku")).data('slick-index', index);
             })
         }).slick({
+            infinite: true,
             slidesToShow: 1,
             slidesToScroll: 1,
             arrows: true,
             lazyLoad: "ondemand",
             autoplaySpeed: 3000,
+            centerMode: false,
             asNavFor: ".product-slider-thmb"
         });
 
         var thumbnailsSlider = $(".product-slider-thmb").on("init", function (slick) {
             $(".product-slider-thmb").fadeIn(1000);
         }).slick({
+            infinite: true,
             slidesToShow: 4,
             slidesToScroll: 1,
             lazyLoad: "ondemand",
             asNavFor: ".product-slider-main",
             dots: false,
-            centerMode: false,
             focusOnSelect: true
         });
 
