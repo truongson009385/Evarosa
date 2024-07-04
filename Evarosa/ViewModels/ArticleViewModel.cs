@@ -10,19 +10,12 @@ namespace Evarosa.ViewModels
         public IPagedList<ArticleCategory> ListArticleCategory { get; set; }
         public ArticleCategory ArticleCategory { get; set; }
         public SelectList SelectListCategory { get; set; }
-
-        [Display(Name = "Chuỗi định danh (url)", Prompt = "Nhập hoặc để trống tự phát sinh theo Title")]
-        [StringLength(160, MinimumLength = 1, ErrorMessage = "{0} dài {1} đến {2}")]
-        [RegularExpression(@"^[a-z0-9-]*$", ErrorMessage = "Chỉ dùng các ký tự [a-z0-9-]")]
-        public string? Url { get; set; }
     }
 
     public class ArticleViewModel
     {
-        [Display(Name = "Chuỗi định danh (url)", Prompt = "Nhập hoặc để trống tự phát sinh theo Title")]
-        [StringLength(160, MinimumLength = 1, ErrorMessage = "{0} dài {1} đến {2}")]
-        [RegularExpression(@"^[a-z0-9-]*$", ErrorMessage = "Chỉ dùng các ký tự [a-z0-9-]")]
-        public string? Url { get; set; }
+        [Display(Name = "Ngày đăng")]
+        public string? CreateDate { get; set; }
         public Article Article { get; set; }
         public SelectList SelectListCategory { get; set; }
         public IPagedList<Article> ListArticle { get; set; }

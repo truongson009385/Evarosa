@@ -28,7 +28,7 @@ namespace Evarosa.Models
         [Display(Name = "Ảnh đại diện"), StringLength(500)]
         public string? Image { set; get; }
         [StringLength(500)]
-        public string Url { set; get; }
+        public string? Url { set; get; }
 
         [Display(Name = "Nội dung")]
         public string? Body { set; get; }
@@ -82,8 +82,8 @@ namespace Evarosa.Models
         [Display(Name = "Hiển thị chân trang")]
         public bool ShowFooter { get; set; }
 
-        [Display(Name = "Url")]
-        public string Url { set; get; }
+        [Display(Name = "Url"), StringLength(500)]
+        public string? Url { set; get; }
 
         [Display(Name = "Thứ tự")]
         public int Sort { set; get; } = 1;

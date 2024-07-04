@@ -49,6 +49,7 @@
                 <th scope="col">@Html.DisplayNameFor(m => m.Article.Image)</th>
                 <th scope="col">@Html.DisplayNameFor(m => m.Article.Name)</th>
                 <th scope="col" style="width: 150px;">@Html.DisplayNameFor(m => m.Article.ArticleCategoryId)</th>
+                <th scope="col">@Html.DisplayNameFor(m => m.Article.Active)</th>
                 <th scope="col" style="width: 130px;"></th>
             </tr>
             @{
@@ -81,6 +82,9 @@
                         <a asp-action="ListArticle" asp-controller="Home" asp-route-url="@item.ArticleCategory.Url" target="_blank">
                             @item.ArticleCategory.Title
                         </a>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(a => item.Active)
                     </td>
                     <td>
                         <a class="btn btn-warning mb-2" asp-action="UpdateArticle" asp-route-id="@item.Id" style="width: 110px;">

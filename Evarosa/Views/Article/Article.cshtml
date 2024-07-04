@@ -75,11 +75,11 @@
                     </tr>
                     <tr>
                         <td class="form_name">
-                            <label asp-for="Url"></label>
+                            <label asp-for="Article.Url"></label>
                         </td>
                         <td class="form_text">
-                            <input asp-for="Url" />
-                            <span asp-validation-for="Url" class="text-danger"></span>
+                            <input asp-for="Article.Url" />
+                            <span asp-validation-for="Article.Url" class="text-danger"></span>
                         </td>
                     </tr>
                     <tr>
@@ -119,6 +119,12 @@
                         <td class="form_text">
                             <select class="v-select" asp-for="Article.ArticleCategoryId" asp-items="Model.SelectListCategory"></select>
                             <span asp-validation-for="Article.ArticleCategoryId" class="text-danger"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(m => m.CreateDate)</td>
+                        <td class="form_text">
+                            <input type="datetime-local" asp-for="CreateDate" class="form-control"/>
                         </td>
                     </tr>
                     <tr>

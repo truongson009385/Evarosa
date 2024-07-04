@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Globalization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -17,7 +18,7 @@ namespace Evarosa.Controllers
         #region ArticleCategory
         public async Task<IActionResult> ListArticleCategory(int? page, string? term = "")
         {
-            int pageNumber = page ?? 1;
+            var pageNumber = page ?? 1;
 
             var list = await unitOfWork.ArticleCategory
                 .GetPagedListAsync(
@@ -48,7 +49,7 @@ namespace Evarosa.Controllers
         [HttpPost]
         public async Task<IActionResult> ArticleCategory(ArticleCategoryViewModel model)
         {
-            model.ArticleCategory.Url = HtmlHelpers.ConvertToUnSign(model.Url ?? model.ArticleCategory.Title);
+            model.ArticleCategory.Url = HtmlHelpers.ConvertToUnSign(model.ArticleCategory.Url ?? model.ArticleCategory.Title);
             await unitOfWork.ArticleCategory.InsertAsync(model.ArticleCategory);
             await unitOfWork.CommitAsync();
 
@@ -72,7 +73,6 @@ namespace Evarosa.Controllers
             var model = new ArticleCategoryViewModel
             {
                 ArticleCategory = category,
-                Url = category.Url,
                 SelectListCategory = await GetCategorySelectAsync()
             };
 
@@ -82,7 +82,7 @@ namespace Evarosa.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateArticleCategory(ArticleCategoryViewModel model)
         {
-            model.ArticleCategory.Url = HtmlHelpers.ConvertToUnSign(model.Url ?? model.ArticleCategory.Title);
+            model.ArticleCategory.Url = HtmlHelpers.ConvertToUnSign(model.ArticleCategory.Url ?? model.ArticleCategory.Title);
 
             unitOfWork.ArticleCategory.UpdateAsync(model.ArticleCategory);
             await unitOfWork.CommitAsync();
@@ -114,7 +114,7 @@ namespace Evarosa.Controllers
         {
             ViewBag.Result = result;
 
-            int pageNumber = page ?? 1;
+            var pageNumber = page ?? 1;
 
             var qrArticles = unitOfWork.Article
                 .GetAll(
@@ -164,8 +164,9 @@ namespace Evarosa.Controllers
             {
                 Article = new Article
                 {
-                    Sort = sttMax + 1,
+                    Sort = sttMax + 1
                 },
+                CreateDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
                 SelectListCategory = await GetCategorySelectAsync()
             };
             return View(model);
@@ -175,17 +176,23 @@ namespace Evarosa.Controllers
         public async Task<IActionResult> Article(ArticleViewModel model)
         {
             model.Article.Image = model.Image;
-            model.Article.Url = HtmlHelpers.ConvertToUnSign(model.Url ?? model.Article.Name);
-            var count = await unitOfWork.Article.CountAsync(m => m.Url == model.Article.Url);
-            
-            if (count > 0)
-            {
-                model.Article.Url += "-" + DateTime.Now.Millisecond;
-            }
+            model.Article.Url = HtmlHelpers.ConvertToUnSign(model.Article.Url ?? model.Article.Name);
 
+            if (DateTime.TryParse(model.CreateDate, new CultureInfo("vi-VN"), DateTimeStyles.None, out var cd))
+            {
+                model.Article.CreatedAt = cd;
+            }
             await unitOfWork.Article.InsertAsync(model.Article);
             await unitOfWork.CommitAsync();
-            
+
+            var count = await unitOfWork.Article.CountAsync(m => m.Url == model.Article.Url);
+
+            if (count > 1)
+            {
+                model.Article.Url += "-" + model.Article.Id;
+                await unitOfWork.CommitAsync();
+            }
+
             TempData["message"] = $"success|Tạo thành công bài viết {model.Article.Name}.";
             return RedirectToAction("ListArticle");
         }
@@ -203,7 +210,7 @@ namespace Evarosa.Controllers
             var model = new ArticleViewModel
             {
                 Article = article,
-                Url = article.Url,
+                CreateDate = article.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss"),
                 SelectListCategory = await GetCategorySelectAsync()
             };
             return View(model);
@@ -221,14 +228,11 @@ namespace Evarosa.Controllers
 
 
             if (article == null) return NotFound();
-            
-            article.Url = HtmlHelpers.ConvertToUnSign(model.Url ?? model.Article.Name);
-            var count = await unitOfWork.Article.GetAll(predicate: m => m.Url == article.Url && m.Id != article.Id).CountAsync();
-            if (count > 0)
+            if (DateTime.TryParse(model.CreateDate, new CultureInfo("vi-VN"), DateTimeStyles.None, out var cd))
             {
-                article.Url += "-" + DateTime.Now.Millisecond;
+                article.CreatedAt = cd;
             }
-
+            article.Url = HtmlHelpers.ConvertToUnSign(model.Article.Url ?? model.Article.Name);
             article.Image = model.Image;
             article.TitleMeta = model.Article.TitleMeta;
             article.DescriptionMeta = model.Article.DescriptionMeta;
@@ -242,6 +246,14 @@ namespace Evarosa.Controllers
             article.Sort = model.Article.Sort;
 
             await unitOfWork.CommitAsync();
+
+            var count = await unitOfWork.Article.GetAll(predicate: m => m.Url == article.Url).CountAsync();
+            if (count > 1)
+            {
+                article.Url += "-" + article.Id;
+                await unitOfWork.CommitAsync();
+            }
+
             TempData["message"] = $"success|Cập nhật thành công bài viết {model.Article.Name}.";
             return RedirectToAction("ListArticle");
         }
