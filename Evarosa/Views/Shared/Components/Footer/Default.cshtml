@@ -8,11 +8,7 @@
                 <a asp-controller="Home" asp-action="Index" class="logo">
                     @if (!string.IsNullOrEmpty(AppService.Config.Image))
                     {
-                        <img src="@PathSystem.Combine("/contents/system/", AppService.Config.Image)" alt="logo" />
-                    }
-                    else
-                    {
-                        <img src="~/images/logo.png" alt="logo" />
+                        <img data-src="@PathSystem.Combine("/contents/system/", AppService.Config.Image)" alt="logo" class="lazyload"/>
                     }
                 </a>
                 <div class="footer-info mt-4">

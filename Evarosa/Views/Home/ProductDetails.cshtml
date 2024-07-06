@@ -9,7 +9,7 @@
     {
         if (Model.Product.Avatar.StartsWith("/ckfinder/"))
         {
-            ViewData["ImageShare"] = Model.Product.Avatar;
+            ViewData["ImageShare"] = Context.Request.Scheme + "://" + Context.Request.Host + Model.Product.Avatar;
         }
         else
         {

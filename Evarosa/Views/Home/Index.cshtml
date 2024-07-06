@@ -22,7 +22,7 @@
             <a href="@item.Url" class="banner-item">
                 @if (!string.IsNullOrEmpty(item.Image))
                 {
-                    <img src="@PathSystem.Combine("/contents/banners", item.Image)?w=1920" alt="@item.Image" />
+                    <img data-src="@PathSystem.Combine("/contents/banners/", item.Image)?w=1920" alt="@item.Image" class="lazyload"/>
                 }
                 else
                 {
@@ -44,7 +44,7 @@
                     <a asp-action="ListProduct" asp-route-url="@item.Url" class="category-item">
                         @if (!string.IsNullOrEmpty(item.Image))
                         {
-                            <img src="@PathSystem.Combine("/contents/product-categories/", item.Image)" alt="@item.Image" />
+                            <img data-src="@PathSystem.Combine("/contents/product-categories/", item.Image)" alt="@item.Title" class="lazyload" />
                         } else
                         {
                             <img src="~/images/no-image.jpg" alt="no-image" />
@@ -108,7 +108,7 @@
                     </div>
                 }
             </div>
-            <div class="d-flex justify-content-center mt-3 mt-md-4">
+            <div class="text-center mt-3 mt-md-4">
                 <a asp-action="ListProduct" asp-route-url="@item.Url" class="btn btn-primary">
                     Xem tất cả<i class="fa-solid fa-circle-chevron-right ml-2"></i>
                 </a>
@@ -129,7 +129,14 @@
                         <a asp-action="ArticleDetails" asp-route-url="@item.Url" class="image">
                             @if (!string.IsNullOrEmpty(item.Image))
                             {
-                                <img src="@PathSystem.Combine("/contents/blog/", item.Image)" alt="@item.Image" />
+                                if (item.Image.StartsWith("/ckfinder/"))
+                                {
+                                    <img data-src="@item.Image" alt="@item.Name" class="lazyload" />
+                                }
+                                else
+                                {
+                                    <img data-src="@PathSystem.Combine("/contents/blog/", item.Image)" alt="@item.Name" class="lazyload" />
+                                }
                             } else
                             {
                                 <img src="~/images/no-image.jpg" alt="no-image" />
@@ -147,7 +154,7 @@
                     </div>
                 }
             </div>
-            <div class="d-flex justify-content-center mt-3 mt-md-4">
+            <div class="text-center mt-3 mt-md-4">
                 <a asp-action="AllArticle" class="btn btn-light">
                     Tìm hiểu thêm<i class="fa-solid fa-circle-chevron-right ml-2"></i>
                 </a>
@@ -164,12 +171,12 @@
             <div class="about-content mb-3">
                 @Html.Raw(AppService.Config.AboutText)
             </div>
-            <a href="@(AppService.Config.AboutUrl)" class="btn btn-outline-primary">Tìm hiểu thêm<i class="fa-sharp fa-solid fa-arrow-right ml-2"></i></a>
+            <a href="@AppService.Config.AboutUrl" class="btn btn-outline-primary">Tìm hiểu thêm<i class="fa-sharp fa-solid fa-arrow-right ml-2"></i></a>
         </div>
         <div class="col-lg-6">
             @if (!string.IsNullOrEmpty(AppService.Config.AboutImage))
             {
-                <img class="about-image" src="@PathSystem.Combine("/contents/system/", AppService.Config.AboutImage)" alt="@AppService.Config.AboutImage" />
+                <img class="about-image lazyload" data-src="@PathSystem.Combine("/contents/system/", AppService.Config.AboutImage)" alt="@AppService.Config.AboutImage" />
             }
         </div>
     </div>
@@ -185,7 +192,7 @@
                 <a href="@item.Url" class="d-block my-2 my-md-3" target="_blank">
                     @if (!string.IsNullOrEmpty(item.Image))
                     {
-                        <img src="@PathSystem.Combine("/contents/banners", item.Image)?w=200" alt="@item.Image" />
+                        <img data-src="@PathSystem.Combine("/contents/banners", item.Image)?w=200" alt="@item.Image" class="lazyload" />
                     }
                     else
                     {

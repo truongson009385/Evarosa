@@ -2,7 +2,6 @@
 
 @{
     ViewData["Title"] = "Giới thiệu";
-
     ViewData["Description"] = Model.Article.DescriptionMeta ?? ViewData["Title"];
     ViewData["Canonical"] = Url.Action("About", "Home", new { }, protocol: Context.Request.Scheme);
     if (Model.Article.Image != null)

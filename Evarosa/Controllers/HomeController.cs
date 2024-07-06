@@ -81,7 +81,7 @@ namespace Evarosa.Controllers
                         Id = m.Id,
                         Title = m.Title,
                         Url = m.Url,
-                        Products = qrProduct.Where(l => l.ProductCategoryId == m.Id).Take(10).ToList()
+                        Products = qrProduct.Where(l => l.ProductCategoryId == m.Id).Take(30).ToList()
                     },
                     take: 20
                 );

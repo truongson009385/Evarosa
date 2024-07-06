@@ -18,10 +18,6 @@
                     {
                         <img src="@PathSystem.Combine("/contents/system/", AppService.Config.Image)" alt="logo" />
                     }
-                    else
-                    {
-                        <img src="~/images/logo.png" alt="logo" />
-                    }
                 </a>
             </div>
             <div class="col-lg-8 d-flex justify-content-center align-items-center">
@@ -80,7 +76,8 @@
                                 <li>
                                     <a asp-controller="Member" asp-action="Register">Đăng ký</a>
                                 </li>
-                            } else
+                            }
+                            else
                             {
                                 <li>
                                     <a asp-controller="Member" asp-action="ChangePassword">Đổi mật khẩu</a>
@@ -122,7 +119,7 @@
                                 @foreach (var chil in item.CategoryChildren)
                                 {
                                     <li>
-                                        <a  asp-controller="Home" asp-action="ListProduct" asp-route-url="@chil.Url">@chil.Title</a>
+                                        <a asp-controller="Home" asp-action="ListProduct" asp-route-url="@chil.Url">@chil.Title</a>
                                     </li>
                                 }
                             </ul>
@@ -242,7 +239,7 @@
             </a>
         </li>
         <li>
-            <a asp-controller="Home" asp-action="AboutUs">
+            <a asp-controller="Home" asp-action="About">
                 Giới thiệu
             </a>
         </li>

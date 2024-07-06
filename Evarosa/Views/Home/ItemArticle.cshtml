@@ -6,11 +6,11 @@
         {
             if (Model.Image.StartsWith("/ckfinder/"))
             {
-                <img src="@Model.Image" alt="@Model.Name" />
+                <img data-src="@Model.Image" alt="@Model.Name" class="lazyload" />
             }
             else
             {
-                <img src="@PathSystem.Combine("/contents/blog/",Model.Image)" alt="@Model.Name" />
+                <img data-src="@PathSystem.Combine("/contents/blog/", Model.Image)" alt="@Model.Name" class="lazyload" />
             }
         }
         else

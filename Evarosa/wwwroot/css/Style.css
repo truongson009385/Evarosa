@@ -367,7 +367,13 @@ header {
   align-items: center;
   justify-content: center;
   gap: 10px;
-  overflow: auto;
+  overflow-x: auto;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+  /* Hide scrollbar for Chrome, Safari and Opera */
+}
+.outstanding-tabs::-webkit-scrollbar {
+  display: none;
 }
 .outstanding-tabs a {
   display: inline-block;

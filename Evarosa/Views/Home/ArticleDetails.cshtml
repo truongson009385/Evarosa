@@ -8,7 +8,7 @@
     {
         if (Model.Article.Image.StartsWith("/ckfinder/"))
         {
-            ViewData["ImageShare"] = Model.Article.Image;
+            ViewData["ImageShare"] = Context.Request.Scheme + "://" + Context.Request.Host + Model.Article.Image;
         }
         else
         {

@@ -21,11 +21,11 @@
         {
             if (Model.Avatar.StartsWith("/ckfinder/"))
             {
-                <img src="@Model.Avatar" alt="@Model.Name" />
+                <img data-src="@Model.Avatar" alt="@Model.Name" class="lazyload"/>
             }
             else
             {
-                <img src="@PathSystem.Combine("/contents/products/",Model.Avatar)" alt="@Model.Name" />
+                <img data-src="@PathSystem.Combine("/contents/products/", Model.Avatar)" alt="@Model.Name" class="lazyload" />
             }
         }
         else
@@ -38,10 +38,10 @@
             <h3>@Model.Name</h3>
         </a>
         <div class="row">
-            <div class="col-6">
+            <div class="col-7">
                 <span class="masp">Mã: @(Model.MaSP ?? "...")</span>
             </div>
-            <div class="col-6">
+            <div class="col-5">
                 <span class="price">
                     @if (finalPrice > 0)
                     {

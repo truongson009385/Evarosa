@@ -14,5 +14,9 @@
   {
     "outputFile": "wwwroot/css/themes/login.css",
     "inputFile": "wwwroot/css/themes/login.less"
+  },
+  {
+    "outputFile": "wwwroot/js/BundlesJs.es5.js",
+    "inputFile": "wwwroot/js/BundlesJs.js"
   }
 ]
