@@ -2,6 +2,7 @@
 using Evarosa.Services;
 using Evarosa.Services.Impl;
 using Imageflow.Server;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 
@@ -64,7 +65,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 
     app.UseRewriter();
-    //app.UseRewriter(new RewriteOptions().AddRedirectToNonWwwPermanent().AddRedirectToHttpsPermanent());
+    app.UseRewriter(new RewriteOptions().AddRedirectToNonWwwPermanent().AddRedirectToHttpsPermanent());
 }
 
 app.UseImageflow(new ImageflowMiddlewareOptions()

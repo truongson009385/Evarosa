@@ -28,7 +28,8 @@
       "wwwroot/lib/select2/css/select2.min.css",
       "wwwroot/lib/sweetalert2/sweetalert2.min.css",
       "wwwroot/lib/tooltip.min.css",
-      "wwwroot/lib/aos/aos.css"
+      "wwwroot/lib/aos/aos.css",
+      "wwwroot/webfonts/font-awesome/css/all.css"
     ]
   },
   {

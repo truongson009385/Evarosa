@@ -54,7 +54,10 @@
                     <a asp-action="ListProduct" asp-route-url="@item.Url" class="category-item">
                         @if (!string.IsNullOrEmpty(item.Image))
                         {
-                            <img data-src="@PathSystem.Combine("/contents/product-categories/", item.Image)" alt="@item.Title" class="lazyload" src="images/loading.webp"/>
+                            <picture>
+                                <source data-srcset="@PathSystem.Combine("/contents/product-categories/", item.Image)?w=200" media="(max-width: 576px)"/>
+                                <img data-src="@PathSystem.Combine("/contents/product-categories/", item.Image)" alt="@item.Title" class="lazyload" src="images/loading.webp"/>
+                            </picture>
                         } else
                         {
                             <img src="~/images/no-image.jpg" alt="no-image" />
@@ -186,7 +189,7 @@
         <div class="col-lg-6">
             @if (!string.IsNullOrEmpty(AppService.Config.AboutImage))
             {
-                <img class="about-image lazyload" data-src="@PathSystem.Combine("/contents/system/", AppService.Config.AboutImage)" alt="@AppService.Config.AboutImage" />
+                <img class="about-image lazyload" data-src="@PathSystem.Combine("/contents/system/", AppService.Config.AboutImage)?w=650" alt="@AppService.Config.AboutImage" />
             }
         </div>
     </div>
@@ -202,7 +205,7 @@
                 <a href="@item.Url" class="d-block my-2 my-md-3" target="_blank">
                     @if (!string.IsNullOrEmpty(item.Image))
                     {
-                        <img data-src="@PathSystem.Combine("/contents/banners", item.Image)?w=200" alt="@item.Image" class="lazyload" />
+                        <img data-src="@PathSystem.Combine("/contents/banners", item.Image)?w=250" alt="@item.Image" class="lazyload" />
                     }
                     else
                     {
