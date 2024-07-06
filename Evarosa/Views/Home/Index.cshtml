@@ -10,6 +10,8 @@
     {
         ViewData["ImageShare"] = Context.Request.Scheme + "://" + Context.Request.Host + PathSystem.Combine("/contents/system/", AppService.Config.AboutImage);
     }
+
+    var i = 1;
 }
 
 <h1 class="d-none">@ViewData["Title"]</h1>
@@ -22,13 +24,21 @@
             <a href="@item.Url" class="banner-item">
                 @if (!string.IsNullOrEmpty(item.Image))
                 {
-                    <img data-src="@PathSystem.Combine("/contents/banners/", item.Image)?w=1920" alt="@item.Image" class="lazyload"/>
+                    if (i == 1)
+                    {
+                        <img src="@PathSystem.Combine("/contents/banners/", item.Image)?w=1920" alt="@item.Name"/>
+                    }
+                    else
+                    {
+                        <img data-src="@PathSystem.Combine("/contents/banners/", item.Image)?w=1920" alt="@item.Name" class="lazyload" src="images/loading.webp" />
+                    }
                 }
                 else
                 {
                     <img src="~/images/no-image.jpg" alt="no-image" />
                 }
             </a>
+            i++;
         }
     </div>
 }
@@ -37,14 +47,14 @@
 {
     <div class="container pt-5 pb-4">
         <h2 class="section-title line-bottom mb-4">DANH MỤC SẢN PHẨM</h2>
-        <div class="row row-cols-2 row-cols-md-3 row-cols-lg-6 justify-content-center mx-n2 mb-n3">
+        <div class="row row-cols-3 row-cols-md-3 row-cols-lg-6 justify-content-center mx-n2 mb-n3">
             @foreach (var item in Model.DisplayCategories)
             {
                 <div class="col px-2 mb-3">
                     <a asp-action="ListProduct" asp-route-url="@item.Url" class="category-item">
                         @if (!string.IsNullOrEmpty(item.Image))
                         {
-                            <img data-src="@PathSystem.Combine("/contents/product-categories/", item.Image)" alt="@item.Title" class="lazyload" />
+                            <img data-src="@PathSystem.Combine("/contents/product-categories/", item.Image)" alt="@item.Title" class="lazyload" src="images/loading.webp"/>
                         } else
                         {
                             <img src="~/images/no-image.jpg" alt="no-image" />

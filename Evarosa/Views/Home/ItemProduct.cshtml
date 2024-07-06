@@ -21,11 +21,11 @@
         {
             if (Model.Avatar.StartsWith("/ckfinder/"))
             {
-                <img data-src="@Model.Avatar" alt="@Model.Name" class="lazyload"/>
+                <img data-src="@Model.Avatar" alt="@Model.Name" class="lazyload" src="images/loading.webp"/>
             }
             else
             {
-                <img data-src="@PathSystem.Combine("/contents/products/", Model.Avatar)" alt="@Model.Name" class="lazyload" />
+                <img data-src="@PathSystem.Combine("/contents/products/", Model.Avatar)" alt="@Model.Name" class="lazyload" src="images/loading.webp" />
             }
         }
         else
