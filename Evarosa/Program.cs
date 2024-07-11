@@ -1,6 +1,7 @@
 ﻿using Evarosa.Data;
 using Evarosa.Services;
 using Evarosa.Services.Impl;
+using Evarosa.Utils;
 using Imageflow.Server;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
@@ -63,6 +64,9 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
+
+    //Redirect
+    app.UseCustomMiddleware();
 
     app.UseRewriter();
     app.UseRewriter(new RewriteOptions().AddRedirectToNonWwwPermanent().AddRedirectToHttpsPermanent());
