@@ -38,7 +38,7 @@ a, a:hover {
 }
 
 header {
-  background-color: #506DB3;
+  background-color: #fff;
 }
 
 .logo {
@@ -63,7 +63,7 @@ header {
   background: rgba(216, 243, 255, 0.5);
   width: 30px;
   aspect-ratio: 1;
-  color: #fff;
+  color: #011027;
   text-decoration: none;
   font-size: 13px;
   display: flex;
@@ -90,7 +90,7 @@ header {
   right: -15px;
 }
 .link-icon .name {
-  color: #fff;
+  color: #011027;
   text-decoration: none;
   font-size: 12px;
   font-weight: 500;
@@ -101,11 +101,11 @@ header {
   -webkit-line-clamp: 1;
 }
 .link-icon:hover {
-  color: #fff;
+  color: #011027;
 }
 
 .search {
-  border: 1px solid #fff;
+  border: 1px solid #011027;
   border-radius: 3px;
 }
 .search .custom-select {
@@ -134,8 +134,9 @@ header {
   box-shadow: none;
   border: 0;
   border-radius: 0;
-  background-color: #E0E9FF;
-  color: #506DB3;
+  /*        background-color: $primaryLight;
+          color: $primary;
+  */
   font-size: 14px;
 }
 
@@ -187,12 +188,15 @@ header {
 }
 .menu a {
   display: inline-block;
-  color: #fff;
+  color: #011027;
   font-size: 14px;
   font-weight: 500;
   line-height: 20px;
   text-transform: uppercase;
   position: relative;
+}
+.menu a:hover {
+  color: #506DB3;
 }
 .menu a::before {
   content: "";
@@ -201,7 +205,7 @@ header {
   left: 0;
   right: 0;
   height: 3px;
-  background-color: #fff;
+  background-color: #011027;
   display: none;
 }
 .menu a.active {

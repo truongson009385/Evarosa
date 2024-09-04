@@ -183,7 +183,7 @@ a, a:hover {
 }
 
 header {
-    background-color: $primary;
+    background-color: $white;
 }
 
 .logo {
@@ -201,14 +201,13 @@ header {
     @include flex-center;
     flex-direction: column;
 
-
     .icon {
         position: relative;
         border-radius: 5px;
         background: rgba(216, 243, 255, 0.50);
         width: 30px;
         aspect-ratio: 1;
-        color: $white;
+        color: $black;
         text-decoration: none;
         font-size: 13px;
         @include flex-center;
@@ -234,7 +233,7 @@ header {
     }
 
     .name {
-        color: $white;
+        color: $black;
         text-decoration: none;
         font-size: 12px;
         font-weight: 500;
@@ -243,12 +242,12 @@ header {
     }
 
     &:hover {
-        color: $white;
+        color: $black;
     }
 }
 
 .search {
-    border: 1px solid $white;
+    border: 1px solid $black;
     border-radius: 3px;
 
     .custom-select {
@@ -280,9 +279,9 @@ header {
         box-shadow: none;
         border: 0;
         border-radius: 0;
-        background-color: $primaryLight;
+        /*        background-color: $primaryLight;
         color: $primary;
-        font-size: 14px;
+*/ font-size: 14px;
     }
 }
 
@@ -343,12 +342,16 @@ header {
 
     a {
         display: inline-block;
-        color: $white;
+        color: $black;
         font-size: 14px;
         font-weight: 500;
         line-height: 20px;
         text-transform: uppercase;
         position: relative;
+
+        &:hover {
+            color: $primary;
+        }
 
         &::before {
             content: "";
@@ -357,7 +360,7 @@ header {
             left: 0;
             right: 0;
             height: 3px;
-            background-color: $white;
+            background-color: $black;
             display: none;
         }
     }
