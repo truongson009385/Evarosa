@@ -246,9 +246,13 @@ header {
     }
 }
 
+header .search {
+    border-radius: 20px;
+    overflow: hidden;
+}
+
 .search {
     border: 1px solid $black;
-    border-radius: 3px;
 
     .custom-select {
         box-shadow: none;
@@ -666,7 +670,7 @@ header {
 
 .news {
     position: relative;
-    background: rgba($primary, .8);
+    background: rgba($black, .3);
 
     &::before {
         content: "";
@@ -2445,7 +2449,7 @@ footer {
 .go-top {
     position: fixed;
     bottom: 10px;
-    right: 50px;
+    right: 68px;
     display: none;
     cursor: pointer;
     -webkit-font-smoothing: antialiased;
@@ -2481,8 +2485,8 @@ footer {
 
 .hotline-phone-ring-wrap {
     position: fixed;
-    bottom: 0;
-    left: 0;
+    bottom: 50px;
+    right: 0;
     z-index: 999999;
 }
 
@@ -2568,6 +2572,7 @@ footer {
 }
 
 .hotline-bar {
+    display: none;
     position: absolute;
     background: #1564a7;
     height: 35px;
@@ -2608,14 +2613,15 @@ footer {
 }
 
 .hotline-bar > a:hover,
+
 .hotline-bar > a:active {
     color: #fff;
 }
 
 .zalo-ben-phai {
     position: fixed;
-    left: 0;
-    bottom: 70px;
+    right: 0;
+    bottom: 120px;
     z-index: 999999;
 }
 
@@ -2800,7 +2806,7 @@ footer {
     bottom: 0;
     width: 80%;
     overflow: auto;
-    background-color: $primary;
+    background-color: $white;
     list-style-type: none;
     padding: 90px 20px 20px;
     margin-bottom: 0;
@@ -2817,7 +2823,7 @@ footer {
     li > a {
         flex-grow: 1;
         display: block;
-        color: $white;
+        color: $black;
         padding: 8px 0;
     }
 
@@ -2830,8 +2836,6 @@ footer {
         input {
             padding: 6px 12px;
             flex-grow: 1;
-            outline: 0;
-            border: 0;
         }
 
         button {
@@ -2883,13 +2887,17 @@ footer {
 
     .social-media {
         margin-top: 30px;
-        @include flex-center;
+        display: grid;
+        grid-gap: 10px;
 
         a {
-            flex-grow: 0;
-            width: 35px;
-            height: 35px;
-            @include flex-center;
+            grid-row: 1;
+            text-align: center;
+            background: #eee;
+
+            i {
+                font-size: 1.5rem;
+            }
         }
     }
 }

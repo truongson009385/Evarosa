@@ -104,9 +104,13 @@ header {
   color: #011027;
 }
 
+header .search {
+  border-radius: 20px;
+  overflow: hidden;
+}
+
 .search {
   border: 1px solid #011027;
-  border-radius: 3px;
 }
 .search .custom-select {
   box-shadow: none;
@@ -541,7 +545,7 @@ header {
 
 .news {
   position: relative;
-  background: rgba(80, 109, 179, 0.8);
+  background: rgba(1, 16, 39, 0.3);
 }
 .news::before {
   content: "";
@@ -2190,7 +2194,7 @@ footer {
 .go-top {
   position: fixed;
   bottom: 10px;
-  right: 50px;
+  right: 68px;
   display: none;
   cursor: pointer;
   -webkit-font-smoothing: antialiased;
@@ -2226,8 +2230,8 @@ footer {
 
 .hotline-phone-ring-wrap {
   position: fixed;
-  bottom: 0;
-  left: 0;
+  bottom: 50px;
+  right: 0;
   z-index: 999999;
 }
 
@@ -2313,6 +2317,7 @@ footer {
 }
 
 .hotline-bar {
+  display: none;
   position: absolute;
   background: #1564a7;
   height: 35px;
@@ -2359,8 +2364,8 @@ footer {
 
 .zalo-ben-phai {
   position: fixed;
-  left: 0;
-  bottom: 70px;
+  right: 0;
+  bottom: 120px;
   z-index: 999999;
 }
 
@@ -2523,7 +2528,7 @@ footer {
   bottom: 0;
   width: 80%;
   overflow: auto;
-  background-color: #506DB3;
+  background-color: #fff;
   list-style-type: none;
   padding: 90px 20px 20px;
   margin-bottom: 0;
@@ -2539,7 +2544,7 @@ footer {
 .nav-mobi-menu li > a {
   flex-grow: 1;
   display: block;
-  color: #fff;
+  color: #011027;
   padding: 8px 0;
 }
 .nav-mobi-menu li.search form {
@@ -2551,8 +2556,6 @@ footer {
 .nav-mobi-menu li.search form input {
   padding: 6px 12px;
   flex-grow: 1;
-  outline: 0;
-  border: 0;
 }
 .nav-mobi-menu li.search form button {
   padding: 6px 12px;
@@ -2595,17 +2598,16 @@ footer {
 }
 .nav-mobi-menu .social-media {
   margin-top: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  grid-gap: 10px;
 }
 .nav-mobi-menu .social-media a {
-  flex-grow: 0;
-  width: 35px;
-  height: 35px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  grid-row: 1;
+  text-align: center;
+  background: #eee;
+}
+.nav-mobi-menu .social-media a i {
+  font-size: 1.5rem;
 }
 
 .member-mobi {

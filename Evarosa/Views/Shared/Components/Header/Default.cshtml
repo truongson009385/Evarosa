@@ -12,7 +12,7 @@
 <header class="d-none d-lg-block">
     <div class="container">
         <div class="row py-3">
-            <div class="col-lg-2 d-flex align-items-center">
+            <div class="col-lg-3 d-flex align-items-center">
                 <a asp-controller="Home" asp-action="Index" class="logo">
                     @if (!string.IsNullOrEmpty(AppService.Config.Image))
                     {
@@ -20,7 +20,7 @@
                     }
                 </a>
             </div>
-            <div class="col-lg-8 d-flex justify-content-center align-items-center">
+            <div class="col-lg-7 d-flex justify-content-center align-items-center">
                 <form asp-controller="Home" asp-action="AllProduct" method="get" class="input-group search">
                     <div class="input-group-prepend">
                         <select name="category" class="custom-select" style="width: 128px;">
