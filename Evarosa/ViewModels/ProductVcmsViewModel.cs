@@ -8,6 +8,7 @@ namespace Evarosa.ViewModels
     public class ProductViewModel
     {
         public IEnumerable<int> CategoryIds { get; set; }
+        public SelectList CategoryList { get; set; }
         public int? InfoId { get; set; }
         public string? Url { get; set; }
         [Display(Name = "Giá niêm yết"), UIHint("MoneyBox"), DisplayFormat(DataFormatString = "{0:N0} VNĐ")]

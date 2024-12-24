@@ -25,7 +25,6 @@ namespace Evarosa.Controllers
             _unitOfWork = unitOfWork;
             _fileService = fileService;
             _appService = appService;
-
             _pepper = Environment.GetEnvironmentVariable("vico@123");
         }
 

@@ -1,10 +1,14 @@
-﻿$(document).ready(function () {
+﻿window.addEventListener("load", function () {
     //Scroll event
-    $(window).scroll(function () {
+    $(window).on("scroll",function () {
         const scrolled = $(window).scrollTop();
         if (scrolled > 200) $('.go-top').fadeIn('slow');
         if (scrolled < 200) $('.go-top').fadeOut('slow');
     });
+
+    $(window).one("scroll", function () {
+        FB.XFBML.parse();
+    })
 
     //Click event
     $(".go-top").click(function () {
@@ -22,13 +26,21 @@
 
     $('.outstanding-content').slick({
         infinite: true,
-        slidesToShow: 5,
-        slidesToScroll: 5,
+        slidesToShow: 6,
+        slidesToScroll: 6,
         arrows: true,
         dots: true,
         responsive: [
             {
                 breakpoint: 1024,
+                settings: {
+                    slidesToShow: 4,
+                    slidesToScroll: 4,
+                    arrows: false
+                }
+            },
+            {
+                breakpoint: 768,
                 settings: {
                     slidesToShow: 3,
                     slidesToScroll: 3,
@@ -36,17 +48,9 @@
                 }
             },
             {
-                breakpoint: 768,
-                settings: {
-                    slidesToShow: 2,
-                    slidesToScroll: 2,
-                    arrows: false
-                }
-            },
-            {
                 breakpoint: 540,
                 settings: {
-                    slidesToShow: 1,
+                    slidesToShow: 2,
                     slidesToScroll: 1,
                     arrows: false
                 }
@@ -189,7 +193,7 @@
         }
     });
 
-     $("#form-contact").on("submit", function (e) {
+    $("#form-contact").on("submit", function (e) {
         e.preventDefault();
 
         if ($(this).valid()) {
@@ -216,7 +220,7 @@
                 }
             });
         }
-     });
+    });
 
     $(".product-option").change(function () {
         $.get("/Home/GetSku", {
@@ -293,7 +297,6 @@
 });
 function BuyNow() {
     const form = $("#addToCart");
-
     $.post("/ShoppingCart/AddToCart", form.serialize(), function (data) {
         if (data.status) {
             Swal.fire({
@@ -320,7 +323,6 @@ function BuyNow() {
         $(".shoppingcart > .count").text(data.count);
     });
 }
-
 function LoadCartMini() {
     $.get("/ShoppingCart/CartMini", function (data) {
         $(".shoppingcart-mini").html(data);

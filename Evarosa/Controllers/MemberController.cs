@@ -459,7 +459,7 @@ namespace Evarosa.Controllers
         [Route("member/dia-chi")]
         public async Task<IActionResult> ListAddress(int? page)
         {
-            var list = await _unitOfWork.MemberAddress.GetPagedListAsync(
+            var list = _unitOfWork.MemberAddress.GetPagedListAsync(
                     include: m => m
                         .Include(l => l.City)
                         .Include(l => l.District)
@@ -573,7 +573,7 @@ namespace Evarosa.Controllers
 
         public async Task<IActionResult> ListOrder(int? page)
         {
-            var list = await _unitOfWork.Order.GetPagedListAsync(
+            var list = _unitOfWork.Order.GetPagedListAsync(
                     predicate: o => o.MemberId == GetMember().Id,
                     include: m => m
                         .Include(l => l.City)

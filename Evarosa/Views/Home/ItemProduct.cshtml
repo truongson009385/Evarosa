@@ -37,11 +37,11 @@
         <a class="name" asp-controller="Home" asp-action="ProductDetails" asp-route-url="@Model.Url">
             <h3>@Model.Name</h3>
         </a>
-        <div class="row">
-            <div class="col-7">
+        <div class="row no-gutters">
+            <div class="col-lg-7 col-6">
                 <span class="masp">Mã: @(Model.MaSP ?? "...")</span>
             </div>
-            <div class="col-5">
+            <div class="col-lg-5 col-6">
                 <span class="price">
                     @if (finalPrice > 0)
                     {

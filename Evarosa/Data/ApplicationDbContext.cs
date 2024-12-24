@@ -1,9 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Evarosa.Models;
+﻿using Evarosa.Models;
+using Microsoft.EntityFrameworkCore;
+
+namespace Evarosa.Data;
 
 public class ApplicationDbContext : DbContext
 {
-    public ApplicationDbContext (DbContextOptions<ApplicationDbContext> options)
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
     {
     }

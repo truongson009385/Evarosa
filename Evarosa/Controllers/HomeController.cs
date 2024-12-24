@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using X.PagedList;
+using X.PagedList.Extensions;
 
 namespace Evarosa.Controllers
 {
@@ -81,7 +82,7 @@ namespace Evarosa.Controllers
                         Id = m.Id,
                         Title = m.Title,
                         Url = m.Url,
-                        Products = qrProduct.Where(l => l.ProductCategoryId == m.Id).Take(30).ToList()
+                        Products = qrProduct.Where(l => l.ProductCategoryId == m.Id).Take(12).ToList()
                     },
                     take: 20
                 );
@@ -369,13 +370,13 @@ namespace Evarosa.Controllers
         {
             var pageNumber = page ?? 1;
 
-            var listArticle = await unitOfWork.Article
+            var listArticle = unitOfWork.Article
                 .GetPagedListAsync(
                     predicate: m => m.Name.Contains(term) && m.Active,
                     orderBy: a => a.OrderByDescending(c => c.Sort),
                     include: a => a.Include(l => l.ArticleCategory),
                     pageIndex: pageNumber,
-                    pageSize: 9
+                    pageSize: 12
                 );
 
             var model = new PageArticleViewModel
@@ -397,13 +398,13 @@ namespace Evarosa.Controllers
 
             if (category == null) return NotFound();
 
-            var listArticle = await unitOfWork.Article
+            var listArticle = unitOfWork.Article
                 .GetPagedListAsync(
                     predicate: m => m.Active &&  (m.ArticleCategoryId == category.Id || m.ArticleCategory.ParentCategoryId == category.Id),
                     orderBy: a => a.OrderByDescending(c => c.Sort),
                     include: a => a.Include(l => l.ArticleCategory),
                     pageIndex: pageNumber,
-                    pageSize: 9
+                    pageSize: 12
                 );
 
             var model = new PageArticleViewModel

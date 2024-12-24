@@ -1,4 +1,5 @@
-﻿using Evarosa.Models;
+﻿using Evarosa.Data;
+using Evarosa.Models;
 
 namespace Evarosa.Services.Impl
 {

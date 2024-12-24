@@ -26,7 +26,7 @@
             </div>
             <div class="col-3">
                 <label>Danh mục</label>
-                <select name="cateId" asp-for="CategoryId" asp-items="ViewBag.categories">
+                <select name="cateId" asp-for="CategoryId" asp-items="@Model.CategoryList">
                     <option value="">Chọn danh mục</option>
                 </select>
             </div>
@@ -43,7 +43,6 @@
                 <input name="timer" asp-for="Timer" />
             </div>
             <div class="col-3 d-flex align-items-end">
-                <a asp-action="ListProduct" class="btn-search mb-2">Quay lại</a>
                 <button type="submit" class="btn-search mb-2">Tìm kiếm</button>
             </div>
         </div>

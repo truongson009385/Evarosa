@@ -7,6 +7,7 @@ using Evarosa.Models;
 using Evarosa.Services;
 using Evarosa.ViewModels;
 using X.PagedList;
+using X.PagedList.Extensions;
 
 namespace Evarosa.Controllers
 {
@@ -28,7 +29,7 @@ namespace Evarosa.Controllers
         {
             int pageNumber = page ?? 1;
 
-            var list = await _unitOfWork.City
+            var list = _unitOfWork.City
                 .GetPagedListAsync(
                     predicate: m => m.Name.Contains(term),
                     pageIndex: pageNumber,

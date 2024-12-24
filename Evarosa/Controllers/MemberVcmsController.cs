@@ -19,10 +19,10 @@ namespace Evarosa.Controllers
         {
             ViewBag.Message = TempData["Message"];
 
-            var list = await unitOfWork.Member.GetPagedListAsync(
+            var list = unitOfWork.Member.GetPagedListAsync(
                     predicate: m => m.FullName.Contains(term)
-                        && m.Email.Contains(term)
-                        && m.PhoneNumber.Contains(term),
+                                    && m.Email.Contains(term)
+                                    && m.PhoneNumber.Contains(term),
                     pageIndex: page ?? 1,
                     pageSize: 10
                 );

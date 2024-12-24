@@ -4,6 +4,7 @@ using Evarosa.Data;
 using Evarosa.Services;
 using Evarosa.ViewModels;
 using X.PagedList;
+using X.PagedList.Extensions;
 
 namespace Evarosa.Controllers
 {

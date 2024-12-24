@@ -9,6 +9,7 @@ using Evarosa.Services;
 using Evarosa.Utils;
 using Evarosa.ViewModels;
 using X.PagedList;
+using X.PagedList.Extensions;
 
 namespace Evarosa.Controllers
 {
@@ -20,15 +21,13 @@ namespace Evarosa.Controllers
         {
             var pageNumber = page ?? 1;
 
-            var list = await unitOfWork.ArticleCategory
+            var list = unitOfWork.ArticleCategory
                 .GetPagedListAsync(
                     predicate: m => m.ParentCategoryId == null && m.Title.Contains(term),
+                    orderBy: m => m.OrderBy(l => l.Sort),
                     include: m => m.Include(l => l.CategoryChildren)
                         .ThenInclude(l => l.CategoryChildren),
-                    orderBy: m => m.OrderBy(l => l.Sort),
-                    pageIndex: pageNumber,
-                    pageSize: 10
-                );
+                    pageIndex: pageNumber, pageSize: 10);
 
             var model = new ArticleCategoryViewModel
             {

@@ -8,6 +8,7 @@ using Evarosa.Services;
 using Evarosa.Utils;
 using Evarosa.ViewModels;
 using X.PagedList;
+using X.PagedList.Extensions;
 
 namespace Evarosa.Controllers
 {
@@ -22,14 +23,12 @@ namespace Evarosa.Controllers
 
             int pageNumber = page ?? 1;
 
-            var list = await unitOfWork.ProductCategory
+            var list = unitOfWork.ProductCategory
                 .GetPagedListAsync(
                     predicate: m => m.ParentCategoryId == null && m.Title.Contains(term),
-                    include: m => m.Include(l => l.CategoryChildren).ThenInclude(l => l.CategoryChildren),
                     orderBy: m => m.OrderBy(l => l.Sort),
-                    pageIndex: pageNumber,
-                    pageSize: 10
-                );
+                    include: m => m.Include(l => l.CategoryChildren).ThenInclude(l => l.CategoryChildren),
+                    pageIndex: pageNumber, pageSize: 10);
 
             var model = new ProductCategoryViewModel
             {
@@ -155,7 +154,7 @@ namespace Evarosa.Controllers
 
             var list = unitOfWork.Product
                 .GetAll(
-                    predicate: m => 
+                    predicate: m =>
                         m.Name.Contains(term),
                     include: l => l
                         .Include(m => m.ProductCategory)
@@ -185,16 +184,16 @@ namespace Evarosa.Controllers
 
             var model = new ProductViewModel
             {
-                ListProduct = await list.ToPagedListAsync(pageNumber, 10),
+                ListProduct = list.ToPagedList(pageNumber, 10),
                 Term = term,
                 CategoryId = cateId,
                 Timer = timer,
                 InStock = instock,
-                MaSP = masp
+                MaSP = masp,
+                CategoryList = new SelectList(unitOfWork.ProductCategory.GetAll(predicate: a => a.Active && a.ParentCategoryId == null, orderBy: q => q.OrderBy(a => a.Sort)), "Id", "Title")
             };
             return View(model);
         }
-
         public async Task<IActionResult> Product()
         {
             ViewData["categories"] = new SelectList(await GetItemsSelectCategory(), "Id", "Title");
@@ -213,7 +212,6 @@ namespace Evarosa.Controllers
             };
             return View(model);
         }
-
         [HttpPost]
         public async Task<IActionResult> Product(ProductViewModel model)
         {
@@ -276,11 +274,10 @@ namespace Evarosa.Controllers
                 await unitOfWork.CommitAsync();
             }
 
-            
+
             TempData["Message"] = "success|Thêm mới thành công sản phẩm";
             return RedirectToAction("ListProduct");
         }
-
         public async Task<IActionResult> UpdateProduct(int id)
         {
             var product = await unitOfWork.Product.GetAll(
@@ -342,8 +339,6 @@ namespace Evarosa.Controllers
 
             return View(model);
         }
-
-
         [HttpPost]
         public async Task<IActionResult> UpdateProduct(ProductViewModel model)
         {
@@ -358,15 +353,7 @@ namespace Evarosa.Controllers
             // Price Conversion
             product.Price = model.Price != null ? Convert.ToDecimal(model.Price.Replace(",", "")) : decimal.Zero;
             product.PriceSale = model.PriceSale != null ? Convert.ToDecimal(model.PriceSale.Replace(",", "")) : decimal.Zero;
-
             product.Url = HtmlHelpers.ConvertToUnSign(model.Url ?? model.Product.Name);
-
-            var slugExists = unitOfWork.Product.Count(m => m.Url == model.Product.Url && m.Id != model.Product.Id) > 0;
-            if (slugExists)
-            {
-                product.Url += $"-{DateTime.Now.Millisecond}";
-            }
-
             product.Images = string.Join(",", model.Images);
             product.Title = model.Product.Title;
             product.Description = model.Product.Description;
@@ -383,6 +370,14 @@ namespace Evarosa.Controllers
             product.ProductCategoryId = model.Product.ProductCategoryId;
 
             unitOfWork.Product.Update(product);
+
+
+            var slugExists = await unitOfWork.Product.CountAsync(m => m.Url == model.Product.Url) > 1;
+            if (slugExists)
+            {
+                product.Url += $"-{product.Id}";
+                unitOfWork.Product.Update(product);
+            }
 
             var skuList = new List<Sku>();
 
