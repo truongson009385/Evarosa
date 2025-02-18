@@ -82,19 +82,28 @@ namespace Evarosa.Controllers
                 }).Take(8);
             model.ProductOutstanding = items;
 
-            model.ProductCategories = await unitOfWork.ProductCategory
-                .GetAllAsync(
-                    predicate: m => m.Active && m.ShowHome,
-                    orderBy: m => m.OrderByDescending(o => o.Sort),
-                    selector: m => new ProductCategory
-                    {
-                        Id = m.Id,
-                        Title = m.Title,
-                        Url = m.Url,
-                        Products = qrProduct.Where(l => l.ProductCategoryId == m.Id).Take(12).ToList()
-                    },
-                    take: 20
-                );
+            var blockItems = unitOfWork.ProductCategory.GetAll(
+                predicate: a => a.Active && a.ShowHome,
+                orderBy: q => q.OrderByDescending(a => a.Sort)).Select(a => new HomeViewModel.CategoryBlock
+            {
+                Category = a,
+                Products = qrProduct.Where(c => c.ProductCategoryId == a.Id).Take(12).ToList()
+            });
+            model.ProductCategories = blockItems;
+
+            //model.ProductCategories = await unitOfWork.ProductCategory
+            //    .GetAllAsync(
+            //        predicate: m => m.Active && m.ShowHome,
+            //        orderBy: m => m.OrderByDescending(o => o.Sort),
+            //        selector: m => new ProductCategory
+            //        {
+            //            Id = m.Id,
+            //            Title = m.Title,
+            //            Url = m.Url,
+            //            Products = qrProduct.Where(l => l.ProductCategoryId == m.Id).Take(12).ToList()
+            //        },
+            //        take: 20
+            //    );
 
             model.Articles = await qrArticle.Take(7).ToListAsync();
 
