@@ -27,6 +27,7 @@
 <partial name="_breadcrumb" model="breadcrumb" />
 
 <form id="form-contact">
+    @Html.AntiForgeryToken()
     <div class="container pb-5">
         <h1 class="page-title text-center mb-5">
             @ViewBag.Title

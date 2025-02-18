@@ -32,14 +32,14 @@ namespace Evarosa.Controllers
             _env = env;
         }
 
-        public ShoppingService cart => ShoppingService.GetCart(HttpContext, _unitOfWork);
+        public ShoppingService Cart => ShoppingService.GetCart(HttpContext, _unitOfWork);
 
         public IActionResult CartMini()
         {
             var model = new CartMiniViewModel
             {
-                CartItems = cart.GetCartItems(),
-                Total = cart.GetTotal(),
+                CartItems = Cart.GetCartItems(),
+                Total = Cart.GetTotal(),
             };
             return PartialView(model);
         }
@@ -52,13 +52,13 @@ namespace Evarosa.Controllers
                 var product = await _unitOfWork.Product.FindAsync(id);
                 var sku = await _unitOfWork.Sku.FindAsync(skuId);
 
-                cart.AddToCart(product, sku, quantity);
+                Cart.AddToCart(product, sku, quantity);
 
                 return Json(new
                 {
                     status = true,
                     msg = "Thêm vào giỏ hàng thành công!",
-                    count = cart.GetCount(),
+                    count = Cart.GetCount(),
                 });
             }
             catch (Exception ex)
@@ -67,7 +67,7 @@ namespace Evarosa.Controllers
                 {
                     status = false,
                     msg = ex.Message,
-                    count = cart.GetCount(),
+                    count = Cart.GetCount(),
                 });
             }
         }
@@ -77,15 +77,15 @@ namespace Evarosa.Controllers
         {
             try
             {
-                cart.UpdateFromCart(recordId, quantity);
+                Cart.UpdateFromCart(recordId, quantity);
 
                 return Json(new
                 {
                     status = true,
                     msg = "Thêm vào giỏ hàng thành công!",
-                    count = cart.GetCount(),
-                    itemTotal = cart.GetItemTotal(recordId).ToString("N0") + " VNĐ",
-                    total = cart.GetTotal().ToString("N0") + " VNĐ",
+                    count = Cart.GetCount(),
+                    itemTotal = Cart.GetItemTotal(recordId).ToString("N0") + " VNĐ",
+                    total = Cart.GetTotal().ToString("N0") + " VNĐ",
                 });
             }
             catch (Exception ex)
@@ -94,7 +94,7 @@ namespace Evarosa.Controllers
                 {
                     status = false,
                     msg = ex.Message,
-                    count = cart.GetCount(),
+                    count = Cart.GetCount(),
                 });
             }
         }
@@ -104,13 +104,13 @@ namespace Evarosa.Controllers
         {
             try
             {
-                cart.RemoveFromCart(recordId);
+                Cart.RemoveFromCart(recordId);
 
                 return Json(new
                 {
                     status = true,
                     msg = "Đã xóa sản phẩm khỏi giỏ hàng!",
-                    count = cart.GetCount(),
+                    count = Cart.GetCount(),
                 });
             }
             catch (Exception ex)
@@ -119,7 +119,7 @@ namespace Evarosa.Controllers
                 {
                     status = false,
                     msg = ex.Message,
-                    count = cart.GetCount(),
+                    count = Cart.GetCount(),
                 });
             }
         }
@@ -129,8 +129,8 @@ namespace Evarosa.Controllers
         {
             var model = new ShoppingViewModel
             {
-                CartItems = cart.GetCartItems(),
-                Total = cart.GetTotal(),
+                CartItems = Cart.GetCartItems(),
+                Total = Cart.GetTotal(),
             };
             return View(model);
         }
@@ -138,7 +138,7 @@ namespace Evarosa.Controllers
         [Route("thanh-toan")]
         public async Task<IActionResult> Checkout()
         {
-            if (cart.GetCount() <= 0)
+            if (Cart.GetCount() <= 0)
                 return RedirectToAction("Index");
 
             var cities = await _unitOfWork.City.GetAllAsync();
@@ -146,8 +146,8 @@ namespace Evarosa.Controllers
             var model = new CheckoutViewModel
             {
                 Cities = cities,
-                CartItems = cart.GetCartItems(),
-                Total = cart.GetTotal(),
+                CartItems = Cart.GetCartItems(),
+                Total = Cart.GetTotal(),
                 Order = new Order()
             };
 
@@ -198,11 +198,11 @@ namespace Evarosa.Controllers
             try
             {
                 model.Order.ShipFee = _unitOfWork.City.Find(model.Order.CityId).ShipFee;
-                model.Order.Total = model.Order.ShipFee + cart.GetTotal();
+                model.Order.Total = model.Order.ShipFee + Cart.GetTotal();
                 await _unitOfWork.Order.InsertAsync(model.Order);
                 await _unitOfWork.CommitAsync();
 
-                cart.CreateOrder(model.Order);
+                Cart.CreateOrder(model.Order);
 
                 var order = await _unitOfWork.Order.GetAll(
                         predicate: m => m.OrderCode == model.Order.OrderCode,
@@ -221,12 +221,10 @@ namespace Evarosa.Controllers
                 using (StreamReader reader = new StreamReader(pathInvoiceEmail))
                 {
                     string subject = "Chúng tôi đã nhận được đơn hàng: " + order.OrderCode;
-                    string body = string.Empty;
 
-                    body = reader.ReadToEnd();
+                    var body = await reader.ReadToEndAsync();
 
-                    string logoUrl = $"{Request.Scheme}://{Request.Host}/contents/system/{_appService.Config.Image}";
-
+                    //string logoUrl = $"{Request.Scheme}://{Request.Host}/contents/system/{_appService.Config.Image}";
                     body = body.Replace("{OrderCode}", order.OrderCode);
                     body = body.Replace("{PaymentType}", order.PaymentType.GetDisplayName());
                     body = body.Replace("{CreateDate}", order.CreateDate.ToString("HH:mm - dd/MM/yyyy"));
@@ -250,8 +248,8 @@ namespace Evarosa.Controllers
                         string itemHtml = $@"
                         <p style=""font-size:14px; margin:0; padding:10px; border:solid 1px #ddd; font-weight:bold;"">
                             <span style=""display:block; font-size:13px; font-weight:normal;"">{item.Product.Name} {itemSku}</span>
-                            {item.Amount.ToString("N0")} VNĐ
-                            <b style=""font-size:12px; font-weight:300;"">/ x{item.Quantity}/ {item.UnitPrice.ToString("N0")} VNĐ</b>
+                            {item.Amount:N0} VNĐ
+                            <b style=""font-size:12px; font-weight:300;"">/ x{item.Quantity}/ {item.UnitPrice:N0} VNĐ</b>
                         </p>";
 
                         itemsHtml += itemHtml;
@@ -277,9 +275,8 @@ namespace Evarosa.Controllers
                     using (StreamReader reader = new StreamReader(pathAlertOrder))
                     {
                         string subject = "Bạn có đơn hàng mới từ: " + Request.Host + " | " + order.OrderCode;
-                        string body = string.Empty;
 
-                        body = reader.ReadToEnd();
+                        var body = await reader.ReadToEndAsync();
 
                         string? urlOrderVcms = Url.Action("ListOrder", "Order", new { madonhang = order.OrderCode }, protocol: Request.Scheme);
 
@@ -389,7 +386,7 @@ namespace Evarosa.Controllers
                 {
                     status = true,
                     fee = data.ShipFee.ToString("N0") + " VNĐ",
-                    total = (data.ShipFee + cart.GetTotal()).ToString("N0") + " VNĐ",
+                    total = (data.ShipFee + Cart.GetTotal()).ToString("N0") + " VNĐ",
                 });
             }
 

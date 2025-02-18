@@ -17,8 +17,8 @@ namespace Evarosa.Controllers
             var model = new HomeViewModel();
 
             //Query
-            var qrBanner = unitOfWork.Banner
-                .GetAll(
+            var qrBanner = await unitOfWork.Banner
+                .GetAllAsync(
                     predicate: m => m.Active,
                     orderBy: m => m.OrderByDescending(o => o.Sort)
             );
@@ -44,8 +44,8 @@ namespace Evarosa.Controllers
             );
 
             //Get
-            model.Banner = await qrBanner.Where(m => m.GroupId == 1).Take(20).ToListAsync();
-            model.Partner = await qrBanner.Where(m => m.GroupId == 2).Take(30).ToListAsync();
+            model.Banner = qrBanner.Where(m => m.GroupId == 1);
+            model.Partner = qrBanner.Where(m => m.GroupId == 2);
 
             model.DisplayCategories = await unitOfWork.ProductCategory.GetAllAsync(
                     predicate: m => m.ParentCategoryId == null && m.Active && m.Display,
@@ -59,19 +59,28 @@ namespace Evarosa.Controllers
                     }
                 );
 
-            model.ProductOutstanding = await unitOfWork.ProductCategory
-                .GetAllAsync(
-                    predicate: m => m.Active && m.ShowOutstanding,
-                    orderBy: m => m.OrderByDescending(o => o.Sort),
-                    selector: m => new ProductCategory
-                    {
-                        Id = m.Id,
-                        Title = m.Title,
-                        Url = m.Url,
-                        Products = qrProductOutstanding.Where(l => l.ProductCategoryId == m.Id).Take(20).ToList()
-                    },
-                    take: 8
-                );
+            //model.ProductOutstanding = await unitOfWork.ProductCategory
+            //    .GetAllAsync(
+            //        predicate: m => m.Active && m.ShowOutstanding,
+            //        orderBy: m => m.OrderByDescending(o => o.Sort),
+            //        selector: m => new ProductCategory
+            //        {
+            //            Id = m.Id,
+            //            Title = m.Title,
+            //            Url = m.Url,
+            //            Products = qrProductOutstanding.Where(l => l.ProductCategoryId == m.Id).Take(20).ToList()
+            //        },
+            //        take: 8
+            //    );
+
+            var items = unitOfWork.ProductCategory.GetAll(
+                predicate: a => a.Active && a.ShowOutstanding,
+                orderBy: q => q.OrderBy(a => a.Sort)).Select(a => new HomeViewModel.CategoryBlock
+                {
+                    Category = a,
+                    Products = qrProductOutstanding.Where(c => c.ProductCategoryId == a.Id).Take(20).ToList()
+                }).Take(8);
+            model.ProductOutstanding = items;
 
             model.ProductCategories = await unitOfWork.ProductCategory
                 .GetAllAsync(
@@ -173,7 +182,8 @@ namespace Evarosa.Controllers
                 model.Price = sku.Price;
                 model.PriceSale = sku.PriceSale;
                 model.SkuId = sku.Id;
-            } else
+            }
+            else
             {
                 model.MaSP = product.MaSP;
                 model.Price = product.Price;
@@ -400,7 +410,7 @@ namespace Evarosa.Controllers
 
             var listArticle = unitOfWork.Article
                 .GetPagedListAsync(
-                    predicate: m => m.Active &&  (m.ArticleCategoryId == category.Id || m.ArticleCategory.ParentCategoryId == category.Id),
+                    predicate: m => m.Active && (m.ArticleCategoryId == category.Id || m.ArticleCategory.ParentCategoryId == category.Id),
                     orderBy: a => a.OrderByDescending(c => c.Sort),
                     include: a => a.Include(l => l.ArticleCategory),
                     pageIndex: pageNumber,
@@ -418,7 +428,7 @@ namespace Evarosa.Controllers
         [Route("lien-he")]
         public IActionResult Contact() => View();
 
-        [HttpPost]
+        [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> ContactStore(Contact contact)
         {
             if (ModelState.IsValid)
@@ -445,11 +455,16 @@ namespace Evarosa.Controllers
             return Json(new { status = false, msg = "Quá trình thực hiện không thành công." });
         }
 
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            unitOfWork.Rollback();
+            base.Dispose(disposing);
         }
     }
 }

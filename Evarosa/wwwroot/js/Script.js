@@ -1,6 +1,6 @@
 ﻿window.addEventListener("load", function () {
     //Scroll event
-    $(window).on("scroll",function () {
+    $(window).on("scroll", function () {
         const scrolled = $(window).scrollTop();
         if (scrolled > 200) $('.go-top').fadeIn('slow');
         if (scrolled < 200) $('.go-top').fadeOut('slow');
@@ -8,7 +8,7 @@
 
     $(window).one("scroll", function () {
         FB.XFBML.parse();
-    })
+    });
 
     //Click event
     $(".go-top").click(function () {

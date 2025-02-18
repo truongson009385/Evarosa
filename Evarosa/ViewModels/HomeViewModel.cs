@@ -8,11 +8,17 @@ namespace Evarosa.ViewModels
     public class HomeViewModel
     {
         public IEnumerable<ProductCategory> DisplayCategories { get; set; } = new List<ProductCategory>();
-        public IEnumerable<ProductCategory> ProductOutstanding { get; set; } = new List<ProductCategory>();
+        public IEnumerable<CategoryBlock> ProductOutstanding { get; set; } = new List<CategoryBlock>();
         public IEnumerable<ProductCategory> ProductCategories { get; set; } = new List<ProductCategory>();
         public IEnumerable<Banner> Banner { get; set; } = new List<Banner>();
         public IEnumerable<Banner> Partner { get; set; } = new List<Banner>();
         public IEnumerable<Article> Articles { get; set; } = new List<Article>();
+
+        public class CategoryBlock
+        {
+            public ProductCategory Category { get; set; }
+            public IEnumerable<Product> Products { get; set; }
+        }
     }
 
     public class OptionGroup
